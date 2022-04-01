@@ -7,16 +7,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-
-	<%@ include file = "/views/common/menubar.jsp" %> 
- 
-	<h3>소개페이지 view</h3>
-
-	소개
-	소개
-	소개
-	
-	<%@ include file = "/views/common/footer.jsp" %>	
-	
+ <%@ include file = "../common/menubar.jsp" %>
+	<h1>강아지의상세정보 </h1>
+	이름
+	사진
+	나이
+	<%@ include file = "../common/footer.jsp" %>	
 </body>
 </html>
