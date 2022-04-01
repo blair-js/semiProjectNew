@@ -7,16 +7,17 @@
 <title>Insert title here</title>
 </head>
 <body>
-
-	<%@ include file = "/views/common/menubar.jsp" %> 
- 
-	<h3>소개페이지 view</h3>
-
-	소개
-	소개
-	소개
 	
-	<%@ include file = "/views/common/footer.jsp" %>	
-	
+
+
+
+	<h2>회원1</h2>
+	<h2>회원2</h2>
+	<h2>회원3</h2>
+
+
+ <%@ include file = "../common/footer.jsp" %>
+
 </body>
 </html>
+

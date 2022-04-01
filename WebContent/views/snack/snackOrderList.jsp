@@ -8,15 +8,19 @@
 </head>
 <body>
 
-	<%@ include file = "/views/common/menubar.jsp" %> 
- 
-	<h3>소개페이지 view</h3>
 
-	소개
-	소개
-	소개
+
+
+	<h1>회원 1     뭐뭐 구매    구매일자</h1>
 	
-	<%@ include file = "/views/common/footer.jsp" %>	
+	<h1>회원 2     뭐뭐 구매    구매일자</h1>
+
+
+
+ <%@ include file = "../common/footer.jsp" %>
+
 	
 </body>
 </html>
+
+
