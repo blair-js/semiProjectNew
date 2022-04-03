@@ -133,7 +133,7 @@
       </section>
       <script>
       		function goIntro(){
-      			location.href="/views/common/intro.jsp";
+      			location.href="views/common/intro.jsp";
       		}
       </script>
       <!-- <section> close ============================-->
