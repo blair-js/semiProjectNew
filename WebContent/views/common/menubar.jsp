@@ -66,7 +66,7 @@
               <li class="nav-item px-2"><a class="nav-link" aria-current="page" href="<%= contextPath %>/intro.do">소개</a></li>
               <li class="nav-item px-2"><a class="nav-link" aria-current="page" href="<%=contextPath%>/listQna.do">Q&A</a></li>
               <li class="nav-item px-2"><a class="nav-link" aria-current="page" href="<%=contextPath%>/listNotice.do">공지사항</a></li>
-              <li class="nav-item px-2"><a class="nav-link" aria-current="page" href="<%=contextPath%>/snack.do">나만먹을개</a></li>
+              <li class="nav-item px-2"><a class="nav-link" aria-current="page" href="<%=contextPath%>/snack.do">나만 먹을개</a></li>
               <li class="nav-item px-2"><a class="nav-link" aria-current="page" href="views/common/charge.jsp">뼈다귀 충전</a></li>
 
               <!-- 드롭다운 설정 해보기 -->

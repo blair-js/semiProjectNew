@@ -1,64 +1,140 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
+<!--  import = "com.semi.user.model.dto.*" %> -->
+
+<%
+//User user = (User)request.getAttribute("user");
+%>
+
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>둥글개 둥글개</title>
+
+<style>
+#center {
+	text-align: center;
+	margin: auto;
+	justify-content: center;
+	display: flex;
+}
+</style>
+
 </head>
 <body>
 
-<%@ include file = "../common/menubar.jsp" %>
+	<!-- ( br말고 마진, 패딩 ) 컨테이너 너비 재확인 세션영역안에 넣고 활용  -->
 
-	
-	<h1> 관리자 전용 페이지 </h1>
-	
-	<button onclick="goUserList()">
+	<%@ include file="../common/menubar.jsp"%>
+
+	<div class="container">
+		<!-- 컨에이터 div 시작 -->
+
+		<div class="px-3 py-3 my-4"></div>
+
+		<h1 class="magin" id="center" style="margin: 70px">My Page</h1>
+		<!-- br 대신 margin을 사용 -->
+
+		<br>
+
+		<form action="<%=request.getContextPath()%>" method="post">
+
+			<pre>
+			<h3 id=center style="float: left">관리자 admin님의 마이페이지입니다.</h3>
+		</pre>
+
+			<hr style="height: 7px; color: #FDC800" ;  id="center">
+
+			<br>
+
+			<div class="px-1 py-3 my-4">
+
+				<div class="col-sm row gx-1" style="float: left">
+					<img src="assets/img/gallery/admin_page_dog.jpg" height="480px" />
+
+				</div>
+
+				<div class="col-sm row gx-10" style="float: right">
+
+					<h4 id="center">이름 : 임현빈</h4>
+
+					<br> <br>
+
+					<h4 id="center">아이디 : admin</h4>
+
+				</div>
+			</div>
+		</form>
+
+		<br> <br>
+	</div>
+
+	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
+		id="center" onclick="goSnackOrder()">간식 구매목록</button>
+	<br>
+	<br>
+
+	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
+		id="center" onclick="goSnackInsert()">간식 추가</button>
+	<br>
+
+	<br>
+
+	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
+		id="center" onclick="goSnackUpdate()">간식 수정</button>
+	<br>
+
+	<br>
+
+	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
+		id="center" onclick="goSnackDelete()">간식 삭제</button>
+	<br>
+	<!--  		
+	<button  class="btn btn-outline-warning btn-lg" style="width: 20%" id="center" onclick="goUserList()">
 		회원조회
-	</button>
-	 
-	 <button onclick="goSnackOrder()">
-	   간식 구매목록
-	 </button>
-	 
-	  <button onclick="goSnackInsert()">
-	   간식 추가
-	 </button>
-	 
-	  <button onclick="goSnackUpdate()">
-	   간식 수정
-	 </button>
-	 
-	   <button onclick="goSnackDelete()">
-	   간식 삭제
-	 </button>
-	 
-	 <script>
+	</button> <br>
+	 -->
+
+
+	</div>
+
+
+	<div class="px-6 py-5 my-4 text-center">
+		<!-- br 적용 시 체크박스 2, 3이 같이 내려오기에 중간에 여백을 위한 div  줄 바꿈을 위해 b -->
+		<p class="display-5 fw-bold"></p>
+	</div>
+
+
+	</div>
+	<!-- 컨에이터 div 끝 -->
+
+	<script>
 	
 			function goUserList(){ //회원목록을 위한 서블릿 
-				location.href="<%= request.getContextPath()%>/userListForm.do;"	
+				location.href="<%=request.getContextPath()%>/userListForm.do;"	
 			}	
 						
 			function goSnackOrder(){ //회원의 간식 구매 목록을 확인하기 위한 서블릿
-				location.href="<%= request.getContextPath()%>/snackOrderListForm.do"
+				location.href="<%=request.getContextPath()%>/snackOrderListForm.do"
 			}
 			
 			function goSnackInsert(){ //새로운 간식 추가하기위한 서블릿
-				location.href="<%= request.getContextPath()%>/snackInsertForm.do"
+				location.href="<%=request.getContextPath()%>/snackInsertForm.do"
 			}
 			
 			function goSnackUpdate(){//간식 업데이트를 위한 서블릿
-				location.href="<%= request.getContextPath()%>/snackUpdateForm.do"
+				location.href="<%=request.getContextPath()%>/snackUpdateForm.do"
 			}
 			function goSnackDelete(){//간식 삭제를 하기위해 form으로 페이지 전환
-				location.href="<%= request.getContextPath()%>/snackDeleteForm.do"
+				location.href="<%=request.getContextPath()%>/snackDeleteForm.do"
 			}
-			
 	</script>
 
-	
-	 <%@ include file = "../common/footer.jsp" %>
 
-	
+	<%@ include file="../common/footer.jsp"%>
+
+
 </body>
 </html>

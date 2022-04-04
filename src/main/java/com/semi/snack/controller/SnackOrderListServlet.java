@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class SnackOrder
+ * Servlet implementation class SnackOrderListServlet
  */
 @WebServlet("/snackOrderList.do")
 public class SnackOrderListServlet extends HttpServlet {
@@ -28,13 +28,10 @@ public class SnackOrderListServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		System.out.println("간식 구매목록 조회를 위한 서블릿 ");
-		
-		request.setAttribute("msg", "구매 완료");
-		RequestDispatcher view = request.getRequestDispatcher("views/snack/snackOrderList.jsp");
-		view.forward(request, response);
-		
+			System.out.println("간식 구매내역 조회를 하는 서블릿");
+			request.setAttribute("msg", "조회 성공");
+			RequestDispatcher view = request.getRequestDispatcher("views/snack/snackOrderList.jsp");
+			view.forward(request, response);
 	}
 
 	/**
