@@ -44,7 +44,7 @@
 	margin-bottom: 1px;
 }
 
-.row {
+.rows {
 	text-align: center;
 }
 
@@ -58,7 +58,7 @@ h5 {
 	<!-- menubar -->
 	<%@ include file="../common/menubar.jsp"%>
 
-	<div class="row mt-5">
+	<div class="row rows mt-5">
 
 		<div class="col-lg-2"></div>
 		<div class="col-lg-4">
