@@ -8,8 +8,15 @@
 </head>
 <body>
 	
-	<%@ include file = "../common/menubar.jsp" %>
-	<h1>OO의 입학을 환영합니다~~~~</h1>
+	<!-- menubar -->
+	<%@ include file="../common/menubar.jsp"%>
+	
+	<div class="">
+		<h3>해피의 입학을 환영합니다.</h3>
+	</div>
+	<div>
+		<img class="d-block mx-auto mb-4" src="assets/img/gallery/fdog.png"alt="강쥐" width="72" height="57">
+	</div>
 	
 	<button onclick="goPointCharge()">
 		뼈다귀충전하러가기
@@ -30,9 +37,8 @@
 		}
 	</script>
 	
-	<%@ include file = "../common/footer.jsp" %>
-	
-	
+	<!-- footer -->
+	<%@ include file="../common/footer.jsp"%>
 	
 </body>
 </html>
