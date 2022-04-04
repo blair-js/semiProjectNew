@@ -3,7 +3,7 @@
 	import="java.util.ArrayList, com.semi.class_notice.model.dto.*"%>
 
 <%
-	ArrayList<ClassNotice> list = (ArrayList<ClassNotice>) request.getAttribute("list");
+ArrayList<ClassNotice> list = (ArrayList<ClassNotice>) request.getAttribute("list");
 %>
 <!DOCTYPE html>
 <html>
@@ -11,9 +11,10 @@
 <meta charset="UTF-8">
 <title>둥글개 둥글개</title>
 <style>
-center .card-img-top {
+#img-center {
+	width: 18rem;
 	object-fit: cover;
-	width: 16rem;
+	margin: auto;
 }
 </style>
 
@@ -29,14 +30,16 @@ center .card-img-top {
 		<div class="container">
 
 			<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-				<a href="#" style="text-decoration:none" onclick="goDetail();">
+				<a href="#" style="text-decoration: none" onclick="goDetail();">
 					<div class="col">
 						<div class="card shadow">
-							<center>
+							<div id="img-center">
 								<img class="card-img-top" src="assets/img/gallery/fdog.png">
-							</center>
+							</div>
 							<div class="card-body">
-								<p class="card-text text-dark">게시물 제목<br>작성자</p>
+								<p class="card-text text-dark">
+									게시물 제목<br>작성자
+								</p>
 								<div class="d-flex justify-content-between align-items-center">
 
 									<small class="text-muted">날짜 | 조회수</small>
@@ -44,15 +47,16 @@ center .card-img-top {
 							</div>
 						</div>
 					</div>
-				</a>
-				<a href="#" style="text-decoration:none" onclick="goDetail();">
+				</a> <a href="#" style="text-decoration: none" onclick="goDetail();">
 					<div class="col">
 						<div class="card shadow">
-							<center>
+							<div id="img-center">
 								<img class="card-img-top" src="assets/img/gallery/fdog.png">
-							</center>
+							</div>
 							<div class="card-body">
-								<p class="card-text text-dark">게시물 제목<br>작성자</p>
+								<p class="card-text text-dark">
+									게시물 제목<br>작성자
+								</p>
 								<div class="d-flex justify-content-between align-items-center">
 
 									<small class="text-muted">날짜 | 조회수</small>
@@ -60,15 +64,16 @@ center .card-img-top {
 							</div>
 						</div>
 					</div>
-				</a>
-				<a href="#" style="text-decoration:none" onclick="goDetail();">
+				</a> <a href="#" style="text-decoration: none" onclick="goDetail();">
 					<div class="col">
 						<div class="card shadow">
-							<center>
+							<div id="img-center">
 								<img class="card-img-top" src="assets/img/gallery/fdog.png">
-							</center>
+							</div>
 							<div class="card-body">
-								<p class="card-text text-dark">게시물 제목<br>작성자</p>
+								<p class="card-text text-dark">
+									게시물 제목<br>작성자
+								</p>
 								<div class="d-flex justify-content-between align-items-center">
 
 									<small class="text-muted">날짜 | 조회수</small>
@@ -76,17 +81,17 @@ center .card-img-top {
 							</div>
 						</div>
 					</div>
-				</a>
-				<a href="#" style="text-decoration:none" onclick="goDetail();">
+				</a> <a href="#" style="text-decoration: none" onclick="goDetail();">
 					<div class="col">
 						<div class="card shadow">
-							<center>
+							<div id="img-center">
 								<img class="card-img-top" src="assets/img/gallery/fdog.png">
-							</center>
+							</div>
 							<div class="card-body">
-								<p class="card-text text-dark">게시물 제목<br>작성자</p>
+								<p class="card-text text-dark">
+									게시물 제목<br>작성자
+								</p>
 								<div class="d-flex justify-content-between align-items-center">
-
 									<small class="text-muted">날짜 | 조회수</small>
 								</div>
 							</div>
@@ -97,8 +102,8 @@ center .card-img-top {
 		</div>
 	</div>
 	<script>
-		function goDetail(){
-			location.href="classNoticeDetail.do";
+		function goDetail() {
+			location.href = "classNoticeDetail.do";
 		}
 	</script>
 
