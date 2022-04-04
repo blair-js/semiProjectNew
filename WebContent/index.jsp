@@ -39,7 +39,7 @@
 	
 </style>
 </head>
-  <body>
+ <body>
 
     <!-- Main Content-->
     <main class="main" id="top">

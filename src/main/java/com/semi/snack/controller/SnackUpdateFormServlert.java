@@ -10,16 +10,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class SnackDeleteServlet
+ * Servlet implementation class SnackUpdateFormServlert
  */
-@WebServlet("/snackDelete.do")
-public class SnackDeleteServlet extends HttpServlet {
+@WebServlet("/snackUpdateForm.do")
+public class SnackUpdateFormServlert extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SnackDeleteServlet() {
+    public SnackUpdateFormServlert() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -28,12 +28,10 @@ public class SnackDeleteServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		System.out.println("간식 삭제를 하기위한 서블릿");
-		request.setAttribute("msg", "삭제 성공");
-		RequestDispatcher view = request.getRequestDispatcher("views/snack/snackDelete.jsp");
+		RequestDispatcher view = request.getRequestDispatcher("views/snack/snackUpdate.jsp");
 		view.forward(request, response);
 	}
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
