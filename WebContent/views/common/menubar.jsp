@@ -37,6 +37,14 @@
    		background-color : rgba( 255, 255, 255, 0.5 );
    }
    
+   #navbarSupportedContent ul li a:hover {
+   		color: orange;
+   }
+   
+   nav.navbar {
+   	background-color : rgba( 255, 255, 255, 0.5 );
+   }
+   
    .dropdown:hover .dropdown-menu {
     display: block;
     margin-top: 0;
