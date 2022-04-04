@@ -87,8 +87,8 @@
             <a class="btn btn-sm btn-light order-1 m-1" href="<%= contextPath %>/userEnrollForm.do;"><b>회원가입</b></a>
             
             <!-- 로그인 후 -->
-            <a class="btn btn-sm btn-light order-1 m-1" href="<%= contextPath %>/myPage.do;"><b>마이페이지</b></a>
-            <a class="btn btn-sm btn-light order-1 m-1" href="<%= contextPath %>/userEnrollForm.do;"><b>로그아웃</b></a>
+            <a class="btn btn-sm btn-light order-1 m-1" href="<%= contextPath %>/userMyDetail.do;"><b>마이페이지</b></a>
+            <a class="btn btn-sm btn-light order-1 m-1" href="index.jsp"><b>로그아웃</b></a>
 
           </div>
         </div>

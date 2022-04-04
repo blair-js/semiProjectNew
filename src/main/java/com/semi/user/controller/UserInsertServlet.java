@@ -22,6 +22,7 @@ public class UserInsertServlet extends HttpServlet {
 
 		//회원가입을 시킨다. 
 		
+		System.out.println("회원가입서블릿 체크");
 		//회원 가입이 정상 완료되면 => 이메일 발송 페이지로 이동 
 		RequestDispatcher view = request.getRequestDispatcher("views/user/emailSendAction.jsp");
 		
