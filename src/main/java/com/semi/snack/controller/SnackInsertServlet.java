@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class SnackInsert
  */
-@WebServlet("/SnackInsert.do")
+@WebServlet("/snackInsert.do")
 public class SnackInsertServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -31,7 +31,7 @@ public class SnackInsertServlet extends HttpServlet {
 		
 		System.out.println("간식 추가를 위한 서블릿");
 		request.setAttribute("msg", "조회 성공");
-		RequestDispatcher view = request.getRequestDispatcher("views/admin/adminMyPage.jsp");
+		RequestDispatcher view = request.getRequestDispatcher("views/snack/snackInsert.jsp");
 		view.forward(request, response);
 	}
 

@@ -20,6 +20,7 @@ public class UserIdFindServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		System.out.println("아이디 찾기 수행");
 		//아이디 찾기 후 
 		//아이디찾기 완료 페이지로 이동
 		//response.sendRedirect("views/user/findUserIdOk.jsp");

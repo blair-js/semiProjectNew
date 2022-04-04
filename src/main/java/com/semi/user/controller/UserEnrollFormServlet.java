@@ -22,7 +22,7 @@ public class UserEnrollFormServlet extends HttpServlet {
 
 	
 		
-		//로그인 작성 폼을 띄워줄 jsp 화면 뿌려주기
+		//회원가입 작성 폼을 띄워줄 jsp 화면 뿌려주기
 		RequestDispatcher view = request.getRequestDispatcher("views/user/userEnrollForm.jsp");
 		view.forward(request, response);
 	}
