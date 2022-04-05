@@ -39,7 +39,7 @@
 		return;
 	}*/
 	
-	String userEmail = userDao.getUserEmail(userId);
+	/*String userEmail = userDao.getUserEmail(userId);
 	
 	//boolean isRight = (new SHA256().getSHA256(userEmail).equals(code)) ? true : false;
 	
@@ -56,10 +56,7 @@
 		script.println("</script>");
 		script.close();
 		return;
-	}
-	
-	
-	
+	}*/
 	
 	/*else{
 		PrintWriter script = response.getWriter();
@@ -72,7 +69,9 @@
 	}*/
 	
 %>
-
+	<script>
+		alert('이메일 인증완료')
+	</script>
 
 
 </body>

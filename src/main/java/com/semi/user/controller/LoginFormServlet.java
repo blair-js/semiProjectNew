@@ -19,7 +19,7 @@ public class LoginFormServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		
+		System.out.println("로그인 작성 폼을 뿌려줄 서블릿");
 		//로그인 작성 폼을 띄워줄 jsp 화면 뿌려주기
 		RequestDispatcher view = request.getRequestDispatcher("views/user/loginForm.jsp");
 		view.forward(request, response);

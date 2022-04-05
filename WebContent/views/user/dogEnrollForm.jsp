@@ -15,7 +15,6 @@
 	font-weight: normal;
 	font-style: normal;
 }
-
 * {
 	font-family: 'LeferiPoint-BlackA';
 }
@@ -24,20 +23,8 @@
 	box-sizing: border-box;
 	box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.4);
 	margin: 15px auto;
-	padding: 15px;
-	width: 600px;
-}
-
-.form-heading {
-	font-size: 36px;
-	font-weight: bold;
-	margin: 5px;
-}
-
-.helper-text {
-font-size: 12px;
-margin-botom: 10px;
-text-align: right;
+	padding: 30px;
+	width: 650px;
 }
 .field-row {
   position: relative;
@@ -62,7 +49,6 @@ text-align: right;
 .field.field-short {
   width: 70px;
 }
-
 .form-button {
   background: #0099FF;
   margin-bottom: 7px;
@@ -73,7 +59,6 @@ text-align: right;
   padding: 10px;
   font-size: 16px;
 }
-
 .tar {
 	resize: none;
 }
@@ -86,20 +71,21 @@ text-align: right;
 button{
 	border-radius: 10px;
 }
-
+div b{
+	color: #0099FF;
+}
 </style>
 </head>
 <body>
-
+	<!-- DogEnrollFormServlet에서 여기로 옴 -->
+	
 	<!-- menubar -->
 	<%@ include file="../common/menubar.jsp"%>
-	<!-- DogEnrollFormServlet에서 여기로 옴 -->
-
+	
 	<div class="py-3 text-center mb-3 mt-3">
-		<img class="d-block mx-auto mb-4" src="assets/img/gallery/paw.png"
-			alt="강쥐" width="72" height="57">
+		<img class="d-block mx-auto mb-4" src="assets/img/gallery/paw.png" alt="강아지로고" width="72" height="57">
 		<h2>입학 신청서</h2>
-		<b style="color:#0099FF">반려견</b>의 정보를 입력해주세요.
+		<b>반려견</b>의 정보를 입력해주세요.
 	</div>
 	
 	<!-- 신청서 form 시작 -->
@@ -107,57 +93,42 @@ button{
 	
 		<!-- 사진 -->
 		<div class="field-row mb-3">
-			<label class="form-label" for="firstName">*사진</label> 
+			<label class="form-label">*사진</label> 
 			<img id="titleImg" width="250" height="200">
 		</div>
-        
 		<!-- 이름 -->
 		<div class="field-row">
-			<label class="form-label" for="firstName">*이름</label> 
-			<input type="text" id="firstName" class="field text-field first-name-field" required>
+			<label class="form-label" for="dogName">*이름</label> 
+			<input type="text" id="dogName" class="field text-field first-name-field" name="dogName" required>
 		</div>
 		<!-- 나이 -->
 		<div class="field-row">
-			<label class="form-label cf" for="lastName">나이</label> 
-			<input type="text" id="lastName" class="field text-field last-name-field" required> 
-			<span class="message"></span>
+			<label class="form-label cf" for="dogAge">나이</label> 
+			<input type="text" id="dogAge" class="field text-field last-name-field" name="dogAge" required> 
 		</div>
 		<!-- 성별 -->
 		<div class="field-row">
 			<label class="form-label">*성별</label>
-				<select class="field form-dropdown">
-				<option value="BS in Physics minor in Economics">
-					남자
-				</option>
-				<option value="BS in Physics minor in Finance">
-					여자
-				</option>
-
-			</select>
+				<select class="field form-dropdown" name="dogGender">
+					<option value="M">남자</option>
+					<option value="F">여자</option>
+				</select>
 		</div>
 		<!-- 몸무게 -->
 		<div class="field-row">
-			<label class="form-label">*몸무게</label> <select
-				class="field form-dropdown">
-				<option value="BS in Physics minor in Economics">
-					소형(1~5kg)
-				</option>
-				<option value="BS in Physics minor in Finance">
-					중형(6~10kg)
-				</option>
-				<option value="BS in Physics with specialization in Material Science">
-					대형(11kg 이상)
-				</option>
+			<label class="form-label">*몸무게</label> 
+			<select class="field form-dropdown" name="dogWeight" required>
+				<option value="S">소형(1~5kg)</option>
+				<option value="M">중형(6~10kg)</option>
+				<option value="L">대형(11kg 이상)</option>
 			</select>
 		</div>
 		<!-- 특이사항 -->
-		<div class="field-row">
-			<label class="form-label" for="tel">특이사항</label> 
-			<textarea class="tar" rows="5" cols="30">
-			
-			</textarea>
+		<div class="field-row" style="text-align: left">
+			<label class="form-label" for="memo">특이사항</label> 
+			<textarea class="tar" id="memo" rows="5" cols="30" name="dogMemo">Hello Dogg World</textarea>
 		</div>
-		<!-- 입학가능여부조회버튼 -->
+		<!-- 입학가능여부조회 버튼 -->
 		<div class="field-row">
 			<label class="form-label"></label>
 			<button type="button" class="form-button mb-3" onclick="goDogEnrollCheck()">입학 가능여부 조회</button>
@@ -169,21 +140,21 @@ button{
 		</div>
 		<!-- 반 -->
 		<div class="field-row">
-			<label class="form-label" for="hs">*반</label>
-			<input type="text" id="hs" class="field text-field hs-field" required readonly>
+			<label class="form-label" for="dogClass">*반</label>
+			<input type="text" id="dogClass" class="field text-field hs-field" name="dogClass" required readonly>
 		</div>
 		<!-- 대기여부 -->
 		<div class="field-row">
-			<label class="form-label" for="tel">대기여부</label> 
-				<input type="radio" name="chk_info" value="Y" checked> 예
-				<input type="radio" name="chk_info" value="N"> 아니오
+			<label class="form-label">대기여부</label> 
+				<input type="radio" id="radioBtn" name="wating" value="Y" checked> 예
+				<input type="radio" id="radioBtn" name="wating" value="N"> 아니오
 		</div>
 		<!-- 입학신청서 제출 버튼 -->
 		<div class="field-row btnWrapper">
 			<button type="button" class="form-button" onclick="goDogEnroll()">입학신청서 제출</button>
 		</div>
-		
 	</form>
+	<!-- 신청서 form 끝 -->
 	
 	<!-- 숨겨져있는 파일영역 -->
 	<div id="fileArea">
@@ -205,15 +176,15 @@ button{
 		function loadImg(inputFile){
 	      if(inputFile.files.length == 1){
 	         //readAsDataURL : 파일의 읽어서 리더에 업로드 동작이 되면서 파일 읽기가 완료가 되면 이미지 src를 URL에 담아주는 방식
-	         var reader = new FileReader(); // 파일 읽어 들일 객체 생성
-	         reader.readAsDataURL(inputFile.files[0]); // 파일 읽어 들이는 메소드
+	         var reader = new FileReader(); //파일을 읽어 들일 객체 생성
+	         reader.readAsDataURL(inputFile.files[0]); //파일을 읽어 들이는 메소드
 	         // onload : 파일 읽기가 완료가 되면 실행 하는것
-	         reader.onload = function(e){ // 파일 읽기가 다 완료 되면 실행
+	         reader.onload = function(e){ //파일 읽기가 다 완료 되면 실행
 	            $("#titleImg").attr("src", e.target.result);
 	         }
 	      }
 	   }
-		//입학신청
+		//입학신청 함수
 		function goDogEnroll() {
 			location.href="<%= request.getContextPath()%>/insertDog.do;"
 		}
@@ -225,5 +196,6 @@ button{
 
 	<!-- footer -->
 	<%@ include file="../common/footer.jsp"%>
+	
 </body>
 </html>
