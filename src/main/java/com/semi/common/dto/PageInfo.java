@@ -10,7 +10,6 @@ public class PageInfo {
 	private int pageLimit;			// 한 페이지 하단에 보여질 페이지 최대 갯수
 	private int boardLimit;			// 한 페이지에 보여질 게시글 최대 갯수
 	
-	//기본 생성자
 	public PageInfo() {
 		
 	}
@@ -89,4 +88,6 @@ public class PageInfo {
 				+ ", endPage=" + endPage + ", maxPage=" + maxPage + ", pageLimit=" + pageLimit + ", boardLimit="
 				+ boardLimit + "]";
 	}
+
+	
 }

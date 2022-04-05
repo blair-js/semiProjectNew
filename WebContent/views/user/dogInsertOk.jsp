@@ -16,10 +16,10 @@ div h2 span{
 button b {
 	color: #0099FF;
 }
-
 </style>
 </head>
 <body>
+	<!-- DogInsertServlet에서 여기로 옴 -->
 	
 	<!-- menubar -->
 	<%@ include file="../common/menubar.jsp"%>
@@ -43,8 +43,7 @@ button b {
 		</button>
 	</div>
 
-	<!--27행 경로는 바꿔야함! (영아님 결제페이지) -->
-	<!-- 27행, 29행은 현재 404에러임 -->
+	<!-- 51행 경로는 바꿔야함! (뼈다귀 충전페이지) 현재는 404에러임 -->
 	<script type="text/javascript">
 		//뼈다귀 충전하기
 		function goPointCharge() {

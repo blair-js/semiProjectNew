@@ -1,6 +1,7 @@
 package com.semi.common;
 
 import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -12,29 +13,43 @@ public class JDBCTemplate {
 
 	public static Connection getConnection() {
 		
-		Connection conn=null;
+
+		Connection conn = null;
 		
 		Properties prop = new Properties();
-		
+			
 		String fileName = JDBCTemplate.class.getResource("/sql/driver/driver.properties").getPath();
 		
+		System.out.println(fileName);
+		
 		try {
+			
 			prop.load(new FileReader(fileName));
 			
+			//driver.properties 파일에서 드라이버 정보 get
 			String driver = prop.getProperty("driver");
 			String url = prop.getProperty("url");
 			String user = prop.getProperty("username");
 			String password = prop.getProperty("password");
-			
+
+			// 1. 클래스 객체 등록, Driver 등록
 			Class.forName(driver);
 			
+			// 2. DBMS와 연결
 			conn = DriverManager.getConnection(url, user, password);
 			
 			conn.setAutoCommit(false);
 			
-		}catch(Exception e) {
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println("conn 체크" + conn.toString());
+		
 		return conn;
 	}
 	
@@ -42,41 +57,41 @@ public class JDBCTemplate {
 		try {
 			if (conn != null && !conn.isClosed())
 				conn.close();
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void close(Statement stmt) {
 		try {
-			if(stmt != null && stmt.isClosed())
+			if (stmt != null && !stmt.isClosed())
 				stmt.close();
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public static void clos(ResultSet rs) {
+
+	public static void close(ResultSet rs) {
 		try {
-			if(rs != null && !rs.isAfterLast()) 
+			if (rs != null && !rs.isAfterLast())
 				rs.close();
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public static void commit (Connection conn) {
+
+	public static void commit(Connection conn) {
 		try {
-			if(conn != null && !conn.isClosed())
+			if (conn != null && !conn.isClosed())
 				conn.commit();
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void rollback(Connection conn) {
 		try {
-			if(conn != null & conn.isClosed())
+			if (conn != null && !conn.isClosed())
 				conn.rollback();
 		} catch (SQLException e) {
 			e.printStackTrace();
