@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="com.semi.user.model.dto.User"%>
+	pageEncoding="UTF-8" import="com.semi.user.model.dto.User"%>
 
 <%
 	//세션에 담겨있는 로그인 유저의 정보를 가져온다.
@@ -14,27 +14,38 @@
 <link rel="icon" href="assets/img/favicons/fdog.ico">
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link href="assets/css/theme.css" rel="stylesheet" />
 <style>
-	
+@font-face {
+	font-family: 'GmarketSansMedium';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff')
+		format('woff');
+	font-weight: normal;
+	font-style: normal;
+	}
 	@font-face {
-    font-family: 'LeferiPoint-BlackA';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/LeferiPoint-BlackA.woff') format('woff');
+    font-family: 'GmarketSansBold';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 	}
+
+	h1, h2, h3, h4, h5, h6, p, b {
+	    font-family: 'GmarketSansBold';
+	}
+
+	.nav-item {
+	    font-family: 'GmarketSansBold';
+		font-size: 1.2rem;
+	}
 	
-   *{
-   		font-family: 'LeferiPoint-BlackA';
-   		font-weight: bold;
-   }
-   h1, h2, h3, h4, h5, h6{
-   		font-family: 'LeferiPoint-BlackA';
-   }
-   li{
-   		font-size: 1.2rem;
-   }
+	*{
+		font-family: 'GmarketSansMedium';		
+	}
+
 	nav.navbar {
    		background-color : rgba( 255, 255, 255, 0.5 );
    }
@@ -52,7 +63,12 @@
     margin-top: 0;
     width: 50%;
 	}
-	
+
+.dropdown:hover .dropdown-menu {
+	display: block;
+	margin-top: 0;
+	width: 50%;
+}
 </style>
 
 <script>
