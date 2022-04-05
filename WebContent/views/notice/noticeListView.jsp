@@ -64,7 +64,7 @@
 						<!-- 검색어 입력 -->		
 						<input type="text" class="form-control" id="searchbar" placeholder="검색어를 입력하세요.">	
 						<!-- 검색 버튼 --> 
-						<a href="#" class="btn btn-secondary" role="button" id="searchBtn">검색</a>							
+						<a href="#" class="btn btn-secondary" role="button" id="searchBtn"><b>검색</b></a>							
 					</div>	
 				</form>	
 			</div>
@@ -110,7 +110,7 @@
 
 		<%-- 글쓰기 버튼 -> 관리자에게만 보이도록한다. --%>
 		<div class="text-md-end" id="button">
-			<button type="button" class="btn btn-dark m-2" onclick="location.href='<%=contextPath%>/enrollFormNotice.do'">글쓰기</button>
+			<button type="button" class="btn btn-dark m-2" onclick="location.href='<%=contextPath%>/enrollFormNotice.do'"><b>글쓰기</b></button>
 		</div>
 		
 		<%-- 부트스트랩에서 제공하는 페이지셔닝 --%>
