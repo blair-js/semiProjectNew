@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>둥글개 둥글개</title>
 
 <style type="text/css">
 .tftable {
@@ -61,7 +61,7 @@ td {
 
 		<h1 class="magin" id="center" style="margin: 40px">간식 구매내역</h1>
 
-		<hr style="height: 7px; color: #FDC800";>
+		<hr style="height: 7px; color: #FDC800;">
 
 
 		<div class="px-6 py-5 my-4 text-center">
@@ -69,6 +69,7 @@ td {
 			<p class="display-5 fw-bold"></p>
 
 			<form id="snackOrderList" action="<%=request.getContextPath() %>/snackOrderList.do" method="post">
+			
 			<table class="tftable" border="1">
 				<tr>
 					<th style="" width=200px">주문번호</th>

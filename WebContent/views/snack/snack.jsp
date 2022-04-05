@@ -82,13 +82,13 @@
 	<div class="container-md">
 		<div class="row">
 
-			<div class="col-sm row gx-10">
+			<div class="col-sm row gx-10" onclick="goDetail()">
 				<img src="assets/img/gallery/test_snack_1.JPG" height="250px" />
 			</div>
-			<div class="col-sm row gx-10">
+			<div class="col-sm row gx-10" onclick="goDetail()">
 				<img src="assets/img/gallery/test_snack_2.JPG" height="250px" />
 			</div>
-			<div class="col-sm row gx-10">
+			<div class="col-sm row gx-10" onclick="goDetail()">
 				<img src="assets/img/gallery/test_snack_3.JPG" height="250px" />
 			</div>
 
@@ -164,13 +164,13 @@
 					<p class="display-5 fw-bold"></p>
 				</div>
 
-				<div class="col-sm row gx-10">
+				<div class="col-sm row gx-10" onclick="goDetail()">
 					<img src="assets/img/gallery/test_snack_4.JPG" height="250px" />
 				</div>
-				<div class="col-sm row gx-10">
+				<div class="col-sm row gx-10" onclick="goDetail()">
 					<img src="assets/img/gallery/test_snack_5.JPG" height="250px" />
 				</div>
-				<div class="col-sm row gx-10">
+				<div class="col-sm row gx-10" onclick="goDetail()">
 					<img src="assets/img/gallery/test_snack_6.JPG" height="250px" />
 				</div>
 
@@ -241,13 +241,13 @@
 					<p class="display-5 fw-bold"></p>
 				</div>
 
-				<div class="col-sm row gx-10">
+				<div class="col-sm row gx-10" onclick="goDetail()">
 					<img src="assets/img/gallery/test_snack_7.JPG" height="250px" />
 				</div>
-				<div class="col-sm row gx-10">
+				<div class="col-sm row gx-10" onclick="goDetail()">
 					<img src="assets/img/gallery/test_snack_8.JPG" height="250px" />
 				</div>
-				<div class="col-sm row gx-10">
+				<div class="col-sm row gx-10" onclick="goDetail()">
 					<img src="assets/img/gallery/test_snack_9.JPG" height="250px" />
 				</div>
 
@@ -353,13 +353,7 @@
 
 	<br>
 
-	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
-			id="center" onclick="goSnackUpdate()">(관리자) 간식 수정</button>
-
-	<br>
-
-	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
-			id="center" onclick="goSnackDelete()">(관리자) 간식 삭제</button>
+	
 
 
 
@@ -370,13 +364,18 @@
 </div> <!-- 컨테이너 끝 div -->
 
 	<script>
+				//Detail은 관리자만 들어갈 수 있도록 조건문 걸어주기
+			function goDetail(){
+			    location.href = "<%=request.getContextPath()%>/snackDetail.do;"
+			}	
+	
 		//서블릿 잘 다녀오는지 테스트차 만들어봄
-		function goSnackResult() { //고메인 함수를 사용하여 이동
+			function goSnackResult() { //간식 구매 완료 후 이동 되는 서블릿
 				location.href = "<%=request.getContextPath()%>/snackResult.do;" 	
 			}	
 			
 			function goUsermypage(){//유저 마이페이지 = 조건문으로 회원과 관리자의 마이페이지 경로를 다르게 이동시켜주기
-				location.href="<%=request.getContextPath()%>/myPage.do"
+				location.href="<%=request.getContextPath()%>/userMyDetail.do;"
 			}
 	 
 			function goAdminmypage(){//관리자 마이페이지 = 조건문으로 회원과 관리자의 마이페이지 경로를 다르게 이동시켜주기
@@ -388,12 +387,7 @@
 				location.href="<%=request.getContextPath()%>/snackInsertForm.do"
 			}
 			
-			function goSnackUpdate(){//간식 업데이트를 위한 서블릿
-				location.href="<%=request.getContextPath()%>/snackUpdateForm.do"
-			}
-			function goSnackDelete(){//간식 삭제를 하기위해 form으로 페이지 전환
-				location.href="<%=request.getContextPath()%>/snackDeleteForm.do"
-			}
+			
 
 			
 	</script>

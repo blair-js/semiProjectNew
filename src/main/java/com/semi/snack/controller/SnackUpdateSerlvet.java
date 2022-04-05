@@ -31,7 +31,7 @@ public class SnackUpdateSerlvet extends HttpServlet {
 		
 		System.out.println("간식수정을 하기위한 서블릿");
 		request.setAttribute("msg", "수정 성공");
-		RequestDispatcher view = request.getRequestDispatcher("views/snack/snackUpdate.jsp");
+		RequestDispatcher view = request.getRequestDispatcher("views/snack/snackDetail.jsp");
 		view.forward(request, response);
 	}
 
