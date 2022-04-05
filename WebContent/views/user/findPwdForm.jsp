@@ -64,6 +64,7 @@ main form button b{
 </head>
 <body>
 	<!-- UserPwdFindFormServlet에서 여기로 넘어옴 -->
+	<!-- form에 입력한 데이터를 UserPwdFindServlet으로 보냄 -->
 	
 	<!-- menubar -->
 	<%@ include file="../common/menubar.jsp"%>
@@ -91,20 +92,20 @@ main form button b{
 	
 	<!-- 아래 아이디, 이메일, 비밀번호 작성 영역 시작 -->
 	<main class="form-findPwd">
-		<form>
+		<form action="<%=contextPath %>/findPwd.do" method="post" onsubmit="return findPwdValidate();">
 			<h5 class="h5 mb-2 fw-lighter" style="font-family: 'LeferiPoint-BlackA'; color: gray">비밀번호를잊으셨나요?</h5>
 			<h5 class="h5 mb-4 fw-lighter" style="font-family: 'LeferiPoint-BlackA'; color: gray">아래의 정보를입력해주세요.</h5>
 			
 			<div class="form-floating">
-				<input type="text" class="form-control" id="userId" name="userId" placeholder="아이디를 입력하세요.">
+				<input type="text" class="form-control" id="userName" name="userName" placeholder="이름을 입력하세요.">
 			</div>
 			<div class="form-floating">
-				<input type="password" class="form-control" id="userPwd" name="userPwd" placeholder="비밀번호를 입력하세요.">
+				<input type="text" class="form-control" id="userId" name="userId" placeholder="아이디를 입력하세요.">
 			</div>
 			<div class="form-floating">
 				<input type="email" class="form-control mb-4" id="userEmail" name="userEmail" placeholder="이메일 주소를 입력하세요.">
 			</div>
-			<button type="button" class="w-100 btn btn-lg btn-primary mb-2" onclick="goFindPwd()">
+			<button type="submit" class="w-100 btn btn-lg btn-primary mb-2">
 				<b>비밀번호 찾기</b>
 			</button>
 		</form>
@@ -112,8 +113,27 @@ main form button b{
 
 	<!-- 아이디찾기 버튼 클릭시 UserPwdFindServlet 로 이동 -->
 	<script type="text/javascript">
-		function goFindPwd() {
-			location.href="<%= request.getContextPath()%>/findPwd.do;"
+		function findPwdValidate() {
+			//아이디 입력 여부 확인
+			if($('#userName').val() == null){
+				alert('이름을 입력해주세요.');
+				$('#userName').focus();
+				return false;
+			}
+			//비밀번호 입력 여부 확인
+			if($('#userId').val() == null){
+				alert('아이디를 입력해주세요.');
+				$('#userId').focus();
+				return false;
+			}
+			//이메일 입력 여부 확인
+			if($('#userEmail').val() == null){
+				alert('이메일을 입력해주세요.');
+				$('#userEmail').focus();
+				return false;
+			}
+			//위의 세 조건 모두 통과시
+			return true;
 		}
 	</script>
 

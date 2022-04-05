@@ -2,6 +2,8 @@
     pageEncoding="UTF-8" import="com.semi.user.model.dto.User"%>
 
 <%
+	//세션에 담겨있는 로그인 유저의 정보를 가져온다.
+	//이 로그인 유저의 정보의 유무에 따라 마이페이지+로그아웃 버튼이 보이는지, 로그인+회원가입 버튼이 보이는지 결정
 	User loginUser = (User)session.getAttribute("loginUser");	
 	String msg = (String)session.getAttribute("msg");
 	String contextPath = request.getContextPath();
@@ -88,18 +90,18 @@
             	</li>
             </ul>
             
-			<!-- 로그인 전 -->
-            <!-- LoginFormServlet으로 이동 -->
-            <a class="btn btn-sm btn-light order-1 m-1" href="<%= contextPath %>/loginForm.do;"><b>로그인</b></a>
-            <!-- UserEnrollFormServlet으로 이동 -->
-            <a class="btn btn-sm btn-light order-1 m-1" href="<%= contextPath %>/userEnrollForm.do;"><b>회원가입</b></a>
-            
-            <!-- 로그인 후 -->
-            <a class="btn btn-sm btn-light order-1 m-1" href="<%= contextPath %>/userMyDetail.do;"><b>마이페이지</b></a>
-            <a class="btn btn-sm btn-light order-1 m-1" href="index.jsp"><b>로그아웃</b></a>
-
-            <!-- 아직 구분해줄 객체가 없기 때문에 관리자 페이지 임의 생성 조건문으로 경로만 다르게 잡아줄거이기에 버튼은 하나! -->
-            <a class="btn btn-sm btn-light order-1 m-1" href="<%= contextPath %>/adminMyPage.do;"><b>Mp</b></a>
+            <%-- 로그인 된 user가 없다면 로그인+회원가입 버튼을 보여주고 --%>
+            <%if(loginUser == null) {%>
+	            <a class="btn btn-sm btn-light order-1 m-1" href="<%= contextPath %>/loginForm.do"><b>로그인</b></a>
+	            <a class="btn btn-sm btn-light order-1 m-1" href="<%= contextPath %>/userEnrollForm.do"><b>회원가입</b></a>
+			
+			<%-- 로그인 된 user가 있다면 마이페이지+로그아웃 버튼을 보여준다. --%>            
+            <%}else{ %>
+	            <a class="btn btn-sm btn-light order-1 m-1" href="<%= contextPath %>/userMyDetail.do"><b>마이페이지</b></a>
+	            <a class="btn btn-sm btn-light order-1 m-1" href="<%= contextPath %>/userLogout.do"><b>로그아웃</b></a>
+	            <!-- 아직 구분해줄 객체가 없기 때문에 관리자 페이지 임의 생성 조건문으로 경로만 다르게 잡아줄거이기에 버튼은 하나! -->
+	            <a class="btn btn-sm btn-light order-1 m-1" href="<%= contextPath %>/adminMyPage.do"><b>Mp</b></a>
+			<%} %>
             
           </div>
         </div>

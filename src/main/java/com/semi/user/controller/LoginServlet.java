@@ -2,12 +2,14 @@ package com.semi.user.controller;
 
 import java.io.IOException;
 
+import javax.mail.Session;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.semi.user.model.dto.User;
 import com.semi.user.model.service.UserService;
@@ -29,8 +31,8 @@ public class LoginServlet extends HttpServlet {
 		//아이디와 비번 파라미터 받아오기
 		String userId = request.getParameter("userId");
 		String userPwd = request.getParameter("userPwd");
-		System.out.println("userId 파라미터 확인" + userId);
-		System.out.println("userPwd 파라미터 확인" + userPwd);
+		//System.out.println("userId 파라미터 확인" + userId);
+		//System.out.println("userPwd 파라미터 확인" + userPwd);
 		
 		//파라미터로 받은 아이디와 비번을 
 		//UserService의 loginUser()메소드의 인자로 전달하여 결과 반환받기. => 결과는 User 객체로!
@@ -38,12 +40,29 @@ public class LoginServlet extends HttpServlet {
 		
 		///////////////////////////////////////////////////////////////////////////
 		
-		
-		
-		//로그인 성공시 다시 시작화면으로 이동
-		//response.sendRedirect(request.getContextPath());
-		RequestDispatcher view = request.getRequestDispatcher("index.jsp");
-		view.forward(request, response);
+		if(loginUser != null) { //로그인 된 대상이 있는 경우(반환된 객체가 있는경우)
+			
+			//세션 생성
+			HttpSession session = request.getSession();
+			
+			//세션에 로그인 된 User 객체의 정보를 담아준다.
+			session.setAttribute("loginUser", loginUser);
+			
+			//로그인이 완료되면 홈 화면으로 돌아가기
+			response.sendRedirect(request.getContextPath());
+			
+			//RequestDispatcher view = request.getRequestDispatcher("index.jsp");
+			//view.forward(request, response);
+			
+		}else { //로그인 된 대상이 없는 경우(반환값이 null인 경우)
+			
+			//로그인 실패 메세지
+			request.setAttribute("msg", "로그인에 실패하였습니다.");
+			
+			//에러페이지
+			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+			
+		}//if-else
 		
 	}
 

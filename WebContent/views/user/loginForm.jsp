@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+<%
+	String userId = (String)request.getAttribute("userId");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -99,6 +101,7 @@
 	</main>
 
 	<script type="text/javascript">
+		
 		//로그인 폼에서 아이디와 비밀번호를 모두 기입해야만 true 반환하도록 한다.
 		function loginValidate() {
 			//아이디가 userId인 요소의 값의 길이가 0이라면(즉, 아이디를 입력하지 않았다면)
