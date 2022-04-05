@@ -1,11 +1,15 @@
 package com.semi.class_notice.controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.semi.class_notice.model.dto.ClassNotice;
+import com.semi.class_notice.model.service.ClassNoticeService;
 
 /**
  * Servlet implementation class ClassNoticeInsertServlet
@@ -26,9 +30,33 @@ public class ClassNoticeInsertServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// 게시글 등록 성공할경우 다시 리스트 목록으로 전환
-		request.getSession().setAttribute("msg", "게시물 등록 성공");
-		response.sendRedirect("classNoticeList.do");
+		// 파라미터 값으로 제목, 내용 잘 받아오는지 확인하기 위한 코드
+		request.setCharacterEncoding("utf-8");
+		// 받아 온 값으로 알림장 객체 생성
+		// 업로드 이미지도 객체 생성해서 던져줘야하는데 시간도 없고 힘들어서 내일 할 예정
+		ClassNotice n = new ClassNotice();
+		String writer = request.getParameter("writer");
+		String title = request.getParameter("title");
+		String content = request.getParameter("content");
+		// 어느 반의 게시물인지 알아야 하니까 마찬가지로 className 같이 넘겨줘야 할듯
+		String className = "햇님반";
+		
+		n.setNoticeWriter(writer);
+		n.setClassNoticeTitle(title);
+		// \n <br> 태그로 변경
+		n.setClassNoticeContent(content);
+		n.setClassName(className);
+		
+		int result = new ClassNoticeService().insertNotice(n);
+		
+		if(result > 0) {
+			// 게시글 등록 성공할경우 다시 리스트 목록으로 전환
+			request.getSession().setAttribute("msg", "게시물 등록 성공");
+			response.sendRedirect("classNoticeList.do");
+		}else {
+			request.setAttribute("msg", "게시물 등록 실패");
+			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+		}
 	}
 
 	/**
