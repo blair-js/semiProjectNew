@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%
+	//UserPwdFindServlet에서 request 객체에 담은 userPwd get
+	String userPwd = (String)request.getAttribute("userPwd");
+	String userName = (String)request.getAttribute("userName");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -95,10 +100,10 @@ main form{
 	<main class="form-findId">
 		<form>
 			<div class="mb-2">
-				<b>김지수</b>고객님의<br> 비밀번호 찾기가완료되었습니다.<br>
+				<b>${ requestScope.userName}</b>고객님의<br> 비밀번호 찾기가완료되었습니다.<br>
 			</div>
 			<div class="mb-4">
-				비밀번호는<br><b>jisu****123</b> 입니다.
+				비밀번호는<br><b>${ requestScope.userPwd }</b> 입니다.
 			</div>
 			<!-- 로그인으로 돌아가는 버튼 -->
 			<button type="button" class="w-100 btn btns btn-lg mb-2" onclick="goLogin()">

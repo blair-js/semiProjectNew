@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%
+	//UserIdFindServlet에서 request 객체에 담은 userId get
+	String userId = (String)request.getAttribute("userId");
+	String userName = (String)request.getAttribute("userName");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -101,10 +106,10 @@ main form{
 	<main class="form-findId">
 		<form>
 			<div class="mb-2">
-				<b>김지수</b>고객님의<br> 아이디 찾기가완료되었습니다.<br>
+				<b>${ requestScope.userName }</b>고객님의<br> 아이디 찾기가완료되었습니다.<br>
 			</div>
 			<div class="mb-4">
-				가입하신 아이디는<br><b>jisu</b> 입니다.
+				가입하신 아이디는<br><b>${ requestScope.userId }</b> 입니다.
 			</div>
 			<!-- 로그으로 돌아가기 버튼 -->
 			<button type="button" class="w-100 btn btns btn-lg mb-2" onclick="goLogin()">
@@ -117,7 +122,7 @@ main form{
 	<!-- 아이디찾기 버튼 클릭시 UserIdFindServlet 로 이동 -->
 	<script type="text/javascript">
 		function goLogin() {
-			location.href="<%= request.getContextPath()%>/loginForm.do;"
+			location.href="<%= contextPath %>/loginForm.do;"
 		}
 	</script>
 

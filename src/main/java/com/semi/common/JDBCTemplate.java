@@ -46,6 +46,9 @@ public class JDBCTemplate {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println("conn 체크" + conn.toString());
+		
 		return conn;
 	}
 	
