@@ -1,26 +1,23 @@
-package com.semi.notice.controller;
+package com.semi.qna.controller;
 
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.semi.notice.model.service.NoticeService;
-
 /**
- * Servlet implementation class NoticeListServlet
+ * Servlet implementation class QnaPwdCheckFormServlet
  */
-@WebServlet("/listNotice.do")
-public class NoticeListServlet extends HttpServlet {
+@WebServlet("/PwdCheckQna.do")
+public class QnaPwdCheckFormServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public NoticeListServlet() {
+    public QnaPwdCheckFormServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,18 +26,9 @@ public class NoticeListServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//페이징 처리를 위한 페이지 정보 변수 선언
-		int listCount;
-		int currentPage;
-		int startPage;
-		int endPage;
-		
-		int maxPage;
-		int pageLimit;
-		int boardLimit;
-		
-		//총 게시글 개수
-		listCount = new NoticeService().getListCount();
+		int nno = Integer.parseInt(request.getParameter("nno"));
+		request.setAttribute("nno", nno);
+		request.getRequestDispatcher("views/qna/qnaPwdCheckForm.jsp").forward(request, response);
 	}
 
 	/**

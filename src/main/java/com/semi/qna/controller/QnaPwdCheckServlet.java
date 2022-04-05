@@ -1,26 +1,23 @@
-package com.semi.notice.controller;
+package com.semi.qna.controller;
 
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.semi.notice.model.service.NoticeService;
-
 /**
- * Servlet implementation class NoticeListServlet
+ * Servlet implementation class QnaPwdCheckServlet
  */
-@WebServlet("/listNotice.do")
-public class NoticeListServlet extends HttpServlet {
+@WebServlet("/pwdCheckQna.do")
+public class QnaPwdCheckServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public NoticeListServlet() {
+    public QnaPwdCheckServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,18 +26,11 @@ public class NoticeListServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//페이징 처리를 위한 페이지 정보 변수 선언
-		int listCount;
-		int currentPage;
-		int startPage;
-		int endPage;
-		
-		int maxPage;
-		int pageLimit;
-		int boardLimit;
-		
-		//총 게시글 개수
-		listCount = new NoticeService().getListCount();
+		//받아온 nno와 가져온 nno가 일치하고, 받아온 pwd와 가져온 pwd가 일치하면 detailList로 간다.
+		request.getRequestDispatcher("views/qna/qnaDetailView.jsp").forward(request, response);
+		//틀리면 error페이지 -> msg로 비밀번호가 틀렸습니다. 다시 입력해주세요
+		//request.setAttribute("msg", "비밀번호가 틀렸습니다. 다시 입력해주세요."
+		//request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
 	}
 
 	/**

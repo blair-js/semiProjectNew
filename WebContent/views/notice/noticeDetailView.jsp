@@ -37,8 +37,8 @@
 		<!-- 원래는 nno 값이 같이 넘어가야한다.(함수를 사용하거나 ?nno=사용 -->
 		<div class="row">
 			<div class="col-md-12 text-md-end p-3">
-				<button class="btn btn-secondary m-1" onclick="location.href='<%=contextPath%>/updateFormNotice.do'">수정</button>
-				<button class="btn btn-secondary m-1" onclick="location.href='<%=contextPath%>/deleteNotice.do'">삭제</button>
+				<button class="btn btn-secondary m-1" onclick="location.href='<%=contextPath%>/updateFormQna.do'"><b>수정</b></button>
+				<button class="btn btn-secondary m-1" onclick="location.href='<%=contextPath%>/deleteQna.do'"><b>삭제</b></button>
 			</div>
 		</div>
 		
@@ -109,10 +109,11 @@
 		<!-- 목록 버튼-->
 		<div class="row">
 			<div class="col-md-12 text-md-end p-3">
-				<button class="btn btn-secondary" onclick="location.href='<%=contextPath%>/listNotice.do'">목록</button>
+				<button class="btn btn-secondary" onclick="location.href='<%=contextPath%>/listNotice.do'"><b>목록</b></button>
 			</div>
 		</div>
 	</div>
+	
 	<%@ include file="../common/footer.jsp" %>
 </body>
 </html>

@@ -13,6 +13,7 @@ public class JDBCTemplate {
 
 	public static Connection getConnection() {
 		
+
 		Connection conn = null;
 		
 		Properties prop = new Properties();
@@ -30,7 +31,7 @@ public class JDBCTemplate {
 			String url = prop.getProperty("url");
 			String user = prop.getProperty("username");
 			String password = prop.getProperty("password");
-			
+
 			// 1. 클래스 객체 등록, Driver 등록
 			Class.forName(driver);
 			
