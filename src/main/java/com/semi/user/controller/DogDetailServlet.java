@@ -9,28 +9,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-//userEnrollForm.jsp에서 넘어옴
-@WebServlet("/insertUser.do")
-public class UserInsertServlet extends HttpServlet {
+@WebServlet("/detailDogPage.do")
+public class DogDetailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public UserInsertServlet() {
+    public DogDetailServlet() {
         super();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		//회원가입을 시킨다. 
+		//도그에 대한 정보를 조회해와서 
+		//jsp에 뿌려주기 
 		
-		System.out.println("회원가입서블릿 체크");
-		//회원 가입이 정상 완료되면 => 이메일 발송 페이지로 이동 
-		RequestDispatcher view = request.getRequestDispatcher("views/user/emailSendAction.jsp");
-		
-		//0403 주석처리
-		//RequestDispatcher view = request.getRequestDispatcher("views/user/loginForm.jsp");
+		//강아지 상세정보
+		RequestDispatcher view = request.getRequestDispatcher("views/user/DogDetailPage.jsp");
 		view.forward(request, response);
-		//response.sendRedirect("views/user/loginForm.jsp");
-	
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

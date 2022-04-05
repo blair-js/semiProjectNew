@@ -1,6 +1,190 @@
 package com.semi.user.model.dao;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Properties;
+
+import static com.semi.common.JDBCTemplate.*;
+import com.semi.user.model.dto.User;
+
 public class UserDao {
+	
+	//properties 파일을 읽어옹기 위한 객체 prop
+	private Properties prop = new Properties();
+	
+	//UserDao 생성자
+	public UserDao() {
+		
+		String fileName = UserDao.class.getResource("/sql/user/user-query.properties").getPath();
+		System.out.println("fileName " + fileName);
+		try {
+			prop.load(new FileReader(fileName));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public User loginUser(Connection conn, String userId, String userPwd) {
+		//로그인 메소드
+		
+		//인자로 들어온 아이디와 비번을 가진 회원이 없으면 null을 반환할 것
+		User loginUser = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		//loginUser=SELECT * FROM R_USER 
+		//WHERE USER_ID=? AND USER_PWD=? AND STATUS='Y'
+		String sql = prop.getProperty("loginUser");
+		
+		try {
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			//쿼리 값 셋팅
+			pstmt.setString(1, userId);
+			pstmt.setString(2, userPwd);
+			
+			//쿼리 실행 후 결과 받기
+			rset = pstmt.executeQuery();
+			
+			/*
+			 	USER_NO
+				USER_ID
+				EMAIL
+				USER_PWD
+				USER_NAME
+				PHONE
+				SMS_CHECKED
+				EMAIL_HASH
+				EMAIL_CHECKED
+				USER_GENDER
+				STATUS
+				ENROLL_DATE
+				COOKIE_CHECKED
+			 */
+			
+			//조회결과로 오는 행은 1개이므로 반복문은 필요없음 
+			if(rset.next()) { //조회 결과가 있다면
+				
+				//rset의 컬럼 값을 담아서 User 객체를 생성
+				loginUser = new User(rset.getInt("USER_NO")
+										, rset.getString("USER_ID")
+										, rset.getString("EMAIL")
+										, rset.getString("USER_PWD")
+										, rset.getString("USER_NAME")
+										, rset.getString("PHONE")
+										, rset.getString("SMS_CHECKED")
+										, rset.getString("EMAIL_HASH")
+										, rset.getString("EMAIL_CHECKED")
+										, rset.getString("USER_GENDER")
+										, rset.getString("STATUS")
+										, rset.getDate("ENROLL_DATE")
+										, rset.getString("COOKIE_CHECKED")
+									);
+				
+			}//if
+			
+			//확인
+			System.out.println(loginUser.toString());
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return loginUser; //정보가 담겨있는 User 객체 반환(없으면 null 반환)
+	}
+
+
+	public String findUserId(Connection conn, String userName, String userEmail) {
+		//아이디 찾기 메소드
+		
+		//해당 조건과 일치하는(이름, 이메일) 회원을 찾지못할경우 null 반환
+		String userId = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		//findUserId=SELECT USER_ID FROM R_USER WHERE USER_NAME=? AND EMAIL=?
+		String sql = prop.getProperty("findUserId");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			//쿼리 값 셋팅 
+			pstmt.setString(1, userName);
+			pstmt.setString(2, userEmail);
+			
+			//쿼리 실행 후 결과 받기
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) { //결과가 있다면
+				//조회되는 컬럼의 1번째 가져오기(어짜피 1행 1열로 아이디 값만 조회됨)
+				userId = rset.getString(1);
+			}//if
+			
+			//확인
+			System.out.println(userId);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return userId; //조회 결과 반환(아이디 or null)
+	}
+
+
+	public String findUserPwd(Connection conn, String userName, String userId, String userEmail) {
+		//비밀번호 찾기 메소드
+		
+		//해당 조건과 일치하는(이름, 아이디, 이메일) 회원을 찾지못할경우 null 반환
+		String userPwd = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		//findUserPwd=SELECT USER_PWD FROM R_USER WHERE USER_NAME=? AND USER_ID=? AND EMAIL=?
+		String sql = prop.getProperty("findUserPwd");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			//쿼리 값 셋팅 
+			pstmt.setString(1, userName);
+			pstmt.setString(2, userId);
+			pstmt.setString(3, userEmail);
+			
+			//쿼리 실행 후 결과 받기
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) { //결과가 있다면
+				//조회되는 컬럼의 1번째 가져오기(어짜피 1행 1열로 비밀번호 값만 조회됨)
+				userPwd = rset.getString(1);
+			}//if
+			
+			//확인
+			System.out.println(userPwd);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return userPwd; //조회 결과 반환(아이디 or null)
+	}
 
 	/*public String getUserEmailChecked(String userID) {
 		

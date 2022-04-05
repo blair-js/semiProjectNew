@@ -20,7 +20,8 @@ public class UserDeleteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		response.sendRedirect(request.getContextPath()); //메인페이지로 단순 화면 전환(데이터 노 필요)
-	
+		
+		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

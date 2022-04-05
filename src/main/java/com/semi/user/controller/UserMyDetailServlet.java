@@ -9,11 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/userDetail.do")
-public class UserDetailServlet extends HttpServlet {
+@WebServlet("/userMyDetail.do")
+public class UserMyDetailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public UserDetailServlet() {
+    public UserMyDetailServlet() {
         super();
     }
 

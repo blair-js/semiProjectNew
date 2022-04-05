@@ -22,8 +22,9 @@ public class MyPageServlet extends HttpServlet {
 		//여기서 로그인한 객체가 누구냐에 따라 이동하는 jsp가 달라짐
 		
 		//회원인경우
-		RequestDispatcher view = request.getRequestDispatcher("views/user/userMyPage.jsp");
-		view.forward(request, response);
+		//0404 경로바꿈
+		//RequestDispatcher view = request.getRequestDispatcher("views/user/userDetailMyPage.jsp");
+		//view.forward(request, response);
 		
 		
 		//관리자인경우

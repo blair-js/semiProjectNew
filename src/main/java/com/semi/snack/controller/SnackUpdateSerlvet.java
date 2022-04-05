@@ -29,8 +29,8 @@ public class SnackUpdateSerlvet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		System.out.println("간식수정");
-		request.setAttribute("msg", "조회 성공");
+		System.out.println("간식수정을 하기위한 서블릿");
+		request.setAttribute("msg", "수정 성공");
 		RequestDispatcher view = request.getRequestDispatcher("views/snack/snackUpdate.jsp");
 		view.forward(request, response);
 	}
