@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/detailDogPage.do")
-public class dogDetailServlet extends HttpServlet {
+public class DogDetailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public dogDetailServlet() {
+    public DogDetailServlet() {
         super();
     }
 
