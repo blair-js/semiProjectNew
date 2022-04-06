@@ -21,9 +21,7 @@
 	
 	.table-condensed>tbody>tr>td,
 	
-	.table-condensed>tfoot>tr>td { padding: 20px;}
-
-	
+	.table-condensed>tfoot>tr>td { padding: 15px;}
 	
 </style>
 </head>
@@ -37,7 +35,7 @@
 		<!-- 원래는 nno 값이 같이 넘어가야한다.(함수를 사용하거나 ?nno=사용 -->
 		<div class="row">
 			<div class="col-md-12 text-md-end p-3">
-				<button class="btn btn-secondary m-1" onclick="location.href='<%=contextPath%>/updateFormQna.do'"><b>수정</b></button>
+				<button class="btn btn-secondary m-1" onclick="location.href='<%=contextPath%>/updateFormNotice.do'"><b>수정</b></button>
 				<button class="btn btn-secondary m-1" onclick="location.href='<%=contextPath%>/deleteQna.do'"><b>삭제</b></button>
 			</div>
 		</div>
