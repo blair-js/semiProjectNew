@@ -151,7 +151,6 @@ public class User {
 				+ ", userName=" + userName + ", phone=" + phone + ", smsChecked=" + smsChecked + ", emailHash="
 				+ emailHash + ", emailChecked=" + emailChecked + ", gender=" + gender + ", status=" + status
 				+ ", enrollDate=" + enrollDate + ", cookieChecked=" + cookieChecked + "]";
-	}
-	
+	}	
 	
 }
