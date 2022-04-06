@@ -40,6 +40,8 @@ public class NoticeDetailServlet extends HttpServlet {
 		//첨부파일
 		ArrayList<Attachment> atList = new NoticeService().selectAttachment(nno);
 
+		System.out.println(n);
+		System.out.println(atList);
 		
 		if(n != null) {
 			request.setAttribute("n", n);

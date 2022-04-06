@@ -88,22 +88,24 @@
 				<tr>
 					<td colspan="4"><%=n.getNoticeContent() %></td>
 				</tr>			
-				<% if(atList.isEmpty()) {%>
+				<% if(atList == null) {%>
 					<tr>
 						<th>첨부파일</th>
 						<td colspan="3">첨부파일이 존재하지 않습니다.</td>
 					</tr>
 				<%} else {%>
-				<%for(int i = 1; i< atList.size(); i++) { %>
-				<tr>
-					<th>첨부파일</th>
-					<td colspan="3">
-						<a download="<%= atList.get(i).getOriginName()%>" href="<%=contextPath%>/resources/notice_upfiles/<%=atList.get(i).getChangeName()%>"><%= atList.get(i).getChangeName()%></a>
-					</td>
-				</tr>
-			<%} %>						
+					<%for(int i = 1; i< atList.size(); i++) { %>
+					<tr>
+						<th>첨부파일</th>
+						<td colspan="3">
+							<a download="<%= atList.get(i).getOriginName()%>" href="<%=contextPath%>/resources/notice_upfiles/<%=atList.get(i).getChangeName()%>"><%= atList.get(i).getChangeName()%></a>
+						</td>
+					</tr>
+					<%} %>	
+				<%} %>						
 			</tbody>	
 		</table>
+		
 		<hr class="bor">
 		
 	</div>			
@@ -111,7 +113,7 @@
 	<!-- 목록 버튼-->
 	<div class="container">
 		<div class="col-md-12 text-md-end p-3">
-			<button class="btn btn-secondary" onclick="location.href='<%= contextPath%>/listNotice.do?currentPage=1';"><b>목록</b></button>
+			<button class="btn btn-secondary" onclick="location.href='<%=contextPath%>/listNotice.do?currentPage=1';"><b>목록</b></button>
 		</div>
 	</div>
 	
