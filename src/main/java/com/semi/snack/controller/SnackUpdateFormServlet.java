@@ -10,16 +10,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class SnackDetailServlet
+ * Servlet implementation class SnackUpdateFormServlet
  */
-@WebServlet("/snackDetail.do")
-public class SnackDetailServlet extends HttpServlet {
+@WebServlet("/snackUpdateForm.do")
+public class SnackUpdateFormServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SnackDetailServlet() {
+    public SnackUpdateFormServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -28,9 +28,10 @@ public class SnackDetailServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//상세 페이지 서블릿
-		System.out.println("상품 상세 페이지 서블릿");
-		request.getRequestDispatcher("views/snack/snackDetail.jsp").forward(request, response);
+		System.out.println("간식 수정 서블릿");
+		
+		RequestDispatcher view = request.getRequestDispatcher("views/snack/snackUpdateForm.jsp");
+		view.forward(request, response);
 	}
 
 	/**

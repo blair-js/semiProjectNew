@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,12 +8,14 @@
 <title>둥글개 둥글개</title>
 
 <style>
+
 #center {
 	text-align: center;
 	margin: auto;
 	justify-content: center;
 	display: flex;
 }
+
 </style>
 
 </head>
@@ -55,7 +58,12 @@
 
 			</div>
 		</div>
-
+		
+		<!-- 스낵 체크박스 체크 후 서블릿으로 이동시키기 위한 form 시작  -->
+		<form id="snackInsert_img"
+			action="<%=request.getContextPath()%>/snackInsert.do" method="post">
+			<!--  enctype="multipart/form-data" 일단 주석 -->
+		
 		<div>
 
 			<button type="submit" class="btn btn-outline-warning btn-lg"
@@ -73,11 +81,7 @@
 
 		<br> <br>
 
-		<!-- 스낵 체크박스 체크 후 서블릿으로 이동시키기 위한 form 시작  -->
-		<form id="snackInsert_img"
-			action="<%=request.getContextPath()%>/snackInsert.do" method="post">
-			<!--  enctype="multipart/form-data" 일단 주석 -->
-
+		
 			<div class="container-md">
 				<div class="row">
 
@@ -106,10 +110,13 @@
 
 						<table id="center">
 							<tr>
-								<td><pre> <h5> 간식번호 :  </h5>
-									</pre> <pre> <h5> 간식 명 :  </h5>
-									</pre> <!--    <pre> <h5> 분류번호 :  </h5></pre> --> <pre> <h5> 가격 :  </h5>
-									</pre></td>
+								<td> 
+								
+								<p> <h5> 간식명  :  <input type="text" name="snackName" value="간식 명을 입력해주세요."  required></h5> </p> 
+								 
+								<p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" value="수량 을 입력해주세요." required></h5> </p> 
+								
+								</td>
 							</tr>
 
 						</table>
@@ -199,12 +206,6 @@
 		location.href="<%=request.getContextPath()%>/adminMyPage.do"
 	}
 	
-	function goSnackUpdate(){//간식 업데이트를 위한 서블릿
-		location.href="<%=request.getContextPath()%>/snackUpdateForm.do"
-	}
-	function goSnackDelete(){//간식 삭제를 하기위해 form으로 페이지 전환
-		location.href="<%=request.getContextPath()%>/snackDeleteForm.do"
-	}
 
 	</script>
 

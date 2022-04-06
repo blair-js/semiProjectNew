@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8" import= "java.util.ArrayList, com.semi.snack.model.dto.*"%>
+	
+	<%
+		ArrayList<Snack> list = (ArrayList<Snack>)request.getAttribute("list");
+		
+	%>
+	
 <!DOCTYPE html>
 <html>
 <head>
@@ -61,9 +67,17 @@
 	</div>
 </div>
 
+		<!-- 스낵 체크박스 체크 후 서블릿으로 이동시키기 위한 form 시작  -->
+	<form id="snackOrder"
+			action="<%=request.getContextPath()%>/snackResult.do" method="post"
+			enctype="multipart/form-data">
+		<!-- multipart/form-data 을 사용하여 데이터 전송 -->
+
+		<!-- 구매에 대한 체크박스 필요 뼈다귀 수량이 있어야할 컨테이너 -->
+
 		<div>
 
-		<button type="button" class="btn btn-outline-warning btn-lg"
+		<button type="submit" class="btn btn-outline-warning btn-lg"
 				style="width: 20%" id="center" onclick="goSnackResult()">
 
 			<b>구매</b>
@@ -99,14 +113,6 @@
 	<p></p>
 
 
-
-	<!-- 스낵 체크박스 체크 후 서블릿으로 이동시키기 위한 form 시작  -->
-	<form id="snackOrder"
-			action="<%=request.getContextPath()%>/snackResult.do" method="post"
-			enctype="multipart/form-data">
-		<!-- multipart/form-data 을 사용하여 데이터 전송 -->
-
-		<!-- 구매에 대한 체크박스 필요 뼈다귀 수량이 있어야할 컨테이너 -->
 		<div class="container-md">
 			<div class="row">
 
