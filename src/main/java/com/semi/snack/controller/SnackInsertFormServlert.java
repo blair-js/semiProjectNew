@@ -13,13 +13,13 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class SnackInsertFromServlert
  */
 @WebServlet("/snackInsertForm.do")
-public class SnackInsertFromServlert extends HttpServlet {
+public class SnackInsertFormServlert extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SnackInsertFromServlert() {
+    public SnackInsertFormServlert() {
         super();
         // TODO Auto-generated constructor stub
     }

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,10 +19,10 @@
 
 </head>
 <body>
-
+	
 	<%@ include file="../common/menubar.jsp"%>
 	
-	<div class="container">
+		<div class="container">
 		<!-- 컨테이너 시작 div -->
 
 
@@ -31,7 +31,7 @@
 		<div class="px-3 py-3 my-4">
 			<!-- 초기 설정 4 5 5 -->
 
-			<h1>간식 상세보기</h1>
+			<h1>간식 수정</h1>
 
 
 			<hr style="height: 7px; color: #FDC800" ;  id="center">
@@ -89,9 +89,9 @@
 							<tr>
 								<td> 
 								
-								<p> <h5> 간식명  :  <input type="text" name="snackName" value="현재 기본 값"  readonly></h5> </p> 
+								<p> <h5> 간식명  :  <input type="text" name="snackName" value="수정 할 간식명 입력."   required></h5> </p> 
 								 
-								<p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" value="현재 기본 값" readonly></h5> </p> 
+								<p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" value="수정 할 뼈다귀 입력."  required></h5> </p> 
 								
 								</td>
 							</tr>
@@ -124,16 +124,13 @@
 
 
 	<div class="container-md">
-
+	
 	<button class="btn btn-outline-warning btn-lg" style="width: 15%"
 		id="center" onclick="goSnackUpdateForm()"><b>간식 수정</b></button>
 	
 	<br>
 	
-	<button class="btn btn-outline-warning btn-lg" style="width: 15%"
-		id="center" onclick="goSnackDelete()"><b>간식 삭제</b></button>
-	
-	
+
 	</div>
 
 
@@ -168,7 +165,7 @@
 	}
 	
 	function goSnackUpdateForm(){  //간식 수정을 하기위한 서블릿 여기에 들어가서 snackUpdateServlet를 호출 
-				location.href="<%=request.getContextPath()%>/snackUpdateForm.do" 	
+				location.href="<%=request.getContextPath()%>/snackUpdate.do" 	
 	}	
 	
 	function goSnackDelete(){  //간식 수정을 하기위한 서블릿 여기에 들어가서 snackUpdateServlet를 호출 
@@ -178,6 +175,8 @@
 	</script>
 	
 	
+	
 	<%@ include file="../common/footer.jsp"%>
+	
 </body>
 </html>
