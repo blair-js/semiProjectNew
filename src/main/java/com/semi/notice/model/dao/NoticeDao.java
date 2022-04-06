@@ -131,7 +131,7 @@ public class NoticeDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//selectNotice=SELECT NOTICE_TITLE, B.USER_NAME, CREATE_DATE, COUNT, NOTICE_CONTENT FROM NOTICE A JOIN R_USER B ON NOTICE_WRITER=USER_NO WHERE A.STATUS='Y' AND NOTICE_NO=?
+		//selectNotice=SELECT NOTICE_NO, NOTICE_TITLE, B.USER_NAME, CREATE_DATE, COUNT, NOTICE_CONTENT FROM NOTICE A JOIN R_USER B ON NOTICE_WRITER=USER_NO WHERE A.STATUS='Y' AND NOTICE_NO=?
 		String sql = prop.getProperty("selectNotice");
 		
 		try {
@@ -141,7 +141,8 @@ public class NoticeDao {
 			rset = pstmt.executeQuery();
 			
 			if(rset.next()) { //하나의 게시글만 조회
-				n = new Notice(rset.getString("NOTICE_TITLE"),
+				n = new Notice(rset.getInt("NOTICE_NO"),
+								rset.getString("NOTICE_TITLE"),
 								rset.getString("USER_NAME"),
 								rset.getDate("CREATE_DATE"),
 								rset.getInt("COUNT"),
@@ -165,7 +166,7 @@ public class NoticeDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//selectAttachment=SELECT FILE_NO, ORIGIN_NAME, CHANGE_NAME FROM ATTACHMENT WHERE REF_NO=? AND STATUS='Y'
+		//selectAttachment=SELECT FILE_NO, ORIGIN_NAME, CHANGE_NAME FROM ATTACHMENT WHERE REF_NO=? AND CATEGORY=3 AND STATUS='Y'
 		String sql = prop.getProperty("selectAttachment");
 		
 		try {
@@ -190,6 +191,45 @@ public class NoticeDao {
 			close(pstmt);
 		}
 		return atList;
+	}
+
+	public int insertNotice(Connection conn, Notice n) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		//insertNotice=INSERT INTO NOTICE VALUES (SEQ_NNO.NEXTVAL, ?, DEFAULT, ?, ?, DEFAULT, SYSDATE, DEFAULT)
+		String sql = prop.getProperty("insertNotice");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, Integer.parseInt(n.getNoticeWriter()));
+			pstmt.setString(2, n.getNoticeTitle());
+			pstmt.setString(3, n.getNoticeContent());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			pstmt = conn.prepareStatement(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+			
+		return result;
+	}
+
+	public int insertAttachment(Connection conn, ArrayList<Attachment> fileList) {
+		Attachment at = new Attachment();
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		return 0;
 	}
 
 }

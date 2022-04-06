@@ -27,8 +27,9 @@ public class Notice {
 		this.createDate = createDate;
 	}	
 	
-	public Notice(String noticeTitle, String noticeWriter, Date createDate, int count, String noticeContent) {
+	public Notice(int noticeNo, String noticeTitle, String noticeWriter, Date createDate, int count, String noticeContent) {
 		super();
+		this.noticeNo = noticeNo;
 		this.noticeTitle = noticeTitle;
 		this.noticeWriter = noticeWriter;
 		this.count = count;

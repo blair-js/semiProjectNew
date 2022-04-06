@@ -82,7 +82,7 @@ public class NoticeListServlet extends HttpServlet {
 		//페이징 바를 위한 pi객체
 		request.setAttribute("pi", pi);
 		
-		request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+		request.getRequestDispatcher("views/notice/noticeListView.jsp").forward(request, response);
 	}
 
 	/**
