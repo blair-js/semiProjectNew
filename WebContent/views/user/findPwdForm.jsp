@@ -50,6 +50,7 @@
 
 h5 {
 	text-align: center;
+	color: gray;
 }
 main form button b{
 	color: #0099FF;
@@ -93,17 +94,19 @@ main form button b{
 	<!-- 아래 아이디, 이메일, 비밀번호 작성 영역 시작 -->
 	<main class="form-findPwd">
 		<form action="<%=contextPath %>/findPwd.do" method="post" onsubmit="return findPwdValidate();">
-			<h5 class="h5 mb-2 fw-lighter" style="font-family: 'LeferiPoint-BlackA'; color: gray">비밀번호를잊으셨나요?</h5>
-			<h5 class="h5 mb-4 fw-lighter" style="font-family: 'LeferiPoint-BlackA'; color: gray">아래의 정보를입력해주세요.</h5>
+			<h5 class="h5 mb-3 fw-lighter" style="font-family: 'LeferiPoint-BlackA';">
+			비밀번호를 잊으셨나요?<br>
+			아래의 정보를입력해주세요.
+			</h5>
 			
 			<div class="form-floating">
-				<input type="text" class="form-control" id="userName" name="userName" placeholder="이름을 입력하세요.">
+				<input type="text" class="form-control" id="userName" name="userName" placeholder="이름을 입력하세요." required>
 			</div>
 			<div class="form-floating">
-				<input type="text" class="form-control" id="userId" name="userId" placeholder="아이디를 입력하세요.">
+				<input type="text" class="form-control" id="userId" name="userId" placeholder="아이디를 입력하세요." required>
 			</div>
 			<div class="form-floating">
-				<input type="email" class="form-control mb-4" id="userEmail" name="userEmail" placeholder="이메일 주소를 입력하세요.">
+				<input type="email" class="form-control mb-4" id="userEmail" name="userEmail" placeholder="이메일 주소를 입력하세요." required>
 			</div>
 			<button type="submit" class="w-100 btn btn-lg btn-primary mb-2">
 				<b>비밀번호 찾기</b>

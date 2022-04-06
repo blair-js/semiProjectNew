@@ -37,12 +37,13 @@
 	
 	<h2 class="mt-7" align="center"><%= message %></h2>
 	<div class="mb-5" align="center">
-		<button class="btn btn-primary mt-3" onclick = "location.href='<%= request.getContextPath()%>'">
+		<button class="btn btn-primary mt-3" onclick="location.href='index.jsp'">
 			<b class="b1">홈으로 돌아가기</b>
 		</button>
 	</div>
 	
 	<!-- footer -->
 	<%@ include file="../common/footer.jsp"%>
+	
 </body>
 </html>
