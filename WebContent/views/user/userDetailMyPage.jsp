@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="java.util.Date" %>
+<%@ page import="java.util.Date, java.util.ArrayList, com.semi.user.model.dto.*"%> 
 	
 <%
 	//UserMyDetailServlet에서 forward해줬으니 현재 회원 정보를 가져온다. 
@@ -14,12 +14,27 @@
 	String email = u.getEmail();
 	String phone = u.getPhone(); 
 	//String gender = u.getGender() != null ? u.getGender() : " "; //필수입력사항이 아니므로 대입되는 값을 삼항연산 사용(null 이면 빈 값 대입)
-	String point = "포인트표시";
+	//String point = "포인트표시";
 	String status = u.getStatus();
+	//String smschecked = u.getSmsChecked();
+	
+	String smsCheckYes = "";
+	String smsCheckNo = "";
+	
+	if(u.getSmsChecked() != null){
+		if(u.getSmsChecked().equals("Y")){
+			smsCheckYes = "checked";
+		}else{
+			smsCheckNo = "checked";
+		}
+	}//if
+	
+	//UserMyDetailServlet에서 loginUserPoint 속성명으로 해당 회원의 포인트를 set 해줬음
+	String userPoint = (String)request.getAttribute("loginUserPoint");
 	
 	String checkedGenderFemale = "";
 	String checkedGenderMale = "";
-	
+
 	//user의 성별이 남자냐 여자냐에 따라 표시해주는 option태그가 달라져야하므로 if문사용
 	if(u.getGender() != null){
 		if(u.getGender().equals("F")){
@@ -29,6 +44,14 @@
 		}
 	}//if
 	
+	String userPwd = u.getUserPwd();
+	
+	///////////////////////////////////
+	
+	//UserMyDetailServlet에서 넘겨주는 강아지리스트
+	ArrayList<Dog> dogList = (ArrayList<Dog>)request.getAttribute("dogList");
+	int dogCount = dogList.size();
+		
 %>
 <!DOCTYPE html>
 <html>
@@ -88,40 +111,61 @@ main .sm{
 				<h2>MY PAGE</h2>
 			</div>
 
+
+
+			<!--  -->
 			<!-- 우측 강아지의 간략한 정보 시작 -->
 			<div class="row g-5">
 				<div class="col-md-5 col-lg-4 order-md-last">
 					<!-- 첫번째 행 -->
 					<h4 class="d-flex justify-content-between align-items-center mb-3">
 						<span class="text-primary">Your Dog</span> 
-						<span class="badge bg-primary rounded-pill">2</span>
+						<span class="badge bg-primary rounded-pill"><%=dogCount %></span>
 					</h4>
 					<!-- 두번째 행 -->
+					<!-- 강아지를 보유한 숫자만큼 반복하여 뽑아준다 -->
+					<%if(dogList.isEmpty()) {%>
 					<ul class="list-group mb-3">
 						<!-- 두번째 행의 첫번째 -->
 						<li class="list-group-item d-flex justify-content-between lh-sm">
 							<div>
 								<h6 class="my-0">Dog name</h6>
-								<small class="sm">해피</small>
+								<small class="sm">강아지가 없습니다.</small>
 							</div> 
-							<span class="text-muted">A반</span>
+							<span class="text-muted"></span>
 						</li>
+					
+					<%} else{%>
+						<%for(Dog d : dogList) {%>
+							<li class="list-group-item d-flex justify-content-between lh-sm">
+								<div>
+									<h6 class="my-0">Dog name</h6>
+									<small class="sm"><%=d.getDogName() %></small>
+								</div> 
+								<span class="text-muted"><%=d.getClassName() %></span>
+							</li>
+						<%} %>
 						<!-- 두번째 행의 두번째 -->
-						<li class="list-group-item d-flex justify-content-between lh-sm">
+						 <!-- <li class="list-group-item d-flex justify-content-between lh-sm">
 							<div>
 								<h6 class="my-0">Dog name</h6>
 								<small class="sm">뽀삐</small>
 							</div> 
 							<span class="text-muted">B반</span>
-						</li>
-					</ul>
-					<!-- 두번째 행 끝 -->
+						</li>  -->
+						<!-- 두번째 행 끝 -->
+					</ul> 
+					<%} %>
+					
 					<!-- 세번째 행 : 버튼 -->
 					<button type="button" class="w-100 btn btn-secondary btn-lg" onclick="goDetailDog()">
 						<b>강아지 정보 상세보기</b>
 					</button>
 				</div>
 				<!-- 우측 강아지의 간략한 정보 끝 -->
+				<!--  -->	
+					
+					
 					
 				<!-- 강아지 로고가 있는 위쪽과 정보를 뿌려주는 아래쪽과의 구분선 -->	
 				<hr class="my-4 hr1" style="height:7px;">
@@ -131,7 +175,11 @@ main .sm{
 					<h4 class="mb-3">Your Info</h4>
 					
 					<!-- 사용자의 정보를 뿌려주는 form이자 수정이 가능한 form -->
-					<form class="needs-validation" novalidate>
+					<form action="<%= contextPath%>/updateUser.do;" id="updateForm" class="needs-validation" method="post" >
+					<!-- 사용자 정보 업데이트시 필요한 부분이므로 hidden으로 넘겨준다. -->
+					<input type="hidden" id="userNo" name="userNo" value="<%= u.getUserNo()%>">
+					<input type="hidden" id = "userPwd" name ="userPwd" value="<%=userPwd %>" readonly>
+					
 						<!-- 첫번째 행 1 : 이름, 가입일 기재 -->
 						<div class="row g-3">
 							<!-- 1-1 이름 -->
@@ -159,13 +207,13 @@ main .sm{
 							<!-- 네번째 행 4 : 전화번호 -->
 							<div class="col-12">
 								<label for="phone" class="form-label">Phone</label> 
-								<input type="text" class="form-control" id="phone" placeholder="" value="<%=phone %>" required>
+								<input type="text" class="form-control" id="phone" name="phone" placeholder="" value="<%=phone %>" required>
 							</div>
 							<!-- 다섯번째 행 5 : 성별, 보유뼈다귀(포인트), 상태 -->
 							<!-- 5-1 : 성별 -->
 							<div class="col-md-5">
 								<label for="gender" class="form-label">Gender</label> 
-								<select class="form-select" id="gender" required>
+								<select class="form-select" id="gender" name="gender" required>
 									<option value="F" <%= checkedGenderFemale %>>여자</option>
 									<option value="M" <%= checkedGenderMale %>>남자</option>
 								</select>
@@ -173,7 +221,7 @@ main .sm{
 							<!-- 5-2 : 보유뼈다귀(포인트) -->
 							<div class="col-md-3">
 								<label for="point" class="form-label">Point</label> 
-								<input type="text" class="form-control" id="point" placeholder="" value="<%=point %>" required readonly>
+								<input type="text" class="form-control" id="point" placeholder="" value="<%=userPoint %>" required readonly>
 							</div>
 							<!-- 5-3 : 상태 -->
 							<div class="col-md-4">
@@ -204,11 +252,11 @@ main .sm{
 						<h4 class="mb-3">SMS 수신여부</h4>
 						<div class="my-3">
 							<div class="form-check">
-								<input id="smsCheck" name="smsCheck" value="Y" type="radio" class="form-check-input" checked> 
+								<input id="smsCheck" name="smsCheck" value="Y" type="radio" class="form-check-input" <%= smsCheckYes %>> 
 								<label class="form-check-label" for="smsCheck">예</label>
 							</div>
 							<div class="form-check">
-								<input id="smsCheck" name="smsCheck" value="N" type="radio" class="form-check-input"> 
+								<input id="smsCheck" name="smsCheck" value="N" type="radio" class="form-check-input" <%= smsCheckNo %>> 
 								<label class="form-check-label" for="smsCheck">아니오</label>
 							</div>
 						</div>
@@ -217,7 +265,7 @@ main .sm{
 							
 						<!-- 정보수정, 탈퇴 버튼 두개 -->
 						<div class="col-md-12 text-center pb-5">
-							<button class="w-50 btn btn-primary btn-lg mb-2" type="button" onclick="updateUser()">
+							<button type="submit" class="w-50 btn btn-primary btn-lg mb-2">
 								<b>회원정보 수정</b>
 							</button>
 							<button class="w-50 btn btn-primary btn-lg" type="button" onclick="deleteUser()">
@@ -236,17 +284,42 @@ main .sm{
 	<!-- 컨테이너 끝 -->
 	
 	<script type="text/javascript">
-		function updateUser() {
-			location.href="<%= request.getContextPath()%>/updateUser.do;"
-		}
 		
 		function deleteUser() {
-			location.href="<%= request.getContextPath()%>/deleteUser.do;"
-			//프롬프트 창으로 비밀번호 확인 후 탈퇴 
+			
+			//비밀번호를 입력받을 프롬프트 창 열기
+			var inputPwd = prompt("현재 비밀번호를 입력하세요.");
+			var originPwd = $('#userPwd').val(); //위 form안에서 hidden으로 숨기고있는 요소에서 현재 user의 비밀번호를 가져온다. 
+			
+			//현재 user의 비번과 프롬프트에서 입력한 비번이 같아야 탈퇴 진행.
+			if(inputPwd != null){
+				if(inputPwd === originPwd){ //같다면
+					//재확인
+					var check = confirm('정말로 탈퇴하시겠습니까?');
+				
+					if(check){ //예 클릭시
+						//UserDeleteServlet으로 이동하도록
+						//action 속성을 해당 경로로 바꿔준다. 
+						$('#updateForm').attr("action", "<%= contextPath%>/deleteUser.do;");
+						
+						//submit() 해주기(해당 탈퇴 버튼은 type=button으로 되어있으므로 form안의 데이터가 넘어가지 않음)
+						$('#updateForm').submit();
+					}else{ //아니오 클릭시
+						alert('회원 탈퇴를 취소하였습니다.');
+					}//if~else
+				}else if(inputPwd != originPwd){
+					alert('비밀번호가 일치하지 않습니다. 다시 입력해주세요.');
+				}
+			}else{
+				alert('회원 탈퇴를 취소하였습니다.');
+			}
+				
 		}
 		function goDetailDog() {
-			location.href="<%= request.getContextPath()%>/detailDogPage.do;"
-			//프롬프트 창으로 비밀번호 확인 후 탈퇴 
+			
+			var userNo = $('#userNo').val();
+			//강아지 상세보기 페이지로 이동(이동시 해당 로그인유저의 id를 쿼리스트링으로 전달~)
+			location.href="<%= request.getContextPath()%>/detailDogPage.do?userNo="+userNo;
 		}
 	</script>
 

@@ -1,5 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="java.util.ArrayList, com.semi.user.model.dto.*"%> 
+
+<%
+	//UserMyDetailServlet에서 넘겨주는 강아지리스트
+	ArrayList<Dog> dogList = (ArrayList<Dog>)request.getAttribute("dogList");
+	int dogCount = dogList.size();
+	
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,43 +47,22 @@ div main hr{
 				<!-- 0405 class="needs-validation" novalidate 삭제. -->
 				<!-- 삭제 사유: 강아지의 정보를 보여주기만 하는 부분으로 제출하지 않으며, 유효성 검사가 필요없음. -->
 				<form>
+					<%if(dogList.isEmpty()) {%>
 					<!-- 강아지 1 시작 -->
 					<div class="row g-3 mb-5">
 						<!-- 강아지 이미지 -->
-						<div class="col-sm-6" style="text-align: center">
-							<img alt="강아지 사진" src="assets/img/gallery/myDog1.jpg" width="300">
-						</div>
-						<!-- 강아지 정보 -->
-						<div class="col-sm-6" style="margin: auto;">
-							<!-- 이름 -->
-							<div class="col-sm-12">
-								<label for="dogName" class="form-label">Dog Name</label> 
-								<input type="text" class="form-control" id="dogName" placeholder="해피" value="" readonly>
-							</div>
-							<!-- 나이 -->
-							<div class="col-sm-12">
-								<label for="dogAge" class="form-label">Dog Age</label>
-								<input type="text" class="form-control" id="dogAge" placeholder="5" readonly>
-							</div>
-							<!-- 반 -->
-							<div class="col-sm-12">
-								<label for="dogClass" class="form-label">Class</label> 
-								<input type="text" class="form-control" id="dogClass" placeholder="A반" readonly>
-							</div>
-							<!-- 성별 -->
-							<div class="col-sm-12">
-								<label for="gender" class="form-label">Gender</label> 
-								<input type="text" class="form-control" id="gender" placeholder="남자" readonly>
-							</div>
-						</div>
+							<b>강쥐노</b>
 						<!-- 강아지 정보 끝 -->
 					</div>
 					<!-- 강아지 1 끝 -->
 					
 					<!-- 강아지 2 시작 -->
+					<%} else{%>
+						<%for(Dog d : dogList){ %>
 					<div class="row g-3 mb-5">
 						<!-- 강아지 이미지 -->
 						<div class="col-sm-6" style="text-align: center">
+							<!-- 일단 현재는 정적인 화면 => 나중에 첨부파일 연결해서 해당 강아지번호의 첨부파일 뿌려줄것 -->
 							<img alt="강아지 사진" src="assets/img/gallery/myDog2.jpg" width="300">
 						</div>
 						<!-- 강아지 정보 -->
@@ -83,27 +70,29 @@ div main hr{
 							<!-- 이름 -->
 							<div class="col-sm-12">
 								<label for="dogName" class="form-label">Dog Name</label> 
-								<input type="text" class="form-control" id="dogName" placeholder="뽀삐" value="" readonly>
+								<input type="text" class="form-control" id="dogName" value="<%=d.getDogName() %>" readonly>
 							</div>
 							<!-- 나이 -->
 							<div class="col-sm-12">
 								<label for="dogAge" class="form-label">Dog Age</label>
-								<input type="text" class="form-control" id="dogAge" placeholder="2" readonly>
+								<input type="text" class="form-control" id="dogAge" value="<%=d.getDogAge() %>"readonly>
 							</div>
 							<!-- 반 -->
 							<div class="col-sm-12">
 								<label for="dogClass" class="form-label">Class</label> 
-								<input type="text" class="form-control" id="dogClass" placeholder="B반" readonly>
+								<input type="text" class="form-control" id="dogClass" value="<%=d.getClassName() %>" readonly>
 							</div>
 							<!-- 성별 -->
 							<div class="col-sm-12">
 								<label for="gender" class="form-label">Gender</label> 
-								<input type="text" class="form-control" id="gender" placeholder="여자" readonly>
+								<input type="text" class="form-control" id="gender" value="<%=d.getDogGender() %>" readonly>
 							</div>
 						</div>
 						<!-- 강아지 정보 끝 -->
 					</div>
+					<%} %>
 					<!-- 강아지 2 끝 -->
+				<%} %>
 				</form>
 			</div>
 			<!-- 강아지 정보 보여지는 영역 끝 -->

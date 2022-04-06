@@ -49,8 +49,9 @@ public class UserPwdFindServlet extends HttpServlet {
 
 		}else {
 			
-			//로그인 실패 메세지
-			request.setAttribute("msg", "비밀번호 찾기에 실패하였습니다.");
+			//비밀번호 찾기 실패 메세지
+			request.getSession().setAttribute("msg", "비밀번호 찾기에 실패하였습니다.");
+			//request.setAttribute("msg", "비밀번호 찾기에 실패하였습니다.");
 			
 			//다시 아이디찾기 화면으로
 			request.getRequestDispatcher("views/user/findPwdForm.jsp").forward(request, response);

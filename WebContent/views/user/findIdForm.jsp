@@ -48,6 +48,7 @@
 
 h5 {
 	text-align: center;
+	color: gray;
 }
 main form button b{
 	color: #0099FF;
@@ -93,8 +94,10 @@ main form button b{
 	<!-- 아래 아이디, 이메일 작성 영역 시작 -->
 	<main class="form-findId">
 		<form action="<%=contextPath %>/findId.do" method="post" onsubmit="return findIdValidate();">
-			<h5 class="h5 mb-2 fw-lighter" style="font-family: 'LeferiPoint-BlackA'; color: gray">ID를 잊으셨나요?</h5>
-			<h5 class="h5 mb-4 fw-lighter" style="font-family: 'LeferiPoint-BlackA'; color: gray">아래의 정보를 입력해주세요.</h5>
+			<h5 class="h5 mb-3 fw-lighter" style="font-family: 'LeferiPoint-BlackA';">
+			ID를 잊으셨나요?<br>
+			아래의 정보를 입력해주세요.
+			</h5>
 
 			<div class="form-floating">
 				<input type="text" class="form-control" id="userName" name="userName" placeholder="이름을 입력하세요." required>

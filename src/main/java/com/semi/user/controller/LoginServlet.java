@@ -31,8 +31,8 @@ public class LoginServlet extends HttpServlet {
 		//아이디와 비번 파라미터 받아오기
 		String userId = request.getParameter("userId");
 		String userPwd = request.getParameter("userPwd");
-		//System.out.println("userId 파라미터 확인" + userId);
-		//System.out.println("userPwd 파라미터 확인" + userPwd);
+		System.out.println("userId 파라미터 확인" + userId);
+		System.out.println("userPwd 파라미터 확인" + userPwd);
 		
 		//파라미터로 받은 아이디와 비번을 
 		//UserService의 loginUser()메소드의 인자로 전달하여 결과 반환받기. => 결과는 User 객체로!
@@ -49,10 +49,10 @@ public class LoginServlet extends HttpServlet {
 			session.setAttribute("loginUser", loginUser);
 			
 			//로그인이 완료되면 홈 화면으로 돌아가기
-			response.sendRedirect(request.getContextPath());
+			//response.sendRedirect(request.getContextPath());
 			
-			//RequestDispatcher view = request.getRequestDispatcher("index.jsp");
-			//view.forward(request, response);
+			RequestDispatcher view = request.getRequestDispatcher("index.jsp");
+			view.forward(request, response);
 			
 		}else { //로그인 된 대상이 없는 경우(반환값이 null인 경우)
 			
