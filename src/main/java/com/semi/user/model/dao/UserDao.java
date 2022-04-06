@@ -186,6 +186,78 @@ public class UserDao {
 		return userPwd; //조회 결과 반환(아이디 or null)
 	}
 
+
+	public User selectUser(Connection conn, String userId) {
+		//회원의 정보를 조회해오는 메소드
+		
+		//인자로 들어온 아이디를 가진 회원이 없으면 null을 반환할 것
+		User user = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		//selectUser=SELECT * FROM R_USER WHERE USER_ID=? AND STATUS='Y';
+		String sql = prop.getProperty("selectUser");
+		
+		try {
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			//쿼리 값 셋팅
+			pstmt.setString(1, userId);
+			
+			//쿼리 실행 후 결과 받기
+			rset = pstmt.executeQuery();
+			
+			/*
+			 	USER_NO
+				USER_ID
+				EMAIL
+				USER_PWD
+				USER_NAME
+				PHONE
+				SMS_CHECKED
+				EMAIL_HASH
+				EMAIL_CHECKED
+				USER_GENDER
+				STATUS
+				ENROLL_DATE
+				COOKIE_CHECKED
+			 */
+			
+			//조회결과로 오는 행은 1개이므로 반복문은 필요없음 
+			if(rset.next()) { //조회 결과가 있다면
+				
+				//rset의 컬럼 값을 담아서 User 객체를 생성
+				user = new User(rset.getInt("USER_NO")
+										, rset.getString("USER_ID")
+										, rset.getString("EMAIL")
+										, rset.getString("USER_PWD")
+										, rset.getString("USER_NAME")
+										, rset.getString("PHONE")
+										, rset.getString("SMS_CHECKED")
+										, rset.getString("EMAIL_HASH")
+										, rset.getString("EMAIL_CHECKED")
+										, rset.getString("USER_GENDER")
+										, rset.getString("STATUS")
+										, rset.getDate("ENROLL_DATE")
+										, rset.getString("COOKIE_CHECKED")
+									);
+				
+			}//if
+			
+			//확인
+			System.out.println(user.toString());
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return user;
+	}
+
 	/*public String getUserEmailChecked(String userID) {
 		
 		String SQL = "SELECT USEREMAIL_CHECKED FROM LECTURE_USER WHERE USERID=?";

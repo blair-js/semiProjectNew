@@ -1,5 +1,35 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="java.util.Date" %>
+	
+<%
+	//UserMyDetailServlet에서 forward해줬으니 현재 회원 정보를 가져온다. 
+	//UserMyDetailServlet에서 loginUser 속성명으로 객체에 회원 정보를 set 해줬음
+	User u = (User)request.getAttribute("loginUser");
+
+	//u에 담겨있는 값들을 하나씩 뽑아서 변수에 저장
+	String userName = u.getUserName();
+	Date enrollDate = u.getEnrollDate();
+	String userId = u.getUserId();
+	String email = u.getEmail();
+	String phone = u.getPhone(); 
+	//String gender = u.getGender() != null ? u.getGender() : " "; //필수입력사항이 아니므로 대입되는 값을 삼항연산 사용(null 이면 빈 값 대입)
+	String point = "포인트표시";
+	String status = u.getStatus();
+	
+	String checkedGenderFemale = "";
+	String checkedGenderMale = "";
+	
+	//user의 성별이 남자냐 여자냐에 따라 표시해주는 option태그가 달라져야하므로 if문사용
+	if(u.getGender() != null){
+		if(u.getGender().equals("F")){
+			checkedGenderFemale = "selected";
+		}else{
+			checkedGenderMale = "selected";
+		}
+	}//if
+	
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -107,48 +137,48 @@ main .sm{
 							<!-- 1-1 이름 -->
 							<div class="col-sm-6">
 								<label for="userName" class="form-label">Name</label> 
-								<input type="text" class="form-control" id="userName" name="userName" placeholder="" value="김지수" required>
+								<input type="text" class="form-control" id="userName" name="userName" placeholder="" value="<%=userName %>" required>
 							</div>
 							<!-- 1-2 가입일 -->
 							<div class="col-sm-6">
 								<label for="enrollDate" class="form-label">Enroll Date</label> 
-								<input type="text" class="form-control" id="enrollDate" placeholder="" value="2022-04-04" readonly required>
+								<input type="text" class="form-control" id="enrollDate" placeholder="" value="<%=enrollDate %>" readonly required>
 							</div>
 							<!-- 두번째 행 2 : 아이디 -->
 							<div class="col-12">
 								<label for="userId" class="form-label">UserId</label>
 								<div class="input-group has-validation">
-									<input type="text" class="form-control" id="userId" name="userId" placeholder="" value="jisu123" required>
+									<input type="text" class="form-control" id="userId" name="userId" placeholder="" value="<%=userId %>" readonly required>
 								</div>
 							</div>
 							<!-- 세번째 행 3 : 이메일 -->
 							<div class="col-12">
 								<label for="email" class="form-label">Email</label> 
-								<input type="email" class="form-control" id="email" name="email" placeholder="" value="ji@su.com" required>
+								<input type="email" class="form-control" id="email" name="email" placeholder="" value="<%=email %>" required>
 							</div>
 							<!-- 네번째 행 4 : 전화번호 -->
 							<div class="col-12">
 								<label for="phone" class="form-label">Phone</label> 
-								<input type="text" class="form-control" id="phone" placeholder="" value="010-1111-2222" required>
+								<input type="text" class="form-control" id="phone" placeholder="" value="<%=phone %>" required>
 							</div>
 							<!-- 다섯번째 행 5 : 성별, 보유뼈다귀(포인트), 상태 -->
 							<!-- 5-1 : 성별 -->
 							<div class="col-md-5">
 								<label for="gender" class="form-label">Gender</label> 
 								<select class="form-select" id="gender" required>
-									<option value="F">여자</option>
-									<option value="M">남자</option>
+									<option value="F" <%= checkedGenderFemale %>>여자</option>
+									<option value="M" <%= checkedGenderMale %>>남자</option>
 								</select>
 							</div>
 							<!-- 5-2 : 보유뼈다귀(포인트) -->
 							<div class="col-md-3">
 								<label for="point" class="form-label">Point</label> 
-								<input type="text" class="form-control" id="point" placeholder="" value="100" required readonly>
+								<input type="text" class="form-control" id="point" placeholder="" value="<%=point %>" required readonly>
 							</div>
 							<!-- 5-3 : 상태 -->
 							<div class="col-md-4">
 								<label for="status" class="form-label">Status</label> 
-								<input type="text" class="form-control" id="status" placeholder="" value="Y" required readonly>
+								<input type="text" class="form-control" id="status" placeholder="" value="<%=status %>" required readonly>
 							</div>
 						</div>
 						<!-- 사용자 정보 끝 -->
