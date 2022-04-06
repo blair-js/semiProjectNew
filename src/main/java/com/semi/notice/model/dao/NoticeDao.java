@@ -1,17 +1,19 @@
 package com.semi.notice.model.dao;
 
-import static com.semi.common.JDBCTemplate.*;
+import static com.semi.common.JDBCTemplate.close;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import com.semi.common.dto.Attachment;
 import com.semi.common.dto.PageInfo;
 import com.semi.notice.model.dto.Notice;
 
@@ -62,8 +64,132 @@ public class NoticeDao {
 	}
 
 	public ArrayList<Notice> selectList(Connection conn, PageInfo pi) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Notice> list = new ArrayList<Notice>();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		//selectList=SELECT * FROM (SELECT ROWNUM RNUM, A.* FROM (SELECT NOTICE_NO, NOTICE_TITLE, USER_NAME, COUNT, CREATE_DATE FROM NOTICE A JOIN R_USER B ON NOTICE_WRITER=USER_NO WHERE A.STATUS = 'Y' ORDER BY A.NOTICE_NO DESC) A) WHERE RNUM BETWEEN ? AND ?
+		String sql = prop.getProperty("selectList");
+		
+		//where 조건문에는 한 페이지 당 보여지는 게시물(10개)를 보여주기 위해
+		int startRow = (pi.getCurrentPage() - 1) * pi.getBoardLimit() + 1; //1
+		int endRow = startRow + pi.getBoardLimit() - 1; //10
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, startRow);
+			pstmt.setInt(2, endRow);
+			
+			rset = pstmt.executeQuery();
+			
+			//SELECT NOTICE_NO, NOTICE_TITLE, USER_NAME, COUNT, CREATE_DATE
+			while(rset.next()) {
+				list.add(new Notice(rset.getInt("NOTICE_NO"),
+									rset.getString("NOTICE_TITLE"),
+									rset.getString("USER_NAME"),
+									rset.getInt("COUNT"),	
+									rset.getDate("CREATE_DATE")
+									));
+			}
+		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+			close(rset);
+		}
+		
+		return list;
+	}
+
+	public int increaseCount(Connection conn, int nno) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		//increaseCount=UPDATE NOTICE SET COUNT=COUNT+1 WHERE NOTICE_NO=?
+		String sql = prop.getProperty("increaseCount");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, nno);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public Notice selectNotice(Connection conn, int nno) {
+		Notice n = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		//selectNotice=SELECT NOTICE_TITLE, B.USER_NAME, CREATE_DATE, COUNT, NOTICE_CONTENT FROM NOTICE A JOIN R_USER B ON NOTICE_WRITER=USER_NO WHERE A.STATUS='Y' AND NOTICE_NO=?
+		String sql = prop.getProperty("selectNotice");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, nno);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) { //하나의 게시글만 조회
+				n = new Notice(rset.getString("NOTICE_TITLE"),
+								rset.getString("USER_NAME"),
+								rset.getDate("CREATE_DATE"),
+								rset.getInt("COUNT"),
+								rset.getString("NOTICE_CONTENT")
+								);
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return n;
+	}
+
+	public ArrayList<Attachment> selectAttachment(Connection conn, int nno) {
+		ArrayList<Attachment> atList = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		//selectAttachment=SELECT FILE_NO, ORIGIN_NAME, CHANGE_NAME FROM ATTACHMENT WHERE REF_NO=? AND STATUS='Y'
+		String sql = prop.getProperty("selectAttachment");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, nno);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				Attachment at = new Attachment();
+				at.setFileNo(rset.getInt("FILE_NO"));
+				at.setOriginName(rset.getString("ORIGIN_NAME"));
+				at.setChangeName(rset.getString("CHANGE_NAME"));
+				
+				atList.add(at);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		return atList;
 	}
 
 }

@@ -5,7 +5,7 @@ import java.sql.Date;
 public class Notice {
 	
 	private int noticeNo;			//공지사항번호
-	private int noticeWriter;		//작성자회원번호
+	private String noticeWriter;		//작성자회원번호
 	private int category;			//분류번호
 	private String noticeTitle;		//공지사항제목
 	private String noticeContent;	//공지사항내용
@@ -17,8 +17,26 @@ public class Notice {
 	public Notice() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	public Notice(int noticeNo, String noticeTitle, String noticeWriter, int count, Date createDate) {
+		super();
+		this.noticeNo = noticeNo;
+		this.noticeTitle = noticeTitle;
+		this.noticeWriter = noticeWriter;
+		this.count = count;
+		this.createDate = createDate;
+	}	
+	
+	public Notice(String noticeTitle, String noticeWriter, Date createDate, int count, String noticeContent) {
+		super();
+		this.noticeTitle = noticeTitle;
+		this.noticeWriter = noticeWriter;
+		this.count = count;
+		this.createDate = createDate;
+		this.noticeContent = noticeContent;
+	}	
 
-	public Notice(int noticeNo, int noticeWriter, int category, String noticeTitle, String noticeContent, int count,
+	public Notice(int noticeNo, String noticeWriter, int category, String noticeTitle, String noticeContent, int count,
 			Date createDate, String status) {
 		super();
 		this.noticeNo = noticeNo;
@@ -39,11 +57,11 @@ public class Notice {
 		this.noticeNo = noticeNo;
 	}
 
-	public int getNoticeWriter() {
+	public String getNoticeWriter() {
 		return noticeWriter;
 	}
 
-	public void setNoticeWriter(int noticeWriter) {
+	public void setNoticeWriter(String noticeWriter) {
 		this.noticeWriter = noticeWriter;
 	}
 
