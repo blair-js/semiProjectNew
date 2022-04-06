@@ -3,7 +3,6 @@
 <%
 	ArrayList<Notice> list = (ArrayList<Notice>)request.getAttribute("list");
 	PageInfo pi = (PageInfo)request.getAttribute("pi");
-	String message = (String)request.getAttribute("msg");
 	
 	int listCount = pi.getListCount();
 	int currentPage = pi.getCurrentPage();

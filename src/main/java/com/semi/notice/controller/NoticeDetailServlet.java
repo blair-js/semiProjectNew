@@ -40,6 +40,7 @@ public class NoticeDetailServlet extends HttpServlet {
 		//첨부파일
 		ArrayList<Attachment> atList = new NoticeService().selectAttachment(nno);
 		System.out.println(atList);
+		System.out.println(n);
 		
 		if(n != null) {
 			request.setAttribute("n", n);
@@ -47,7 +48,7 @@ public class NoticeDetailServlet extends HttpServlet {
 			request.getRequestDispatcher("views/notice/noticeDetailView.jsp").forward(request, response);
 		}else {
 			request.setAttribute("msg", "게시글 상세조회에 실패하였습니다.");
-			request.getRequestDispatcher("views/common/noticeListView.jsp").forward(request, response);
+			request.getRequestDispatcher("views/notice/noticeListView.jsp").forward(request, response);
 		}
 		
 		
