@@ -20,7 +20,7 @@
 	
 	.table-condensed>tbody>tr>td,
 	
-	.table-condensed>tfoot>tr>td { padding: 20px;}
+	.table-condensed>tfoot>tr>td { padding: 15px;}
 </style>
 </head>
 <body>
@@ -40,7 +40,7 @@
 					<tbody>
 						<tr>
 							<th class="col-md-1"><h3>제목 : </h3></th>
-							<td><input type="text" class="form-control form-control-lg rounded-0" name="title" placeholder="제목을 입력해주세요"></td>
+							<td><input type="text" class="form-control form-control-lg rounded-0 mt-3" name="title" placeholder="제목을 입력해주세요"></td>
 						</tr>
 						<tr>
 							<td colspan="2">
