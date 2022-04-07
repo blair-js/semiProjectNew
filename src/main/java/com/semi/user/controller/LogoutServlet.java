@@ -19,7 +19,7 @@ public class LogoutServlet extends HttpServlet {
 		
 		//세션 무효화한 후 다시 홈 화면으로
 		request.getSession().invalidate();
-		response.sendRedirect(request.getContextPath());
+		response.sendRedirect("index.jsp");
 		
 	}
 

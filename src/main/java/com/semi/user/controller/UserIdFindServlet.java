@@ -47,8 +47,9 @@ public class UserIdFindServlet extends HttpServlet {
 			
 		}else { //조회되는 아이디가 없다면(null)
 			
-			//로그인 실패 메세지
-			request.setAttribute("msg", "아이디 찾기에 실패하였습니다.");
+			//아이디찾기 실패 메세지
+			//request.setAttribute("msg", "아이디 찾기에 실패하였습니다.");
+			request.getSession().setAttribute("msg", "아이디 찾기에 실패하였습니다.");
 			
 			//다시 아이디찾기 화면으로
 			request.getRequestDispatcher("views/user/findIdForm.jsp").forward(request, response);

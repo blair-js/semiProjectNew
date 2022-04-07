@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+<% String classname = (String)request.getAttribute("classname"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,8 +9,6 @@
 <!-- 스마트 에디터 사용하기 위해 스크립트에 설정 -->
 <script type="text/javascript"
 	src="./resources/smartEditor/js/HuskyEZCreator.js" charset="utf-8"></script>
-<style>
-</style>
 
 </head>
 <body>
@@ -18,6 +16,7 @@
 
 	<div class="container" id="container">
 		<form id="frm" action="classNoticeInsert.do" method="post">
+		<input type="hidden" name="classname" value="<%=classname %>">
 		<input type="hidden" name="writer" value="1">
 			<p>제목</p>
 			<input type="text" id="title" name="title" class="mb-3"

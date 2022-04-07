@@ -1,9 +1,12 @@
 package com.semi.user.model.service;
 
 import com.semi.user.model.dao.UserDao;
+import com.semi.user.model.dto.Dog;
 import com.semi.user.model.dto.User;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+
 import static com.semi.common.JDBCTemplate.*;
 
 public class UserService {
@@ -70,6 +73,94 @@ public class UserService {
 		//변환된 비밀번호 전달 or null
 		return newUserPwd;
 		
+	}
+
+	public User selectUser(String userId) {
+
+		//커넥션 생성
+		Connection conn = getConnection();
+		
+		//커넥션 객체와 아이디를 인자로 전달
+		User user = new UserDao().selectUser(conn, userId);
+		
+		//커넥션 닫기
+		close(conn);
+		
+		//정보가 담긴 user객체 반환 
+		return user;
+	}
+
+	public int selectUserPoint(String userId) {
+
+		//커넥션 생성
+		Connection conn = getConnection();
+		
+		//커넥션 객체와 아이디를 인자로 전달
+		int userPoint = new UserDao().selectUserPoint(conn, userId);
+		
+		//커넥션 닫기
+		close(conn);
+		
+		//정보가 담긴 user객체 반환 
+		return userPoint;
+		
+	}
+
+	public int updateUser(User user) {
+		
+		//커넥션 생성
+		Connection conn = getConnection();
+		
+		//커넥션 객체와 user 객체를 인자로 전달
+		int result = new UserDao().updateUser(conn, user);
+		
+		if(result > 0) { //업데이트 성공시
+			commit(conn);
+		}else { //업데이트 실패시
+			rollback(conn);
+		}
+		
+		//커넥션 닫기
+		close(conn);
+		
+		//결과 반환
+		return result;
+	}
+
+	public int deleteUser(String userId) {
+
+		//커넥션 생성
+		Connection conn = getConnection();
+		
+		//커넥션 객체와 삭제할 회원의 아이디 userId를 인자로 전달
+		int result = new UserDao().deleteUser(conn, userId);
+		
+		if(result > 0) { //삭제 성공시
+			commit(conn);
+		}else { //삭제 실패시
+			rollback(conn);
+		}
+		
+		//커넥션 닫기
+		close(conn);
+		
+		//결과 반환
+		return result;
+	}
+
+	public ArrayList<Dog> selectDogList(int userNo) {
+
+		//커넥션 생성
+		Connection conn = getConnection();
+		
+		//커넥션 객체와 아이디를 인자로 전달
+		ArrayList<Dog> dogList = new UserDao().selectDogList(conn, userNo);
+		
+		//커넥션 닫기
+		close(conn);
+		
+		//정보가 담긴 user객체 반환 
+		return dogList;
 	}
 
 }

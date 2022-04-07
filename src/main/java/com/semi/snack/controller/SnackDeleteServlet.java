@@ -31,7 +31,7 @@ public class SnackDeleteServlet extends HttpServlet {
 		
 		System.out.println("간식 삭제를 하기위한 서블릿");
 		request.setAttribute("msg", "삭제 성공");
-		RequestDispatcher view = request.getRequestDispatcher("views/snack/snackDelete.jsp");
+		RequestDispatcher view = request.getRequestDispatcher("views/snack/snackDetail.jsp");
 		view.forward(request, response);
 	}
 	/**

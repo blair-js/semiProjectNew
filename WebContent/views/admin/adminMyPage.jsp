@@ -71,6 +71,10 @@
 		<br> <br>
 	</div>
 
+	<br>
+
+	<br>
+
 	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
 		id="center" onclick="goSnackOrder()">간식 구매목록</button>
 	<br>
@@ -82,15 +86,7 @@
 
 	<br>
 
-	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
-		id="center" onclick="goSnackUpdate()">간식 수정</button>
-	<br>
 
-	<br>
-
-	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
-		id="center" onclick="goSnackDelete()">간식 삭제</button>
-	<br>
 	<!--  		
 	<button  class="btn btn-outline-warning btn-lg" style="width: 20%" id="center" onclick="goUserList()">
 		회원조회
@@ -112,8 +108,8 @@
 
 	<script>
 	
-			function goUserList(){ //회원목록을 위한 서블릿 
-				location.href="<%=request.getContextPath()%>/userListForm.do;"	
+			 function goUserList(){ //회원목록을 위한 서블릿 
+				//location.href="<%=request.getContextPath()%>/userListForm.do;"	
 			}	
 						
 			function goSnackOrder(){ //회원의 간식 구매 목록을 확인하기 위한 서블릿
@@ -124,12 +120,6 @@
 				location.href="<%=request.getContextPath()%>/snackInsertForm.do"
 			}
 			
-			function goSnackUpdate(){//간식 업데이트를 위한 서블릿
-				location.href="<%=request.getContextPath()%>/snackUpdateForm.do"
-			}
-			function goSnackDelete(){//간식 삭제를 하기위해 form으로 페이지 전환
-				location.href="<%=request.getContextPath()%>/snackDeleteForm.do"
-			}
 	</script>
 
 
