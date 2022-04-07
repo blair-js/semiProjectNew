@@ -8,6 +8,8 @@ public class Snack {
 	private int price; //가격(필요 뼈다귀)
 	private String status; //상태값
 	
+	private String titleImg; //사진
+	
 	public Snack() {
 	
 	}
