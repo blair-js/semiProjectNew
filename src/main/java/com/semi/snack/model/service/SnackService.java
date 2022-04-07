@@ -33,7 +33,7 @@ public class SnackService {
 		
 		if(at != null) {
 		
-		result2 = new SnackDao().insertAttachment(conn, at);
+		result2 = new SnackDao().insertAttachment(conn, at, snack.getUserNo());
 		
 		}
 			if(result1 * result2 > 0) {

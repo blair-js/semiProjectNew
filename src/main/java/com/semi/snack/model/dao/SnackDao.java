@@ -93,22 +93,25 @@ public class SnackDao {
 
 
 
-	public int insertAttachment(Connection conn, Attachment at) {
-		//insertAttachment=INSERT INTO ATTACHMENT VALUES(SEQ_FNO.NEXTVAL, SEQ_UNO.CURRVAL, ?, ?, ?, SYSDATE, DEFAULT)
+	public int insertAttachment(Connection conn, Attachment at, int userNo) {
+		//insertAttachmentSnack=INSERT INTO ATTACHMENT VALUES(SEQ_FNO.NEXTVAL, ?, SEQ_SNO.CURRVAL, 2, ?, ?, ?, SYSDATE, DEFAULT)
 		
 		int result = 0;
 		
 		PreparedStatement pstmt = null;
 		
-		String sql = prop.getProperty("insertAttachment");
+		String sql = prop.getProperty("insertAttachmentSnack");
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, at.getOriginName());
-			pstmt.setString(2, at.getChangeName());
-			pstmt.setString(3, at.getFilePath());
+			pstmt.setInt(1, userNo);
+			pstmt.setString(2, at.getOriginName());
+			pstmt.setString(3, at.getChangeName());
+			pstmt.setString(4, at.getFilePath());
 			
 			result = pstmt.executeUpdate();
+			
+
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
