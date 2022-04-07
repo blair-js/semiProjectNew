@@ -1,11 +1,15 @@
 package com.semi.class_notice.controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.semi.class_notice.model.dto.ClassNotice;
+import com.semi.class_notice.model.service.ClassNoticeService;
 
 /**
  * Servlet implementation class ClassNoticeUpdateServlet
@@ -28,9 +32,25 @@ public class ClassNoticeUpdateServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// is멀티 어쩌구로 파일 확인
 		// 첨부파일, 게시물 객체 만들어서 DB 까지 연결 후 수정, 수정 한 게시글 바로 봐야 하니까 게시물 번호 넘겨주기
-		// 나는 반별로 3개 게시판이 있으니까 반이름도 같이 보내줘야 할듯
-		request.getSession().setAttribute("msg", "성공적으로 수정 완료~");
-		response.sendRedirect("classNoticeDetail.do");
+		String title = request.getParameter("title");
+		String content = request.getParameter("content");
+		int nno = Integer.parseInt(request.getParameter("nno"));
+		
+		ClassNotice cn = new ClassNotice();
+		cn.setClassNoticeNo(nno);
+		cn.setClassNoticeTitle(title);
+		cn.setClassNoticeContent(content);
+		
+		cn = new ClassNoticeService().updateNotice(cn, nno);
+		
+		if(cn != null) {
+			request.getSession().setAttribute("msg", "게시물 수정 성공!");
+			response.sendRedirect("classNoticeDetail.do?nno=" + nno);
+		}else {
+			request.setAttribute("msg", "게시물 수정 실패");
+			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+		}
+		
 	}
 
 	/**
