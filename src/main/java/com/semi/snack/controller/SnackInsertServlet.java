@@ -59,32 +59,37 @@ public class SnackInsertServlet extends HttpServlet {
 					new MyFileRenamePolicy());
 
 			String snackName = multiRequest.getParameter("snackName");
-
+			int userNo = Integer.parseInt(multiRequest.getParameter("userNo"));
 			int snackPrice = Integer.parseInt(multiRequest.getParameter("snackPrice"));
 
-			Snack snack = new Snack(); // 객체 생성 후 값을 담아줌
-
+			
+			Snack snack = new Snack(); //객체생성 생성자이용
+			
+			snack.setUserNo(userNo);
 			snack.setSanckName(snackName);
-			snack.setPrice(snackPrice);
+			snack.setPrice(snackPrice);;
+			
 
-			Attachment at = null; // 첨부파일을 안넣을수도 있어서 null 선언
-			if (multiRequest.getOriginalFileName("upfile") != null) {
+				Attachment at = null;// 첨부파일을 안넣을수도 있어서 null 선언
+				if(multiRequest.getOriginalFileName("upfile") != null) {
 				String originName = multiRequest.getOriginalFileName("upfile"); // 원본명
 				String changeName = multiRequest.getFilesystemName("upfile"); // 바꾼이름
 
 				System.out.println("originName : " + originName);
 				System.out.println("changeName : " + changeName);
+				
 
 				at = new Attachment(); // 첨부파일이 있으면 객체 생성
 				at.setFilePath(savePath);
 				at.setOriginName(originName);
 				at.setChangeName(changeName);
-			}
+				}
 
 			int result = new SnackService().insertSnack(snack, at);
 
 			if (result > 0) {
 				request.getSession().setAttribute("msg", "간식 등록 성공");
+				System.out.println(result);
 				response.sendRedirect("snack.do");
 
 			} else { // 등록실패

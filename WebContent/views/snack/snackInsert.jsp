@@ -62,7 +62,7 @@
 		<!-- 스낵 체크박스 체크 후 서블릿으로 이동시키기 위한 form 시작  -->
 		<form id="snackInsert_img"
 			action="<%=request.getContextPath()%>/snackInsert.do" method="post" enctype="multipart/form-data">
-			
+			<input type="hidden" id="userNo" name="userNo" value="<%= loginUser.getUserNo() %>">
 			<!--  enctype="multipart/form-data" 일단 주석 -->
 		
 		<div>
