@@ -12,13 +12,13 @@ public class Attachment {
 	private String filePath;	// 파일이 저장된 폴더 경로
 	private Date uploadDate;	// 파일 업로드일
 	private String status;		// 파일 상태값
-	
+
 	public Attachment() {
-		
+
 	}
 	
-	public Attachment(int fileNo, int refBoardNo, String originName, String changeName, String filePath, Date uploadDate,
-			int fileLevel, String status) {
+	public Attachment(int fileNo, int userNo, int refNo, int category, String originName, String changeName,
+			String filePath, Date uploadDate, String status) {
 		super();
 		this.fileNo = fileNo;
 		this.userNo = userNo;
@@ -109,6 +109,6 @@ public class Attachment {
 				+ ", originName=" + originName + ", changeName=" + changeName + ", filePath=" + filePath
 				+ ", uploadDate=" + uploadDate + ", status=" + status + "]";
 	}
-
 	
 }
+

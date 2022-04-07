@@ -1,5 +1,6 @@
 package com.semi.user.model.service;
 
+import com.semi.common.dto.Attachment;
 import com.semi.user.model.dao.UserDao;
 import com.semi.user.model.dto.Dog;
 import com.semi.user.model.dto.User;
@@ -159,8 +160,81 @@ public class UserService {
 		//커넥션 닫기
 		close(conn);
 		
-		//정보가 담긴 user객체 반환 
+		//정보가 담긴 Dog리스트 반환 
 		return dogList;
+	}
+
+	public int insertDog(Dog dog, Attachment at) {
+		//이 메소드에서는 Dao의 메소드 2개를 호출해야 한다.
+		//Dog를 insert 하는 메소드와 첨부파일을 insert하는 메소드
+		
+		//커넥션 생성
+		Connection conn = getConnection();
+		
+		//1.Dog 입학시키기(커넥션 객체와 Dog 객체 전달)
+		int result1 = new UserDao().insertDog(conn, dog);
+		
+		//2.Dog 첨부파일(이미지) 등록(커넥션 객체와 첨부파일 객체, 회원번호 전달)
+		int result2 = new UserDao().insertAttachmentDog(conn, at, dog.getUserNo());
+		
+		if(result1 * result2 > 0) { //위의 두 메소드 모두 성공시 
+			commit(conn);
+		}else { //하나라도 실패시, 둘다실패시
+			rollback(conn);
+		}
+		
+		//커넥션 닫기
+		close(conn);
+		
+		//결과반환
+		return result1 * result2; //두 메소드 수행결과 모두 정상 수행시에만 1 반환(하나라도 실패시 0 반환)
+	}
+
+	public String selectClassName(String dogWeight) {
+
+		//커넥션 생성
+		Connection conn = getConnection();
+		
+		//커넥션 객체와 강아지 몸무게를 인자로 전달
+		String className = new UserDao().selectClassName(conn, dogWeight);
+		
+		//커넥션 닫기
+		close(conn);
+		
+		//조회해온 반이름 반환
+		return className;
+	}
+
+	public ArrayList<Attachment> selectDogImgList(int userNo) {
+
+		//커넥션 생성
+		Connection conn = getConnection();
+		
+		//커넥션 객체와 회원번호를 인자로 전달
+		ArrayList<Attachment> dogImgList = new UserDao().selectDogImgList(conn, userNo);
+		
+		//커넥션 닫기
+		close(conn);
+		
+		//조회해온 반이름 반환
+		return dogImgList;
+		
+	}
+
+	public int idCheck(String userId) {
+
+		//커넥션 생성
+		Connection conn = getConnection();
+		
+		//커넥션 객체와 userId를 인자로 전달
+		int result = new UserDao().idCheck(conn, userId);
+		
+		//커넥션 닫기
+		close(conn);
+		
+		//결과 반환
+		return result;
+		
 	}
 
 }
