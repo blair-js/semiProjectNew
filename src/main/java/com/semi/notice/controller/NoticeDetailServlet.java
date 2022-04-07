@@ -39,7 +39,7 @@ public class NoticeDetailServlet extends HttpServlet {
 		Notice n = new NoticeService().selectNotice(nno);
 		//첨부파일
 		ArrayList<Attachment> atList = new NoticeService().selectAttachment(nno);
-
+		
 		System.out.println(n);
 		System.out.println(atList);
 		

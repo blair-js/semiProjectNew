@@ -224,12 +224,34 @@ public class NoticeDao {
 		return result;
 	}
 
-	public int insertAttachment(Connection conn, ArrayList<Attachment> fileList) {
+	public int insertAttachment(Connection conn, int noticeWriter, ArrayList<Attachment> fileList) {
 		Attachment at = new Attachment();
 		int result = 0;
 		PreparedStatement pstmt = null;
 		
-		return 0;
+		//insertAttachment=INSERT INTO ATTACHMENT VALUES(SEQ_FNO.NEXTVAL, ?, SEQ_NNO.CURRVAL, 3, ?, ?, ?, SYSDATE, DEFAULT)
+		String sql = prop.getProperty("insertAttachment");
+		
+		try {
+			for(int i = 0; i < fileList.size(); i++) {
+				at = fileList.get(i);
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, noticeWriter);
+				pstmt.setString(2, at.getOriginName());
+				pstmt.setString(3, at.getChangeName());
+				pstmt.setString(4, at.getOriginName());
+				
+				result += pstmt.executeUpdate();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
 	}
 
 }

@@ -139,8 +139,7 @@
 				<button class="btn btn-outline-dark" disabled> <%= p %> </button>
 				<%}else{ %>
 				<button class="btn btn-outline-dark" onclick="location.href='<%=contextPath %>/listNotice.do?currentPage=<%= p %>'"> <%= p %> </button>
-				<%} %>
-				
+				<%} %>				
 			<%} %>
 			
 			<!-- 다음 페이지로(>) -->

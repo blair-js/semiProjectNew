@@ -60,13 +60,15 @@ public class NoticeService {
 	public int insertNotice(Notice n, ArrayList<Attachment> fileList) {
 		Connection conn = getConnection();
 		
+		int noticeWriter = Integer.parseInt(n.getNoticeWriter());
+		
 		//게시글 등록
 		int result1 = new NoticeDao().insertNotice(conn, n);
 		
 		//첨부파일이 없을 경우
 		int result2 = 1;
 		if(!fileList.isEmpty()) { //첨부파일이 비어있지 않다면 등록
-			result2 = new NoticeDao().insertAttachment(conn, fileList);
+			result2 = new NoticeDao().insertAttachment(conn, noticeWriter, fileList);
 		}
 		
 		if(result1 * result2 > 0) {
