@@ -99,9 +99,9 @@
               <li class="dropdown">
           		<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">오늘 뭐했개<b class="caret"></b></a>
           			<ul class="dropdown-menu">
-		            	<li><a class="p-3 text-decoration-none" href="<%= contextPath %>/classNoticeList.do">A반 게시판</a></li>
-		            	<li><a class="p-3 text-decoration-none" href="<%= contextPath %>/classNoticeList.do">B반 게시판</a></li>
-		            	<li><a class="p-3 text-decoration-none" href="<%= contextPath %>/classNoticeList.do">C반 게시판</a></li>
+		            	<li><a class="p-3 text-decoration-none" href="<%= contextPath %>/classNoticeList.do?classname=햇님반">햇님반 게시판</a></li>
+		            	<li><a class="p-3 text-decoration-none" href="<%= contextPath %>/classNoticeList.do?classname=달님반">달님반 게시판</a></li>
+		            	<li><a class="p-3 text-decoration-none" href="<%= contextPath %>/classNoticeList.do?classname=별님반">별님반 게시판</a></li>
             		</ul>
             	</li>
             </ul>
