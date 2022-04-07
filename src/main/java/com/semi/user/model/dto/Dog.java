@@ -13,6 +13,18 @@ public class Dog {
 	private String wating;
 	
 	public Dog() {	}
+	
+	public Dog(int userNo, String className, String dogName, int dogAge, String dogGender,
+			String memo, String wating) {
+		super();
+		this.userNo = userNo;
+		this.className = className;
+		this.dogName = dogName;
+		this.dogAge = dogAge;
+		this.dogGender = dogGender;
+		this.memo = memo;
+		this.wating = wating;
+	}
 
 	public Dog(int dogNo, int userNo, String className, int category, String dogName, int dogAge, String dogGender,
 			String memo, String wating) {

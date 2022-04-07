@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%
+	
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -71,8 +74,20 @@
 button{
 	border-radius: 10px;
 }
-div b{
+div .bDog{
 	color: #0099FF;
+}
+.btns{
+	width: 20%;
+	border-radius: 5px;
+	color: white;
+	font-weight: bold;
+}
+.enrolls{
+	color: #FDC800;
+}
+#goLogin{
+	text-align: center;
 }
 </style>
 </head>
@@ -82,85 +97,97 @@ div b{
 	<!-- menubar -->
 	<%@ include file="../common/menubar.jsp"%>
 	
-	<div class="py-3 text-center mb-3 mt-3">
-		<img class="d-block mx-auto mb-4" src="assets/img/gallery/paw.png" alt="강아지로고" width="72" height="57">
-		<h2>입학 신청서</h2>
-		<b>반려견</b>의 정보를 입력해주세요.
-	</div>
-	
-	<!-- 신청서 form 시작 -->
-	<form class="reg-form mb-5">
-	
-		<!-- 사진 -->
-		<div class="field-row mb-3">
-			<label class="form-label">*사진</label> 
-			<img id="titleImg" width="250" height="200">
+	<%if(loginUser != null) {%>
+		<div class="py-3 text-center mb-3 mt-3">
+			<img class="d-block mx-auto mb-4" src="assets/img/gallery/paw.png" alt="강아지로고" width="72" height="57">
+			<h2>입학 신청서</h2>
+			<b class="bDog">반려견</b>의 정보를 입력해주세요.
 		</div>
-		<!-- 이름 -->
-		<div class="field-row">
-			<label class="form-label" for="dogName">*이름</label> 
-			<input type="text" id="dogName" class="field text-field first-name-field" name="dogName" required>
-		</div>
-		<!-- 나이 -->
-		<div class="field-row">
-			<label class="form-label cf" for="dogAge">나이</label> 
-			<input type="text" id="dogAge" class="field text-field last-name-field" name="dogAge" required> 
-		</div>
-		<!-- 성별 -->
-		<div class="field-row">
-			<label class="form-label">*성별</label>
-				<select class="field form-dropdown" name="dogGender">
-					<option value="M">남자</option>
-					<option value="F">여자</option>
+		
+		<!-- 신청서 form 시작 -->
+		<!-- 첨부파일도 같이 보내기 때문에 multipart/form-data 속성 설정 -->
+		<form class="reg-form mb-5" action="<%= contextPath%>/insertDog.do;" enctype="multipart/form-data" method="post" onsubmit="return dogEnrollValidate();">
+			<!-- hidden으로 해당 loginUser의 userNo도 같이 전달해야한다. -->
+			<input type="hidden" id="userNo" name="userNo" value="<%= loginUser.getUserNo() %>">
+			
+			<!-- 사진 -->
+			<div class="field-row mb-3">
+				<label class="form-label">*사진</label> 
+				<img id="titleImg" name="titleImg" width="250" height="200">
+			</div>
+			<!-- 이름 -->
+			<div class="field-row">
+				<label class="form-label" for="dogName">*이름</label> 
+				<input type="text" id="dogName" class="field text-field first-name-field" name="dogName" required>
+			</div>
+			<!-- 나이 -->
+			<div class="field-row">
+				<label class="form-label cf" for="dogAge">나이</label> 
+				<input type="text" id="dogAge" class="field text-field last-name-field" name="dogAge" required> 
+			</div>
+			<!-- 성별 -->
+			<div class="field-row">
+				<label class="form-label">*성별</label>
+					<select class="field form-dropdown" id="dogGender" name="dogGender">
+						<option value="M">남자</option>
+						<option value="F">여자</option>
+					</select>
+			</div>
+			<!-- 몸무게 -->
+			<div class="field-row">
+				<label class="form-label">*몸무게</label> 
+				<select class="field form-dropdown" id="dogWeight" name="dogWeight" required>
+					<option value="S">소형(1~5kg)</option>
+					<option value="M">중형(6~10kg)</option>
+					<option value="L">대형(11kg 이상)</option>
 				</select>
-		</div>
-		<!-- 몸무게 -->
-		<div class="field-row">
-			<label class="form-label">*몸무게</label> 
-			<select class="field form-dropdown" name="dogWeight" required>
-				<option value="S">소형(1~5kg)</option>
-				<option value="M">중형(6~10kg)</option>
-				<option value="L">대형(11kg 이상)</option>
-			</select>
-		</div>
-		<!-- 특이사항 -->
-		<div class="field-row" style="text-align: left">
-			<label class="form-label" for="memo">특이사항</label> 
-			<textarea class="tar" id="memo" rows="5" cols="30" name="dogMemo">Hello Dogg World</textarea>
-		</div>
-		<!-- 입학가능여부조회 버튼 -->
-		<div class="field-row">
-			<label class="form-label"></label>
-			<button type="button" class="form-button mb-3" onclick="goDogEnrollCheck()">입학 가능여부 조회</button>
-		</div>
-		<!-- 자동 반배정 -->
-		<div class="field-row">
-			<label class="form-label"></label>
-			<span style="color:red;">*반은 강아지의 몸무게에 따라 자동으로 배정됩니다.</span>
-		</div>
-		<!-- 반 -->
-		<div class="field-row">
-			<label class="form-label" for="dogClass">*반</label>
-			<input type="text" id="dogClass" class="field text-field hs-field" name="dogClass" required readonly>
-		</div>
-		<!-- 대기여부 -->
-		<div class="field-row">
-			<label class="form-label">대기여부</label> 
-				<input type="radio" id="radioBtn" name="wating" value="Y" checked> 예
-				<input type="radio" id="radioBtn" name="wating" value="N"> 아니오
-		</div>
-		<!-- 입학신청서 제출 버튼 -->
-		<div class="field-row btnWrapper">
-			<button type="button" class="form-button" onclick="goDogEnroll()">입학신청서 제출</button>
-		</div>
+			</div>
+			<!-- 특이사항 -->
+			<div class="field-row" style="text-align: left">
+				<label class="form-label" for="memo">특이사항</label> 
+				<textarea class="tar" id="memo" name="memo" rows="5" cols="30">Hello Dogg World</textarea>
+			</div>
+			<!-- 입학가능여부조회 버튼 -->
+			<div class="field-row">
+				<label class="form-label"></label>
+				<button type="button" class="form-button mb-3" id="" onclick="goDogEnrollCheck()">입학 가능여부 조회</button>
+			</div>
+			<!-- 자동 반배정 -->
+			<div class="field-row">
+				<label class="form-label"></label>
+				<span style="color:red;">*반은 강아지의 몸무게에 따라 자동으로 배정됩니다.</span>
+			</div>
+			<!-- 반 -->
+			<div class="field-row">
+				<label class="form-label" for="dogClass">*반</label>
+				<input type="text" id="dogClass" class="field text-field hs-field" name="dogClass" required readonly>
+			</div>
+			<!-- 대기여부 -->
+			<div class="field-row">
+				<label class="form-label">대기여부</label> 
+					<input type="radio" id="radioBtn" name="wating" value="Y" disabled> 예
+					<input type="radio" id="radioBtn" name="wating" value="N"checked> 아니오
+			</div>
+			<!-- 입학신청서 제출 버튼 -->
+			<div class="field-row btnWrapper">
+				<button type="submit" class="form-button">입학신청서 제출</button>
+			</div>
+			
+			<!-- 숨겨져있는 파일영역 -->
+			<div id="fileArea">
+		    	<input type="file" name="file" id="file" onchange="loadImg(this);" required>
+		    </div>
 	</form>
 	<!-- 신청서 form 끝 -->
-	
-	<!-- 숨겨져있는 파일영역 -->
-	<div id="fileArea">
-    	<input type="file" name="file" id="file" onchange="loadImg(this);">
-    </div>
-	
+		<%} else{ %>
+			
+			<h2 id="goLogin" class="mt-5"><b class="enrolls">입학신청</b> 서비스는 로그인 후 이용이 가능합니다.</h2>
+			<div id="goLogin" class="mb-5">
+	    		<button type="button" class="form-button btns" onclick="goLogin()">로그인으로 이동</button>
+		    </div>
+		
+		<%} %>
+
 	<script>
 		$(function(){
 		      // 파일 input 하는 부분은 숨겼음
@@ -171,6 +198,10 @@ div b{
 		         $("#file").click();
 		      });
 	      });
+		
+		function goLogin() {
+			location.href="<%= contextPath%>/loginForm.do;"
+		}
 		
 		//사진을 로드해주는 함수
 		function loadImg(inputFile){
@@ -184,13 +215,69 @@ div b{
 	         }
 	      }
 	   }
-		//입학신청 함수
+		//입학신청 버튼 클릭시 서블릿으로 가는 함수
 		function goDogEnroll() {
 			location.href="<%= request.getContextPath()%>/insertDog.do;"
 		}
 		//입학가능여부조회
 		function goDogEnrollCheck() {
-			alert('일단 입학가능');
+			
+			//form에서 사용자가 선택한 도그의 몸무게 값을 가져온다.
+			var dogWeight = $('#dogWeight').val();
+			
+			//Ajax 통신을 할 것
+			$.ajax({
+				//기재한 매핑명이 있는 서블릿으로 이동 
+				url: "dogEnrollChecked.do",
+				
+				//전달할 데이터 : 위에서 변수에 담아놓은 도그 몸무게 전달(키:값)
+				data: {
+					dogWeight: dogWeight,
+				},
+				
+				//type : 전송방식
+				type:"get",
+				
+				//성공시
+				success: function(className) {
+					console.log("Ajax 통신성공")
+					$('#dogClass').val(className)
+					alert('입학이 가능합니다. 확인을 누르시면 반이 배정됩니다.')
+				},
+				
+				//실패시
+				error: function() {
+					console.log("Ajax 통신실패")
+				}
+				
+			})
+			
+		}
+		
+		//form에 모든 데이터가 작성되었는지 확인해주는 용도
+		function dogEnrollValidate() {
+			if($('#file').val() == null){
+				alert('파일을 첨부해주세요.');
+				return false;
+			}
+			
+			if($('#dogName').val() == null){
+				alert('이름을 입력해주세요.');
+				$('#dogName').focus();
+				return false;
+			}
+			if($('#dogGender').val() == null){
+				alert('성별을 선택해주세요.');
+				$('#dogGender').focus();
+				return false;
+			}
+			if($('#dogWeight').val() == null){
+				alert('몸무게를 선택해주세요.');
+				$('#dogWeight').focus();
+				return false;
+			}
+			
+			return true;
 		}
 	</script>
 
