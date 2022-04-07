@@ -3,7 +3,8 @@ package com.semi.common.dto;
 import java.sql.Date;
 
 public class Attachment {
-	private int fileNo;			// 파일 고유 번호
+
+   private int fileNo;			// 파일 고유 번호
 	private int userNo;			// 회원번호
 	private int refNo;			// 참조하고 있는 게시글 번호
 	private int category;		// 분류번호
@@ -111,4 +112,6 @@ public class Attachment {
 	}
 	
 }
+	
+
 

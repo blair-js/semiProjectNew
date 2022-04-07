@@ -61,7 +61,8 @@
 		
 		<!-- 스낵 체크박스 체크 후 서블릿으로 이동시키기 위한 form 시작  -->
 		<form id="snackInsert_img"
-			action="<%=request.getContextPath()%>/snackInsert.do" method="post">
+			action="<%=request.getContextPath()%>/snackInsert.do" method="post" enctype="multipart/form-data">
+			
 			<!--  enctype="multipart/form-data" 일단 주석 -->
 		
 		<div>
@@ -85,8 +86,10 @@
 			<div class="container-md">
 				<div class="row">
 
-					<div name="snack_img1" id="center">
-						<td><img id="snack1" height="250px" width="369.33px" /></td>
+					<div name="snack_img" id="center">
+						<table>
+						<td><img id="snackImg" height="250px" width="369.33px" /></td>
+						</table>
 						<!-- 현재 올릴 사진은 1개이기에 수업 jsp중 tuhmbnailInsertForm.jsp 참고-->
 					</div>
 
@@ -120,7 +123,11 @@
 							</tr>
 
 						</table>
-
+								
+					<div id="fileArea">
+					<input type="file" name="file1" id="file1" onchange="loadImg(this, 1);">
+					
+			</div>
 
 					</div>
 					<!-- snack 1 div 끝-->
@@ -191,7 +198,7 @@
 			reader.onload = function(e){ // 파일 읽기가 다 완료되면 실행
 				switch(num){
 				// e.target.result(URL 형식) 결과값을 src에 다 담아주고 있다. 각각의 파일을 읽어들여서 미리보기가 가능하게된다.
-				case 1 : $("#snack1").attr("src", e.target.result); break; //src 속성을 titleImg 속성을 걸어주니가 load가 가능한거이다.
+				case 1 : $("#snackImg").attr("src", e.target.result); break; //src 속성을 titleImg 속성을 걸어주니가 load가 가능한거이다.
 			
 				}
 			}
