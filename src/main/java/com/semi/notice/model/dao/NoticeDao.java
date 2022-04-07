@@ -68,7 +68,7 @@ public class NoticeDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//selectList=SELECT * FROM (SELECT ROWNUM RNUM, A.* FROM (SELECT NOTICE_NO, NOTICE_TITLE, USER_NAME, COUNT, CREATE_DATE FROM NOTICE A JOIN R_USER B ON NOTICE_WRITER=USER_NO WHERE A.STATUS = 'Y' ORDER BY A.NOTICE_NO DESC) A) WHERE RNUM BETWEEN ? AND ?
+		//selectList=SELECT * FROM (SELECT ROWNUM RNUM, A.* FROM (SELECT NOTICE_NO, NOTICE_TITLE, USER_ID, COUNT, CREATE_DATE FROM NOTICE A JOIN R_USER B ON NOTICE_WRITER=USER_NO WHERE A.STATUS = 'Y' ORDER BY A.NOTICE_NO DESC) A) WHERE RNUM BETWEEN ? AND ?
 		String sql = prop.getProperty("selectList");
 		
 		//where 조건문에는 한 페이지 당 보여지는 게시물(10개)를 보여주기 위해
@@ -86,7 +86,7 @@ public class NoticeDao {
 			while(rset.next()) {
 				list.add(new Notice(rset.getInt("NOTICE_NO"),
 									rset.getString("NOTICE_TITLE"),
-									rset.getString("USER_NAME"),
+									rset.getString("USER_ID"),
 									rset.getInt("COUNT"),	
 									rset.getDate("CREATE_DATE")
 									));
@@ -131,7 +131,7 @@ public class NoticeDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//selectNotice=SELECT NOTICE_NO, NOTICE_TITLE, B.USER_NAME, CREATE_DATE, COUNT, NOTICE_CONTENT FROM NOTICE A JOIN R_USER B ON NOTICE_WRITER=USER_NO WHERE A.STATUS='Y' AND NOTICE_NO=?
+		//selectNotice=SELECT NOTICE_NO, NOTICE_TITLE, B.USER_ID, CREATE_DATE, COUNT, NOTICE_CONTENT FROM NOTICE A JOIN R_USER B ON NOTICE_WRITER=USER_NO WHERE A.STATUS='Y' AND NOTICE_NO=?
 		String sql = prop.getProperty("selectNotice");
 		
 		try {
@@ -143,7 +143,7 @@ public class NoticeDao {
 			if(rset.next()) { //하나의 게시글만 조회
 				n = new Notice(rset.getInt("NOTICE_NO"),
 								rset.getString("NOTICE_TITLE"),
-								rset.getString("USER_NAME"),
+								rset.getString("USER_ID"),
 								rset.getDate("CREATE_DATE"),
 								rset.getInt("COUNT"),
 								rset.getString("NOTICE_CONTENT")
@@ -253,6 +253,26 @@ public class NoticeDao {
 		}
 		
 		return result;
+	}
+
+	public int updateNotice(Connection conn, Notice n) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty(null);
+		
+		
+		return 0;
+	}
+
+	public int updateAttachment(Connection conn, ArrayList<Attachment> atList) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int insertUpdateAttachment(Connection conn, ArrayList<Attachment> atList) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

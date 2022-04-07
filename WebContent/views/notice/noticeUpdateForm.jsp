@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="java.util.ArrayList, com.semi.notice.model.dto.*, com.semi.common.dto.*"%>
+ <%
+ 	Notice n = (Notice)request.getAttribute("n");
+ 	ArrayList<Attachment> atList = (ArrayList<Attachment>)request.getAttribute("atList");
+ %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,33 +39,32 @@
 		<!-- 글 수정하기 -->
 		<!-- 수정할 값을 request에서 꺼내서 뿌려줘야한다. -->
 		<form id="enrollForm" action="<%= contextPath %>/updateNotice.do" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="nno" value="<%= n.getNoticeNo() %>">
 			<div class="form-group">
 				<table class="table table-condensed table-borded pd-1">	
 					<tbody>
 						<tr>
 							<th class="col-md-1"><h3>제목 : </h3></th>
-							<td><input type="text" class="form-control form-control-lg rounded-0 mt-3" name="title" placeholder="제목을 입력해주세요"></td>
+							<td><input type="text" class="form-control form-control-lg rounded-0 mt-3" name="title" value="<%= n.getNoticeTitle()%>"></td>
 						</tr>
 						<tr>
 							<td colspan="2">
 								<label for="comment"><h3>내용 : </h3></label>
-								<textarea class="form-control form-control-lg rounded-0" name="content" rows="20" style="resize:none"></textarea>
+								<textarea class="form-control form-control-lg rounded-0" name="content" rows="20" style="resize:none"><%= n.getNoticeContent() %></textarea>
 							</td>
 						</tr>
-						<%-- 첨부파일이 있는지 없는지 확인해야 한다. --%>
-						<%--
+						<% if(!atList.isEmpty()) {%>
+							<%for(int i = 0; i < atList.size(); i++) { %>
 							<tr>
 								<th>첨부파일</th>
-								<td>
-									<% if(at != null){ %> <!-- 기존의 첨부파일이 있었을 경우 -> list로 확인해야한다. -->
-										<%= at.getOriginName() %> <br>
-										<input type='hidden' name='originFile' value='<%=at.getChangeName()%>'>
-										<input type='hidden' name='originFileNo' value='<%=at.getFileNo()%>'>
-									<% }%>
-									<input type="file" name="upFile">
-								</td>			
+								<td colspan="3">
+									<%= atList.get(i).getOriginName()%>
+									<input type='hidden' name='originFile' value='<%=atList.get(i).getChangeName()%>'>
+									<input type='hidden' name='originFileNo' value='<%=atList.get(i).getFileNo()%>'>
+								</td>
 							</tr>
-						 --%>
+							<%} %>	
+						<%} %>
 						<tr>
 							<td>첨부파일1</td>
 							<td><input type="file" name="upfile1"></td>
@@ -73,7 +76,7 @@
 						<tr>
 							<td>첨부파일3</td>
 							<td><input type="file" name="upfile3"></td>
-						</tr>
+						</tr>					
 					</tbody>	
 				</table>
 			</div>

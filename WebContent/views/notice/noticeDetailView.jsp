@@ -33,36 +33,19 @@
 	<%@ include file="../common/menubar.jsp" %>
 	
 	<h1 id="title" align="center" class="text-primary p-6">공지사항</h1>
-	
+
 	<div class="container p-2">
 		<!-- 수정하기 버튼 -> 관리자 아이디일 때만 보이도록 -->
 		<!-- 원래는 nno 값이 같이 넘어가야한다.(함수를 사용하거나 ?nno=사용 -->
 		<%if(loginUser != null && loginUser.getUserId().equals(n.getNoticeWriter())) {%>
 			<div class="row">
 				<div class="col-md-12 text-md-end p-3">
-					<button class="btn btn-secondary m-1" onclick="updateForm()"><b>수정</b></button>
-					<button class="btn btn-secondary m-1" onclick="deleteNotice()"><b>삭제</b></button>
+					<button class="btn btn-secondary m-1" onclick="location.href='<%=contextPath%>/updateFormNotice.do?nno=<%=n.getNoticeNo()%>'">수정</button>
+					<button class="btn btn-secondary m-1" onclick="location.href='<%=contextPath%>/deleteQna.do?nno=<%=n.getNoticeNo()%>'">삭제</button>
 				</div>
 			</div>
 		<% } %>
-		
-		<div class="d-none">
-			<form action"" id="postForm" method="post">
-				<input name="nno" value="<%=n.getNoticeNo() %>">
-			</form>
-		</div>
-		<script>
-			function updateForm(){
-				$("postForm").attr("action", "<%=contextPath%>/updateFormNotice.do");
-				$("postForm").submit();
-			}
-			
-			function updateForm(){
-				$("postForm").attr("action", "<%=contextPath%>/deleteQna.do");
-				$("postForm").submit();
-			}
-		</script>
-		
+
 		<hr class="bor">
 		
 		<!-- 글 상세보기 -->
@@ -113,7 +96,7 @@
 	<!-- 목록 버튼-->
 	<div class="container">
 		<div class="col-md-12 text-md-end p-3">
-			<button class="btn btn-secondary" onclick="location.href='<%=contextPath%>/listNotice.do?currentPage=1';"><b>목록</b></button>
+			<button class="btn btn-secondary" onclick="location.href='<%=contextPath%>/listNotice.do?currentPage=1';">목록</button>
 		</div>
 	</div>
 	
