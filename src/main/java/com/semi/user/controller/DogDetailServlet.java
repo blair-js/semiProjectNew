@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.semi.common.dto.Attachment;
 import com.semi.user.model.dto.Dog;
 import com.semi.user.model.dto.User;
 import com.semi.user.model.service.UserService;
@@ -62,9 +63,21 @@ public class DogDetailServlet extends HttpServlet {
 			//그래야 받아주는 곳에서 dogList 이름으로 get해서 반복을 통해 뿌려줄 것
 			request.setAttribute("dogList", dogList);
 			
-			//강아지 상세정보페이지로 이동
-			RequestDispatcher view = request.getRequestDispatcher("views/user/DogDetailPage.jsp");
-			view.forward(request, response);
+			//해당 강아지들의 사진들도 가져와야 한다. 
+			//회원의 번호를 기준으로 해당 회원의 모든 강아지의 사진들을 가져와야함.
+			ArrayList<Attachment> dogImgList = new UserService().selectDogImgList(userNo);
+			
+			if(dogImgList.isEmpty()) {
+				
+			}else {
+				
+				request.setAttribute("dogImgList", dogImgList);
+				
+				//강아지 상세정보페이지로 이동
+				RequestDispatcher view = request.getRequestDispatcher("views/user/DogDetailPage.jsp");
+				view.forward(request, response);
+			}//if~else
+			
 		}//if~else
 		
 		

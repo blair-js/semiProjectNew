@@ -27,9 +27,10 @@ public class ClassNoticeDeleteServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 간단하게 DB까지 가서 상태값 변경, 커밋해 주고 결과 값만 전달
+		String className = "햇님반";
 		
-		request.getSession().setAttribute("msg", "게시물 삭제 성공");
-		response.sendRedirect("classNoticeList.do");
+//		request.setAttribute("classname", className);
+//		request.getRequestDispatcher("classNoticeList.do").forward(request, response);	
 	}
 
 	/**

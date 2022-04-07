@@ -89,7 +89,7 @@ public class ClassNoticeDao {
 
 			while(rset.next()) {
 				ClassNotice c = new ClassNotice();
-				c.setClassNoticeNo(rset.getInt("RNUM"));
+				c.setClassNoticeNo(rset.getInt("CLASS_NOTICE_NO"));
 				c.setClassNoticeTitle(rset.getString("CLASS_NOTICE_TITLE"));
 				c.setNoticeWriter(rset.getString("USER_ID"));
 				c.setCreateDate(rset.getDate("CREATE_DATE"));
@@ -131,6 +131,90 @@ public class ClassNoticeDao {
 		}finally {
 			close(pstmt);
 		}
+		return result;
+	}
+	
+	public int increaseCount(Connection conn, int nno) {
+		// 게시물 조회수 증가 메소드
+		PreparedStatement pstmt = null;
+		int result = 0;
+//		increaseCount=UPDATE CLASS_NOTICE SET COUNT = COUNT+1 WHERE CLASS_NOTICE_NO=? AND STATUS='Y'
+		String sql = prop.getProperty("increaseCount");
+
+		try {
+			pstmt = conn.prepareStatement(sql);
+			// 오라클 DB에 테이블 컬럼명 순서 어떻게 들어가는지 확인하고 입력
+			pstmt.setInt(1, nno);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		return result;
+	}
+	public ClassNotice selectNotice(Connection conn, int nno) {
+		// 게시물 상세 조회 메소드
+		ClassNotice cn = null;
+		PreparedStatement pstmt= null;
+		ResultSet rset = null;
+//		selectNotice=SELECT CLASS_NOTICE_NO, CLASS_NOTICE_TITLE, CLASS_NOTICE_CONTENT, USER_ID, COUNT, CREATE_DATE FROM CLASS_NOTICE N JOIN "USER" ON (NOTICE_WRITER=USER_NO) WHERE CLASS_NOTICE_NO=? AND N.STATUS='Y'
+		String sql = prop.getProperty("selectNotice");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, nno);
+			
+			rset = pstmt.executeQuery();
+			// 한건 if문으로 처리
+			
+			if(rset.next()) {
+				cn = new ClassNotice();
+				cn.setClassNoticeNo(rset.getInt("CLASS_NOTICE_NO"));
+				cn.setClassNoticeTitle(rset.getString("CLASS_NOTICE_TITLE"));
+				cn.setClassNoticeContent(rset.getString("CLASS_NOTICE_CONTENT"));
+				cn.setNoticeWriter(rset.getString("USER_ID"));
+				cn.setCount(rset.getInt("COUNT"));
+				cn.setCreateDate(rset.getDate("CREATE_DATE"));
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return cn;
+	}
+	public int updateNotice(Connection conn, ClassNotice cn, int nno) {
+		
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+//		updateNotice=UPDATE CLASS_NOTICE SET CLASS_NOTICE_TITLE=?, CLASS_NOTICE_CONTENT=? WHERE CLASS_NOTICE_NO=?
+		String sql = prop.getProperty("updateNotice");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, cn.getClassNoticeTitle());
+			pstmt.setString(2, cn.getClassNoticeContent());
+			pstmt.setInt(3, nno);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		
 		return result;
 	}
 

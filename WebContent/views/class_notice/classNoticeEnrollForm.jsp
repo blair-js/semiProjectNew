@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+<% String classname = (String)request.getAttribute("classname"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,8 +9,6 @@
 <!-- 스마트 에디터 사용하기 위해 스크립트에 설정 -->
 <script type="text/javascript"
 	src="./resources/smartEditor/js/HuskyEZCreator.js" charset="utf-8"></script>
-<style>
-</style>
 
 </head>
 <body>
@@ -18,18 +16,21 @@
 
 	<div class="container" id="container">
 		<form id="frm" action="classNoticeInsert.do" method="post">
-		<input type="hidden" name="writer" value="1">
+		<input type="hidden" name="classname" value="<%=classname %>">
+		<input type="hidden" name="writer" value="<%= loginUser.getUserNo()%>">
 			<p>제목</p>
 			<input type="text" id="title" name="title" class="mb-3"
 				placeholder="게시글 제목을 입력하세요." style="width: 100%;">
-			<!-- input type="hidden" name="writer" value=""-->
 			<div id="smarteditor">
 				<p>내용</p>
+				<div class="thumbnail mb-3 mt-2">썸네일이미지 선택 : <input type="file" name="titleimg"></div>
 				<textarea name="content" id="content" rows="20" cols="10"
 					style="width: 100%"></textarea>
 			</div>
-			<input id="save" class="save mb-3 mt-3" type="button" value="등록">
-			<input id="close" class="close mb-3 mt-3" type="button" value="취소">
+			<div class="col-sm-12 text-md-end">
+			<input id="save" class="save btn btn-secondary mb-2 mt-2" type="button" value="등록">
+			<input id="close" class="close btn btn-secondary mb-2 mt-2" type="button" value="취소">
+			</div>
 		</form>
 	</div>
 	<script>
@@ -81,9 +82,9 @@
 				}
 				return true;
 			}
-			// 취소 버튼 클릭시 목록 화면으로 전환
+			// 취소 버튼 클릭시 목록 화면으로 전환 (반 이름 계속 데리고 다녀야 함... 안그럼 오류나네)
 			$("#close").click(function() {
-				$(location).attr("href", "classNoticeList.do");
+				$(location).attr("href", "classNoticeList.do?classname=<%= classname %>");
 			});
 		});
 	</script>

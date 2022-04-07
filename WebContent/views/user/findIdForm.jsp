@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%
+	String className = "햇님반";
+%>	
 <!DOCTYPE html>
 <html>
 <head>
@@ -109,8 +112,10 @@ main form button b{
 			<button type="submit" class="w-100 btn btn-lg btn-primary mb-2">
 				<b>아이디 찾기</b>
 			</button>
+
 		</form>
 	</main>
+	
 	<!-- 아래 아이디, 이메일 작성 영역 끝 -->
 	
 	<script>

@@ -99,12 +99,36 @@
               <li class="dropdown">
           		<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">오늘 뭐했개<b class="caret"></b></a>
           			<ul class="dropdown-menu">
-		            	<li><a class="p-3 text-decoration-none" href="<%= contextPath %>/classNoticeList.do">A반 게시판</a></li>
-		            	<li><a class="p-3 text-decoration-none" href="<%= contextPath %>/classNoticeList.do">B반 게시판</a></li>
-		            	<li><a class="p-3 text-decoration-none" href="<%= contextPath %>/classNoticeList.do">C반 게시판</a></li>
+		            	<li><a class="p-3 text-decoration-none" href="#" onclick="goAnotice();">햇님반 게시판</a></li>
+		            	<li><a class="p-3 text-decoration-none" href="#" onclick="goBnotice();">달님반 게시판</a></li>
+		            	<li><a class="p-3 text-decoration-none" href="#" onclick="goCnotice();">별님반 게시판</a></li>
             		</ul>
             	</li>
             </ul>
+            <%-- 알림장 게시판 회원들만 접근 가능하게 변경 --%>
+            <script>
+	            function goAnotice(){
+	        		<% if(loginUser != null){ %>
+	        			location.href ="/classNoticeList.do?classname=햇님반";
+	        		<% }else{ %>
+	        			alert("회원 전용 게시판입니다. 로그인이 필요합니다.");
+	        		<% } %>
+	        	}
+	            function goBnotice(){
+            		<% if(loginUser != null){ %>
+            			location.href ="/classNoticeList.do?classname=달님반";
+            		<% }else{ %>
+            			alert("회원 전용 게시판입니다. 로그인이 필요합니다.");
+            		<% } %>
+            	}
+	            function goCnotice(){
+            		<% if(loginUser != null){ %>
+            			location.href ="/classNoticeList.do?classname=별님반";
+            		<% }else{ %>
+            			alert("회원 전용 게시판입니다. 로그인이 필요합니다.");
+            		<% } %>
+            	}
+            </script>
             
             <%-- 로그인 된 user가 없다면 로그인+회원가입 버튼을 보여주고 --%>
             <%if(loginUser == null) {%>

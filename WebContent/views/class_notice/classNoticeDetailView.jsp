@@ -5,6 +5,7 @@
 ArrayList<Attachment> fileList = (ArrayList<Attachment>) request.getAttribute("fileList");
 PageInfo pi = (PageInfo) request.getAttribute("pi");
 //Attachment img = fileList.get(0);
+ClassNotice cNotice = (ClassNotice)request.getAttribute("cn");
 %>
 <!DOCTYPE html>
 <html>
@@ -26,20 +27,33 @@ PageInfo pi = (PageInfo) request.getAttribute("pi");
 	<%@ include file="../common/menubar.jsp"%>
 	<section class="fullCnt">
 		<div class="container">
-			<h3>게시물 제목</h3>
-			<small>작성자 : khh1212<br> <small class="text-muted">날짜
-					| 조회수</small>
+			<h3><%=cNotice.getClassNoticeTitle() %></h3>
+			<small>작성자 : <%=cNotice.getNoticeWriter() %><br> 
+			<small class="text-muted"><%=cNotice.getCreateDate() %>
+			| <%=cNotice.getCount() %></small>
 			</small>
 			<div class="col-lg-12 col-sm-12 text-lg-end text-center">
-				<button onclick="location.href='classNoticeUpdateForm.do'">수정</button>
-				<button onclick="location.href='classNoticeDelete.do'">삭제</button>
+			<% if(loginUser.getUserNo() == 1 || loginUser.getUserNo() == 2 || loginUser.getUserNo() == 3){ %>
+				<button class="btn btn-secondary" onclick="goUpdate();">수정</button>
+				<button class="btn btn-secondary" onclick="goDelete();">삭제</button>
+			<% } %>
 			</div>
+			<form action="" id="postForm" method="post">
+				<input type="hidden" name="nno" value="<%=cNotice.getClassNoticeNo() %>">
+			</form>
+			<script>
+				function goUpdate(){
+					<%-- System.out.println("로그인 회원 비밀번호 : " + loginUser.getUserPwd());--%>
+					$("#postForm").attr("action", "/classNoticeUpdateForm.do");
+					$("#postForm").submit();
+				}
+				function goDelete(){
+					$("#postForm").attr("action", "/classNoticeDelete.do");
+					$("#postForm").submit();
+				}
+			</script>
 			<hr class="line">
-			글 내용, 사진 첨부 할 공간
-			글 내용, 사진 첨부 할 공간
-			글 내용, 사진 첨부 할 공간
-			글 내용, 사진 첨부 할 공간
-			글 내용, 사진 첨부 할 공간
+			<%=cNotice.getClassNoticeContent() %>
 		</div>
 		<div class="container">
 			<hr class="line">
@@ -50,7 +64,6 @@ PageInfo pi = (PageInfo) request.getAttribute("pi");
 					style="height: 4.5rem">등록하기</button>
 			</div>
 		</div>
-		<% System.out.println("글 번호"+request.getParameter("nNo")); %>
 		<div class="container">
 			<div class="row">
 				<table class="table table-striped"

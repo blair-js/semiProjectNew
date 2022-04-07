@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="java.util.ArrayList, com.semi.user.model.dto.*"%> 
+<%@ page import="java.util.ArrayList, com.semi.user.model.dto.*, com.semi.common.dto.Attachment"%> 
 
 <%
 	//UserMyDetailServlet에서 넘겨주는 강아지리스트
 	ArrayList<Dog> dogList = (ArrayList<Dog>)request.getAttribute("dogList");
 	int dogCount = dogList.size();
-	
+	ArrayList<Attachment> dogImgList = (ArrayList<Attachment>)request.getAttribute("dogImgList");
 %>
 <!DOCTYPE html>
 <html>
@@ -58,34 +58,34 @@ div main hr{
 					
 					<!-- 강아지 2 시작 -->
 					<%} else{%>
-						<%for(Dog d : dogList){ %>
+						<%for(int i=0; i<dogCount; i++){ %>
 					<div class="row g-3 mb-5">
 						<!-- 강아지 이미지 -->
 						<div class="col-sm-6" style="text-align: center">
 							<!-- 일단 현재는 정적인 화면 => 나중에 첨부파일 연결해서 해당 강아지번호의 첨부파일 뿌려줄것 -->
-							<img alt="강아지 사진" src="assets/img/gallery/myDog2.jpg" width="300">
+							<img alt="강아지 사진" src="<%=contextPath %>/resources/enroll_dogs/<%=dogImgList.get(i).getChangeName() %>" width="300" height="300">
 						</div>
 						<!-- 강아지 정보 -->
 						<div class="col-sm-6" style="margin: auto;">
 							<!-- 이름 -->
 							<div class="col-sm-12">
 								<label for="dogName" class="form-label">Dog Name</label> 
-								<input type="text" class="form-control" id="dogName" value="<%=d.getDogName() %>" readonly>
+								<input type="text" class="form-control" id="dogName" value="<%=dogList.get(i).getDogName() %>" readonly>
 							</div>
 							<!-- 나이 -->
 							<div class="col-sm-12">
 								<label for="dogAge" class="form-label">Dog Age</label>
-								<input type="text" class="form-control" id="dogAge" value="<%=d.getDogAge() %>"readonly>
+								<input type="text" class="form-control" id="dogAge" value="<%=dogList.get(i).getDogAge() %>"readonly>
 							</div>
 							<!-- 반 -->
 							<div class="col-sm-12">
 								<label for="dogClass" class="form-label">Class</label> 
-								<input type="text" class="form-control" id="dogClass" value="<%=d.getClassName() %>" readonly>
+								<input type="text" class="form-control" id="dogClass" value="<%=dogList.get(i).getClassName() %>" readonly>
 							</div>
 							<!-- 성별 -->
 							<div class="col-sm-12">
 								<label for="gender" class="form-label">Gender</label> 
-								<input type="text" class="form-control" id="gender" value="<%=d.getDogGender() %>" readonly>
+								<input type="text" class="form-control" id="gender" value="<%=dogList.get(i).getDogGender() %>" readonly>
 							</div>
 						</div>
 						<!-- 강아지 정보 끝 -->

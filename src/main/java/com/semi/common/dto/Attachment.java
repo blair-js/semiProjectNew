@@ -3,7 +3,8 @@ package com.semi.common.dto;
 import java.sql.Date;
 
 public class Attachment {
-	private int fileNo;			// 파일 고유 번호
+
+   private int fileNo;			// 파일 고유 번호
 	private int userNo;			// 회원번호
 	private int refNo;			// 참조하고 있는 게시글 번호
 	private int category;		// 분류번호
@@ -12,11 +13,11 @@ public class Attachment {
 	private String filePath;	// 파일이 저장된 폴더 경로
 	private Date uploadDate;	// 파일 업로드일
 	private String status;		// 파일 상태값
-	
-	public Attachment() {
-		
-	}
 
+	public Attachment() {
+
+	}
+  
 	public Attachment(int fileNo, int userNo, int refNo, int category, String originName, String changeName,
 			String filePath, Date uploadDate, String status) {
 		super();
@@ -109,6 +110,8 @@ public class Attachment {
 				+ ", originName=" + originName + ", changeName=" + changeName + ", filePath=" + filePath
 				+ ", uploadDate=" + uploadDate + ", status=" + status + "]";
 	}
-
 	
 }
+	
+
+
