@@ -34,6 +34,7 @@ public class ClassNoticeListServlet extends HttpServlet {
 		// 수업때와는 다르게 반이름을 받아서 매개변수로 넘겨줘야 될 듯, 그래야 어떤 반에 게시글인지 알 수 있으니까
 		// 임의로 반 이름 설정
 		String className = request.getParameter("classname");
+		System.out.println("반 : " + className);
 		// 총 게시글 개수 DB 조회 후 받아 옴
 		listCount = new ClassNoticeService().getListCount(className);
 		System.out.println("listCount : " + listCount);

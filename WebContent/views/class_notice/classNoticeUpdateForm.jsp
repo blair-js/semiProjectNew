@@ -13,17 +13,20 @@
 	<%@ include file="../common/menubar.jsp" %>
 	<div class="container" id="container">
 		<form id="frm" action="classNoticeUpdate.do" method="post">
-		<input type="hidden" name="writer" value="1">
+		<input type="hidden" name="writer" value="<%= loginUser.getUserNo() %>">
 		<input type="hidden" name="nno" value="<%= cn.getClassNoticeNo() %>">
 			<p>제목</p>
 			<input type="text" id="title" name="title" class="mb-3" style="width: 100%;" value="<%=cn.getClassNoticeTitle() %>">
 			<div id="smarteditor">
 				<p>내용</p>
+				<div class="thumbnail mb-3 mt-2">썸네일이미지 선택 : <input type="file" name="titleimg"></div>
 				<textarea name="content" id="content" rows="20" cols="10"
 					style="width: 100%"><%=cn.getClassNoticeContent() %></textarea>
 			</div>
-			<input id="update" class="save mb-3 mt-3" type="button" value="수정하기">
-			<input id="close" class="close mb-3 mt-3" type="button" value="취소">
+			<div class="col-sm-12 text-md-end">
+			<input id="update" class="save btn btn-secondary mb-2 mt-2" type="button" value="수정하기">
+			<input id="close" class="close btn btn-secondary mb-2 mt-2" type="button" value="취소">
+			</div>
 		</form>
 	</div>
 	<script>

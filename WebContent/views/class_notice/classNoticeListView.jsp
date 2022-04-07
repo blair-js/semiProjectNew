@@ -5,7 +5,7 @@
 <%
 ArrayList<ClassNotice> list = (ArrayList<ClassNotice>) request.getAttribute("list");
 PageInfo pi = (PageInfo) request.getAttribute("pi");
-String classname = (String)request.getAttribute("classname");
+String classname = request.getParameter("classname");
 
 int listCount = pi.getListCount();
 int currentPage = pi.getCurrentPage();
@@ -34,14 +34,15 @@ button:hover {
 <body>
 
 	<%@ include file="../common/menubar.jsp"%>
-
-	<%--if(classname.equals("햇님반")){ --%>
+	
+	<%if(classname.equals("햇님반")) { %>
 	<h2 class="text-center">햇님반</h2>
-	<%--} else if(classname.equals("달님반")){ --%>
-	<%--} else { --%>
-	<%-- } --%>
+	<% } else if(classname.equals("달님반")){ %>
+	<h2 class="text-center">달님반</h2>
+	<% } else { %>
+		<h2 class="text-center">별님반</h2>
+	<% } %>
 	<p class="page-description text-center">반별 알림장</p>
-
 	<div class="album py-5 bg-light">
 		<div class="container">
 			<% if (list.isEmpty()) { %>
@@ -72,9 +73,12 @@ button:hover {
 				<% } %>
 			<% } %>
 			</div>
+			<!-- 로그인한 회원 중 관리자만 글쓰기 버튼이 보이도록 설정 -->
 			<div class="col-lg-12 col-sm-12 text-lg-end text-center">
+			<% if(loginUser.getUserNo() == 1 || loginUser.getUserNo() == 2 || loginUser.getUserNo() == 3){ %>
 				<button style="background-color: white;" class="mt-3"
-					onclick="location.href='classNoticeEnrollForm.do?classname=<%=classname%>'">글쓰기</button>
+					onclick="location.href='/classNoticeEnrollForm.do?classname=<%=classname %>'">글쓰기</button>
+			<% } %>
 			</div>
 			<hr style="background-color: black">
 		</div>
