@@ -31,20 +31,6 @@ public class Attachment {
 		this.status = status;
 	}
 
-	/*public Attachment(int fileNo, int refBoardNo, String originName, String changeName, String filePath, Date uploadDate,
-			int fileLevel, String status) {
-		super();
-		this.fileNo = fileNo;
-		this.userNo = userNo;
-		this.refNo = refNo;
-		this.category = category;
-		this.originName = originName;
-		this.changeName = changeName;
-		this.filePath = filePath;
-		this.uploadDate = uploadDate;
-		this.status = status;
-	}*/
-
 	public int getFileNo() {
 		return fileNo;
 	}
@@ -123,6 +109,6 @@ public class Attachment {
 				+ ", originName=" + originName + ", changeName=" + changeName + ", filePath=" + filePath
 				+ ", uploadDate=" + uploadDate + ", status=" + status + "]";
 	}
-
-
+	
 }
+

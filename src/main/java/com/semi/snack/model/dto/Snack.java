@@ -2,11 +2,11 @@ package com.semi.snack.model.dto;
 
 public class Snack {
 
-	private int sanckNo;
-	private String sanckName;
-	private int category;
-	private int price;
-	private String status;
+	private int sanckNo; //간식번호
+	private String sanckName; // 간식명
+	private int category; // 분류번호
+	private int price; //가격(필요 뼈다귀)
+	private String status; //상태값
 	
 	public Snack() {
 	

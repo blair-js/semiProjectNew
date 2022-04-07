@@ -30,8 +30,7 @@ public class SnackDetailServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//상세 페이지 서블릿
 		System.out.println("상품 상세 페이지 서블릿");
-		RequestDispatcher view = request.getRequestDispatcher("views/snack/snackDetail.jsp");
-		view.forward(request, response);
+		request.getRequestDispatcher("views/snack/snackDetail.jsp").forward(request, response);
 	}
 
 	/**

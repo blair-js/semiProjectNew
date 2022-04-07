@@ -39,11 +39,12 @@ public class ClassNoticeInsertServlet extends HttpServlet {
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
 		// 어느 반의 게시물인지 알아야 하니까 마찬가지로 className 같이 넘겨줘야 할듯
+//		String className = request.getParameter("classname");
 		String className = "햇님반";
+//		System.out.println(className + " : 반이름");
 		
 		n.setNoticeWriter(writer);
 		n.setClassNoticeTitle(title);
-		// \n <br> 태그로 변경
 		n.setClassNoticeContent(content);
 		n.setClassName(className);
 		

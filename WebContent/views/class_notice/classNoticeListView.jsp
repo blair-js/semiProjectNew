@@ -5,6 +5,7 @@
 <%
 ArrayList<ClassNotice> list = (ArrayList<ClassNotice>) request.getAttribute("list");
 PageInfo pi = (PageInfo) request.getAttribute("pi");
+String classname = (String)request.getAttribute("classname");
 
 int listCount = pi.getListCount();
 int currentPage = pi.getCurrentPage();
@@ -34,7 +35,11 @@ button:hover {
 
 	<%@ include file="../common/menubar.jsp"%>
 
+	<%--if(classname.equals("햇님반")){ --%>
 	<h2 class="text-center">햇님반</h2>
+	<%--} else if(classname.equals("달님반")){ --%>
+	<%--} else { --%>
+	<%-- } --%>
 	<p class="page-description text-center">반별 알림장</p>
 
 	<div class="album py-5 bg-light">
@@ -44,11 +49,11 @@ button:hover {
 			<% } else { %>
 				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 					<% for (ClassNotice n : list) { %>
-					<input type="hidden" name="nNo" value="<%=n.getClassNoticeNo()%>">
 					<div class="col">
+					<input type="hidden" name="nNo" value="<%=n.getClassNoticeNo()%>">
 						<div class="card shadow">
 							<div id="img-center">
-								<a href="<%=contextPath%>/classNoticeDetail.do?bno="
+								<a href="#"
 									style="text-decoration: none"> <img class="card-img-top"
 									src="assets/img/gallery/fdog.png">
 								</a>
@@ -68,8 +73,8 @@ button:hover {
 			<% } %>
 			</div>
 			<div class="col-lg-12 col-sm-12 text-lg-end text-center">
-				<button style="background-color: white;"
-					onclick="location.href='classNoticeEnrollForm.do'">글쓰기</button>
+				<button style="background-color: white;" class="mt-3"
+					onclick="location.href='classNoticeEnrollForm.do?classname=<%=classname%>'">글쓰기</button>
 			</div>
 			<hr style="background-color: black">
 		</div>
@@ -78,7 +83,7 @@ button:hover {
 	<div class="pagingArea mt-3 mb-3" align="center">
 		<!-- 맨 처음으로 (<<) -->
 		<button class="btn btn-outline-dark"
-			onclick="location.href='<%=contextPath%>/classNoticeList.do?currentPage=1'">
+			onclick="location.href='<%=contextPath%>/classNoticeList.do?classname=<%=classname %>&currentPage=1'">
 			&lt;&lt;</button>
 
 		<!-- 이전페이지로(<) -->
@@ -90,7 +95,7 @@ button:hover {
 		} else {
 		%>
 		<button class="btn btn-outline-dark"
-			onclick="location.href='<%=contextPath%>/classNoticeList.do?currentPage=<%=currentPage - 1%>'">
+			onclick="location.href='<%=contextPath%>/classNoticeList.do?classname=<%=classname %>&currentPage=<%=currentPage - 1%>'">
 			&lt;</button>
 		<%
 		}
@@ -111,7 +116,7 @@ button:hover {
 		} else {
 		%>
 		<button class="btn btn-outline-dark"
-			onclick="location.href='<%=contextPath%>/classNoticeList.do?currentPage=<%=p%>'">
+			onclick="location.href='<%=contextPath%>/classNoticeList.do?classname=<%=classname %>&currentPage=<%=p%>'">
 			<%=p%>
 		</button>
 		<%
@@ -131,7 +136,7 @@ button:hover {
 		} else {
 		%>
 		<button class="btn btn-outline-dark"
-			onclick="location.href='<%=contextPath%>/classNoticeList.do?currentPage=<%=currentPage + 1%>'">
+			onclick="location.href='<%=contextPath%>/classNoticeList.do?classname=<%=classname %>&currentPage=<%=currentPage + 1%>'">
 			&gt;</button>
 		<%
 		}
@@ -139,15 +144,18 @@ button:hover {
 
 		<!-- 맨 끝으로 (>>) -->
 		<button class="btn btn-outline-dark"
-			onclick="location.href='<%=contextPath%>/classNoticeList.do?currentPage=<%=maxPage%>'">
+			onclick="location.href='<%=contextPath%>/classNoticeList.do?classname=<%=classname %>&currentPage=<%=maxPage%>'">
 			&gt;&gt;</button>
 	</div>
-	<%--<script>
-		function goDetail() {
-			var bno = $(this).children().eq(0).val();
-			location.href = "<%= contextPath %>/classNoticeDetail.do?bno=" + bno;
-		}
-	</script> --%>
+	<script>
+	// 게시글 클릭시 게시글 번호 넘겨주기 위한 함수
+		$(function(){
+			$(".col").click(function(){
+				var nno = $(this).children().eq(0).val();
+				location.href="/classNoticeDetail.do?nno=" + nno;
+			})
+		})
+	</script>
 	<%@ include file="../common/footer.jsp"%>
 </body>
 </html>
