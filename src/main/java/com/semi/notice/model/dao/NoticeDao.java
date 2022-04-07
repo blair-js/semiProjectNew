@@ -23,7 +23,7 @@ public class NoticeDao {
 	
 	public NoticeDao() {
 		String fileName = NoticeDao.class.getResource("/sql/notice/notice-query.properties").getPath();
-		System.out.println(fileName);
+		//System.out.println(fileName);
 		
 		try {
 			prop.load(new FileReader(fileName));
@@ -68,7 +68,7 @@ public class NoticeDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//selectList=SELECT * FROM (SELECT ROWNUM RNUM, A.* FROM (SELECT NOTICE_NO, NOTICE_TITLE, USER_NAME, COUNT, CREATE_DATE FROM NOTICE A JOIN R_USER B ON NOTICE_WRITER=USER_NO WHERE A.STATUS = 'Y' ORDER BY A.NOTICE_NO DESC) A) WHERE RNUM BETWEEN ? AND ?
+		//selectList=SELECT * FROM (SELECT ROWNUM RNUM, A.* FROM (SELECT NOTICE_NO, NOTICE_TITLE, USER_ID, COUNT, CREATE_DATE FROM NOTICE A JOIN R_USER B ON NOTICE_WRITER=USER_NO WHERE A.STATUS = 'Y' ORDER BY A.NOTICE_NO DESC) A) WHERE RNUM BETWEEN ? AND ?
 		String sql = prop.getProperty("selectList");
 		
 		//where 조건문에는 한 페이지 당 보여지는 게시물(10개)를 보여주기 위해
@@ -86,7 +86,7 @@ public class NoticeDao {
 			while(rset.next()) {
 				list.add(new Notice(rset.getInt("NOTICE_NO"),
 									rset.getString("NOTICE_TITLE"),
-									rset.getString("USER_NAME"),
+									rset.getString("USER_ID"),
 									rset.getInt("COUNT"),	
 									rset.getDate("CREATE_DATE")
 									));
@@ -131,7 +131,7 @@ public class NoticeDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//selectNotice=SELECT NOTICE_NO, NOTICE_TITLE, B.USER_NAME, CREATE_DATE, COUNT, NOTICE_CONTENT FROM NOTICE A JOIN R_USER B ON NOTICE_WRITER=USER_NO WHERE A.STATUS='Y' AND NOTICE_NO=?
+		//selectNotice=SELECT NOTICE_NO, NOTICE_TITLE, B.USER_ID, CREATE_DATE, COUNT, NOTICE_CONTENT FROM NOTICE A JOIN R_USER B ON NOTICE_WRITER=USER_NO WHERE A.STATUS='Y' AND NOTICE_NO=?
 		String sql = prop.getProperty("selectNotice");
 		
 		try {
@@ -143,7 +143,7 @@ public class NoticeDao {
 			if(rset.next()) { //하나의 게시글만 조회
 				n = new Notice(rset.getInt("NOTICE_NO"),
 								rset.getString("NOTICE_TITLE"),
-								rset.getString("USER_NAME"),
+								rset.getString("USER_ID"),
 								rset.getDate("CREATE_DATE"),
 								rset.getInt("COUNT"),
 								rset.getString("NOTICE_CONTENT")
@@ -162,7 +162,7 @@ public class NoticeDao {
 	}
 
 	public ArrayList<Attachment> selectAttachment(Connection conn, int nno) {
-		ArrayList<Attachment> atList = null;
+		ArrayList<Attachment> atList = new ArrayList<Attachment>();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
@@ -182,6 +182,7 @@ public class NoticeDao {
 				at.setChangeName(rset.getString("CHANGE_NAME"));
 				
 				atList.add(at);
+				System.out.println(atList);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -224,11 +225,53 @@ public class NoticeDao {
 		return result;
 	}
 
-	public int insertAttachment(Connection conn, ArrayList<Attachment> fileList) {
+	public int insertAttachment(Connection conn, int noticeWriter, ArrayList<Attachment> fileList) {
 		Attachment at = new Attachment();
 		int result = 0;
 		PreparedStatement pstmt = null;
 		
+		//insertAttachment=INSERT INTO ATTACHMENT VALUES(SEQ_FNO.NEXTVAL, ?, SEQ_NNO.CURRVAL, 3, ?, ?, ?, SYSDATE, DEFAULT)
+		String sql = prop.getProperty("insertAttachment");
+		
+		try {
+			for(int i = 0; i < fileList.size(); i++) {
+				at = fileList.get(i);
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, noticeWriter);
+				pstmt.setString(2, at.getOriginName());
+				pstmt.setString(3, at.getChangeName());
+				pstmt.setString(4, at.getFilePath());
+				
+				result += pstmt.executeUpdate();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public int updateNotice(Connection conn, Notice n) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty(null);
+		
+		
+		return 0;
+	}
+
+	public int updateAttachment(Connection conn, ArrayList<Attachment> atList) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int insertUpdateAttachment(Connection conn, ArrayList<Attachment> atList) {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 

@@ -60,13 +60,15 @@ public class NoticeService {
 	public int insertNotice(Notice n, ArrayList<Attachment> fileList) {
 		Connection conn = getConnection();
 		
+		int noticeWriter = Integer.parseInt(n.getNoticeWriter());
+		
 		//게시글 등록
 		int result1 = new NoticeDao().insertNotice(conn, n);
 		
 		//첨부파일이 없을 경우
 		int result2 = 1;
 		if(!fileList.isEmpty()) { //첨부파일이 비어있지 않다면 등록
-			result2 = new NoticeDao().insertAttachment(conn, fileList);
+			result2 = new NoticeDao().insertAttachment(conn, noticeWriter, fileList);
 		}
 		
 		if(result1 * result2 > 0) {
@@ -77,6 +79,41 @@ public class NoticeService {
 		
 		close(conn);
 		return result1 * result2;
+	}
+
+	public Notice selectUpdateNotice(int nno) {
+		Connection conn = getConnection();
+		Notice n =new NoticeDao().selectNotice(conn, nno);
+		
+		close(conn);
+		return n;
+	}
+
+	public int updateNotice(Notice n, ArrayList<Attachment> atList) {
+		Connection conn = getConnection();
+		
+		//게시글 수정
+		int result1 = new NoticeDao().updateNotice(conn, n);
+		
+		//첨부파일 수정
+		int result2 = 1;
+		if(!atList.isEmpty()) {
+			for(int i = 0; i < atList.size(); i++) {
+				if(atList.get(i).getFileNo() != 0) {
+					result2 = new NoticeDao().updateAttachment(conn, atList);
+				}else {
+					result2 = new NoticeDao().insertUpdateAttachment(conn, atList);
+				}
+			}
+		}
+		
+		if(result1 > 0 && result2 > 0) {
+			commit(conn);
+		} else {
+			rollback(conn);
+		}
+		
+		return 0;
 	}
 
 }

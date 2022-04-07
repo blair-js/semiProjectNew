@@ -55,7 +55,7 @@ public class NoticeInsertServlet extends HttpServlet {
 			
 			Notice n = new Notice();
 			n.setNoticeTitle(title);
-			n.setNoticeContent(content);
+			n.setNoticeContent(content.replace("\n", "<br>"));
 			n.setNoticeWriter(String.valueOf(userNo));
 			
 			//파일이 여러 개

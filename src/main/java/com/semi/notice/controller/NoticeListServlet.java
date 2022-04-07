@@ -48,9 +48,8 @@ public class NoticeListServlet extends HttpServlet {
 		
 		//현재 페이지
 		currentPage = 1;
-		
 		if(request.getParameter("currentPage") != null) {
-			currentPage = Integer.parseInt(request.getParameter("currnetPage"));
+			currentPage = Integer.parseInt(request.getParameter("currentPage"));
 		}
 		
 		//페이지 최대 개수
