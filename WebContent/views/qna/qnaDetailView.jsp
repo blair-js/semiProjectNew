@@ -21,7 +21,7 @@
 	
 	.table-condensed>tbody>tr>td,
 	
-	.table-condensed>tfoot>tr>td { padding: 20px;}
+	.table-condensed>tfoot>tr>td { padding: 15px;}
 
 	
 	

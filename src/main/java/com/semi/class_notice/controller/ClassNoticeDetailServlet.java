@@ -1,11 +1,15 @@
 package com.semi.class_notice.controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.semi.class_notice.model.dto.ClassNotice;
+import com.semi.class_notice.model.service.ClassNoticeService;
 
 @WebServlet("/classNoticeDetail.do")
 public class ClassNoticeDetailServlet extends HttpServlet {
@@ -22,7 +26,20 @@ public class ClassNoticeDetailServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// DB에서 조회 해온 뒤 화면에 조회한 게시글 보여준다
 		// 게시물 객체, 첨부파일 객체 setAttribute로 request에 변경
-		request.getRequestDispatcher("views/class_notice/classNoticeDetailView.jsp").forward(request, response);
+		int nno = Integer.parseInt(request.getParameter("nno"));
+		
+		ClassNotice cn = new ClassNoticeService().selectNotice(nno);
+		
+		String view = "";
+		if(cn != null) {
+			request.setAttribute("cn", cn);
+			view = "views/class_notice/classNoticeDetailView.jsp";
+		}else {
+			request.setAttribute("msg", "게시물 조회에 실패했습니다.");
+			view = "views/common/errorPage.jsp";
+		}
+		request.getRequestDispatcher(view).forward(request, response);
+		
 	}
 
 	/**

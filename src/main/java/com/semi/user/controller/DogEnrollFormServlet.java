@@ -20,10 +20,10 @@ public class DogEnrollFormServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+			//입학신청 폼을 띄워줄 jsp 화면 뿌려주기
+			RequestDispatcher view = request.getRequestDispatcher("views/user/dogEnrollForm.jsp");
+			view.forward(request, response);
 		
-		//힙학신청 폼을 띄워줄 jsp 화면 뿌려주기
-		RequestDispatcher view = request.getRequestDispatcher("views/user/dogEnrollForm.jsp");
-		view.forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

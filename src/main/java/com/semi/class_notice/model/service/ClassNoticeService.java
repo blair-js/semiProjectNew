@@ -35,7 +35,7 @@ public class ClassNoticeService {
 	}
 
 	public int insertNotice(ClassNotice n) {
-		// 게시물 추가 메소드, 일단 글만 추가 이미지는 내일 고민 필요할 듯
+		// 게시물 추가 메소드
 		Connection conn = getConnection();
 		
 		int result = new ClassNoticeDao().insertNotice(conn, n);
@@ -48,6 +48,55 @@ public class ClassNoticeService {
 		close(conn);
 		
 		return result;
+	}
+
+	public ClassNotice selectNotice(int nno) {
+		Connection conn = getConnection();
+		// 조회수 증가도 시켜주어야 하니까 메소드 생성
+		int result = new ClassNoticeDao().increaseCount(conn, nno);
+		ClassNotice cn = null;
+		
+		if(result > 0) {
+			commit(conn);
+			// 정상적으로 조회수가 증가 했을경우 객체 조회
+			cn = new ClassNoticeDao().selectNotice(conn, nno);
+		}else {
+			rollback(conn);
+		}
+		
+		close(conn);
+		
+		return cn;
+	}
+
+	public ClassNotice selectNewNotice(int nno) {
+		// 수정시 사용하는 조회 메소드 조회수 증가되면 안되니까
+		Connection conn = getConnection();
+		
+		ClassNotice cn = new ClassNoticeDao().selectNotice(conn, nno);
+		
+		close(conn);
+		
+		return cn;
+	}
+
+	public ClassNotice updateNotice(ClassNotice cn, int nno) {
+		// 게시글 수정 메소드
+		Connection conn = getConnection();
+		ClassNotice updateCn = null;
+		
+		int result = new ClassNoticeDao().updateNotice(conn, cn, nno);
+		
+		if(result > 0) {
+			commit(conn);
+			updateCn = new ClassNoticeDao().selectNotice(conn, nno);
+		}else {
+			rollback(conn);
+		}
+		
+		close(conn);
+		
+		return updateCn;
 	}
 
 }

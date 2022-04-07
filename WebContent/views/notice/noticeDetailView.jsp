@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="java.util.ArrayList, com.semi.notice.model.dto.*, com.semi.common.dto.*"%>
+<%
+	Notice n = (Notice)request.getAttribute("n");
+	ArrayList<Attachment> atList = (ArrayList<Attachment>)request.getAttribute("atList");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,9 +25,7 @@
 	
 	.table-condensed>tbody>tr>td,
 	
-	.table-condensed>tfoot>tr>td { padding: 20px;}
-
-	
+	.table-condensed>tfoot>tr>td { padding: 15px;}
 	
 </style>
 </head>
@@ -35,84 +37,86 @@
 	<div class="container p-2">
 		<!-- 수정하기 버튼 -> 관리자 아이디일 때만 보이도록 -->
 		<!-- 원래는 nno 값이 같이 넘어가야한다.(함수를 사용하거나 ?nno=사용 -->
-		<div class="row">
-			<div class="col-md-12 text-md-end p-3">
-				<button class="btn btn-secondary m-1" onclick="location.href='<%=contextPath%>/updateFormQna.do'"><b>수정</b></button>
-				<button class="btn btn-secondary m-1" onclick="location.href='<%=contextPath%>/deleteQna.do'"><b>삭제</b></button>
+		<%if(loginUser != null && loginUser.getUserId().equals(n.getNoticeWriter())) {%>
+			<div class="row">
+				<div class="col-md-12 text-md-end p-3">
+					<button class="btn btn-secondary m-1" onclick="updateForm()"><b>수정</b></button>
+					<button class="btn btn-secondary m-1" onclick="deleteNotice()"><b>삭제</b></button>
+				</div>
 			</div>
-		</div>
+		<% } %>
 		
-		<!--  
-		<form action="" id="postForm" method="post">
-			<input type="hidden" name="nno" value="">
-		</form>
+		<div class="d-none">
+			<form action"" id="postForm" method="post">
+				<input name="nno" value="<%=n.getNoticeNo() %>">
+			</form>
+		</div>
 		<script>
-			function deleteNotice(){
-				$("postForm").attr("action", "<%=contextPath%>/deleteNotice.do");
+			function updateForm(){
+				$("postForm").attr("action", "<%=contextPath%>/updateFormNotice.do");
 				$("postForm").submit();
 			}
-		</script> -->
+			
+			function updateForm(){
+				$("postForm").attr("action", "<%=contextPath%>/deleteQna.do");
+				$("postForm").submit();
+			}
+		</script>
 		
 		<hr class="bor">
 		
 		<!-- 글 상세보기 -->
 		<table class="table table-condensed pd-1">	
 			<tbody>
-				<tr id="title">
+				<tr>
 					<th class="col-md-1"><h3>제목 : </h3></th>
-					<td colspan="3"><h3>게시글 제목</h3></td>
+					<td colspan="3"><h3><%=n.getNoticeTitle() %></h3></td>
 				</tr>
 				
-				<tr id="writer">
+				<tr>
 					<th><h4>작성자 | </h4></th>
-					<td colspan="3"><h4>작성자 이름</h4></td>
+					<td colspan="3"><h4><%=n.getNoticeWriter() %></h4></td>
 				</tr>
 				
 				<tr>
 					<th><h4>작성일 | </h4></th>
-					<td><h4>작성일</h4></td>
+					<td><h4><%=n.getCreateDate() %></h4></td>
 					<th class="col-md-1"><h4>조회수 | </h4></th>
-					<td><h4>3</h4></td>
+					<td><h4><%=n.getCount() %></h4></td>
 				</tr>
 				
-				<tr id="content">
-					<td colspan="4">
-					입학 상담은 전화와 방문 상담으로 가능합니다. <br><br>
-		
-										입학 신청을 홈페이지 메인 화면의 입학 신청 버튼을 눌러서 신청해주세요 <br><br>
-		
-										강아지의 정보를 작성하시면 입학비와 배정될 반이 자동으로 나옵니다. <br><br>
-		
-										반을 바꾸고 싶거나 가격에 대한 문의가 있으시면 문의 게시판이나 전화를 이용해주세요. <br><br>
-		
-										감사합니다.<br><br>
-					</td>
-				</tr>
-				<%-- 뿌려줄 첨부파일이 있는지 없는지 확인 --%>
-				<%-- for문을 돌려서 첨부파일이 있으면 추가 첨부파일의 수만큼 늘어난다. --%>
-				<%-- <td colspan="3">
-						<% if(at != null){ %>
-						<a download="<%= at.getOriginName() %>" href="<%=contextPath%>/resources/board_upfiles/<%=at.getChangeName()%>"><%= at.getOriginName() %></a>
-						<% }else{ %>
-						첨부파일이 없습니다.
-					<% } %>
-				</td> --%>
-				<tr id="attachment">
-					<th>첨부파일</th>
-					<td colspan="3">첨부파일이 없습니다.</td>
-				</tr>
+				<tr>
+					<td colspan="4"><%=n.getNoticeContent() %></td>
+				</tr>			
+				<% if(atList == null) {%>
+					<tr>
+						<th>첨부파일</th>
+						<td colspan="3">첨부파일이 존재하지 않습니다.</td>
+					</tr>
+				<%} else {%>
+					<%for(int i = 1; i< atList.size(); i++) { %>
+					<tr>
+						<th>첨부파일</th>
+						<td colspan="3">
+							<a download="<%= atList.get(i).getOriginName()%>" href="<%=contextPath%>/resources/notice_upfiles/<%=atList.get(i).getChangeName()%>"><%= atList.get(i).getChangeName()%></a>
+						</td>
+					</tr>
+					<%} %>	
+				<%} %>						
 			</tbody>	
 		</table>
-			
+		
 		<hr class="bor">
 		
-		<!-- 목록 버튼-->
-		<div class="row">
-			<div class="col-md-12 text-md-end p-3">
-				<button class="btn btn-secondary" onclick="location.href='<%=contextPath%>/listNotice.do'"><b>목록</b></button>
-			</div>
+	</div>			
+		
+	<!-- 목록 버튼-->
+	<div class="container">
+		<div class="col-md-12 text-md-end p-3">
+			<button class="btn btn-secondary" onclick="location.href='<%=contextPath%>/listNotice.do?currentPage=1';"><b>목록</b></button>
 		</div>
 	</div>
+	
 	
 	<%@ include file="../common/footer.jsp" %>
 </body>

@@ -12,6 +12,7 @@ import java.util.Properties;
 
 import static com.semi.common.JDBCTemplate.*;
 
+import com.semi.common.dto.Attachment;
 import com.semi.user.model.dto.Dog;
 import com.semi.user.model.dto.User;
 
@@ -412,6 +413,236 @@ public class UserDao {
 		
 		//해당 회원번호의 보유 강아지 리스트를 반환(empty일수도 있음)
 		return dogList;
+	}
+
+
+	public int insertDog(Connection conn, Dog dog) {
+		//강아지를 등록하는 메소드(입학)
+		
+		//입학 결과 반환하는 변수(강아지 등록 실패시 0 반환)
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		//insertDog=INSERT INTO R_DOG VALUES(SEQ_DNO.NEXTVAL, ?, ?, 1, ?, ?, ?, ?, ?)
+		String sql = prop.getProperty("insertDog");
+		
+		/*	쿼리 셋팅 순서(2개는 정적으로 고정되어있기때문에, 나머지 7개 물음표 순서대로 셋팅)
+			USER_NO	NUMBER
+			CLASS_NAME	VARCHAR2(15 BYTE)
+			DOG_NAME	VARCHAR2(15 BYTE)
+			DOG_AGE	NUMBER
+			DOG_GENDER	VARCHAR2(1 BYTE)
+			MEMO	VARCHAR2(1000 BYTE)
+			WAITING	VARCHAR2(1 BYTE) 
+		 */
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			//쿼리 값 셋팅
+			pstmt.setInt(1, dog.getUserNo());
+			pstmt.setString(2, dog.getClassName());
+			pstmt.setString(3, dog.getDogName());
+			pstmt.setInt(4, dog.getDogAge());
+			pstmt.setString(5, dog.getDogGender());
+			pstmt.setString(6, dog.getMemo());
+			pstmt.setString(7, dog.getWating());
+			
+			//쿼리 실행 후 결과 반환
+			result = pstmt.executeUpdate();
+			
+			//확인
+			System.out.println("insertDog 결과확인 : " + result);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}		
+		
+		return result; //강아지 입학 결과 반환(1 or 0)
+	}
+
+
+	public int insertAttachmentDog(Connection conn, Attachment at, int userNo) {
+		//입학하는 강아지의 **이미지를** 등록하는 메소드
+		
+		//반환할 결과변수
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		//insertAttachmentDog=INSERT INTO R_ATTACHMENT VALUES(SEQ_FNO.NEXTVAL, ?, SEQ_DNO.CURRVAL, 1, ?, ?, ?, SYSDATE, DEFAULT)
+		String sql = prop.getProperty("insertAttachmentDog");
+		
+		/* 	쿼리 셋팅 순서 (5개는 고정, 나머지만 4개만 내가 넣어주면 된다)
+			USER_NO	NUMBER
+			ORIGIN_NAME	VARCHAR2(255 BYTE)
+			CHANGE_NAME	VARCHAR2(255 BYTE)
+			FILE_PATH	VARCHAR2(1000 BYTE)
+		 */
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			//쿼리 값 셋팅
+			pstmt.setInt(1, userNo);
+			pstmt.setString(2, at.getOriginName());
+			pstmt.setString(3, at.getChangeName());
+			pstmt.setString(4, at.getFilePath());
+			
+			//쿼리 실행 후 결과 반환 
+			result = pstmt.executeUpdate();
+			
+			//확인
+			System.out.println("insertDog 결과확인 : " + result);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}		
+		
+		return result; //첨부파일 등록 결과 반환(1 or 0)
+	}
+
+
+	public String selectClassName(Connection conn, String dogWeight) {
+		//입학신청을 한 강아지의 반을 배정해주는 메소드
+		
+		//반환해줄 결과 변수
+		String className = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		//selectClassName=SELECT CLASS_NAME FROM R_SCHOOL WHERE WEIGHT=?
+		String sql = prop.getProperty("selectClassName");
+		
+		try {
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			//쿼리 값 셋팅
+			pstmt.setString(1, dogWeight);
+			
+			rset = pstmt.executeQuery();
+			
+			//결과 행은 1개임
+			if(rset.next()) {
+				className = rset.getString(1);
+			}//if
+			
+			//확인
+			System.out.println("className 확인 : " + className);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}	
+		
+		//결과 반환
+		return className;
+	}
+
+
+	public ArrayList<Attachment> selectDogImgList(Connection conn, int userNo) {
+		//특정 회원(userNO)의 강아지 사진 리스트를 가져오는 메소드 
+		
+		ArrayList<Attachment> dogImgList = new ArrayList<Attachment>();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		//selectDogImgList=SELECT * FROM R_ATTACHMENT WHERE USER_NO=? AND STATUS='Y'
+		String sql = prop.getProperty("selectDogImgList");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			//쿼리 값 셋팅
+			pstmt.setInt(1, userNo);
+			
+			//쿼리 실행 후 결과 반환
+			rset = pstmt.executeQuery();
+			
+			/* 	조회되는 컬럼들 
+			 	FILE_NO	NUMBER
+				USER_NO	NUMBER
+				REF_NO	NUMBER
+				CATEGORY	NUMBER
+				ORIGIN_NAME	VARCHAR2(255 BYTE)
+				CHANGE_NAME	VARCHAR2(255 BYTE)
+				FILE_PATH	VARCHAR2(1000 BYTE)
+				UPLOAD_DATE	DATE
+				STATUS	VARCHAR2(1 BYTE)
+			 */
+			
+			//하나 이상이기 때문에 반복문 실행
+			while(rset.next()) {
+				//첨부파일 객체 생성(전체 컬럼을 조회해서 가져오므로 매개변수 생성자 사용)
+				//첨부파일 객체 매개변수 생성자 순서 잘 볼것
+				Attachment at = new Attachment(rset.getInt("FILE_NO")
+												, rset.getInt("USER_NO")
+												, rset.getInt("REF_NO")
+												, rset.getInt("CATEGORY")
+												, rset.getString("ORIGIN_NAME")
+												, rset.getString("CHANGE_NAME")
+												, rset.getString("FILE_PATH")
+												, rset.getDate("UPLOAD_DATE")
+												, rset.getString("STATUS")
+											);
+				
+				//값이 모두 셋팅된 객체 at 리스트에 추가
+				dogImgList.add(at);
+			}
+			
+			//확인
+			System.out.println("dogImgList 확인 : " + dogImgList);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}	
+		
+		return dogImgList; //해당 회원의 강아지 리스트가 담겨있는 결과 반환 
+	}
+
+	public int idCheck(Connection conn, String userId) {
+
+		//결과 반환 변수(중복된 아이디가 있으면 1, 없으면 0)
+		int result = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		//idCheck=SELECT COUNT(*) FROM R_USER WHERE USER_ID=?
+		String sql = prop.getProperty("idCheck");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			//쿼리 값 셋팅
+			pstmt.setString(1, userId);
+			
+			rset = pstmt.executeQuery();
+			
+			//COUNT 조회이므로 결과 행은 1개
+			if(rset.next()) {
+				result = rset.getInt(1); //1번째 컬럼 값 담기
+			}
+			
+			//확인
+			System.out.println("result 확인 : " + result);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}	
+		
+		return result; //결과 반환
 	}
 
 	
