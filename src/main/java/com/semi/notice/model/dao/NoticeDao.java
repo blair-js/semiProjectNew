@@ -23,7 +23,7 @@ public class NoticeDao {
 	
 	public NoticeDao() {
 		String fileName = NoticeDao.class.getResource("/sql/notice/notice-query.properties").getPath();
-		System.out.println(fileName);
+		//System.out.println(fileName);
 		
 		try {
 			prop.load(new FileReader(fileName));
@@ -162,7 +162,7 @@ public class NoticeDao {
 	}
 
 	public ArrayList<Attachment> selectAttachment(Connection conn, int nno) {
-		ArrayList<Attachment> atList = null;
+		ArrayList<Attachment> atList = new ArrayList<Attachment>();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
@@ -182,6 +182,7 @@ public class NoticeDao {
 				at.setChangeName(rset.getString("CHANGE_NAME"));
 				
 				atList.add(at);
+				System.out.println(atList);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -240,7 +241,7 @@ public class NoticeDao {
 				pstmt.setInt(1, noticeWriter);
 				pstmt.setString(2, at.getOriginName());
 				pstmt.setString(3, at.getChangeName());
-				pstmt.setString(4, at.getOriginName());
+				pstmt.setString(4, at.getFilePath());
 				
 				result += pstmt.executeUpdate();
 			}

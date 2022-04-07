@@ -88,13 +88,13 @@
 				<tr>
 					<td colspan="4"><%=n.getNoticeContent() %></td>
 				</tr>			
-				<% if(atList == null) {%>
+				<% if(atList.isEmpty()) {%>
 					<tr>
 						<th>첨부파일</th>
 						<td colspan="3">첨부파일이 존재하지 않습니다.</td>
 					</tr>
 				<%} else {%>
-					<%for(int i = 1; i< atList.size(); i++) { %>
+					<%for(int i = 0; i < atList.size(); i++) { %>
 					<tr>
 						<th>첨부파일</th>
 						<td colspan="3">
