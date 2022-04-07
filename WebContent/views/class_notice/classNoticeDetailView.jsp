@@ -33,15 +33,22 @@ ClassNotice cNotice = (ClassNotice)request.getAttribute("cn");
 			| <%=cNotice.getCount() %></small>
 			</small>
 			<div class="col-lg-12 col-sm-12 text-lg-end text-center">
-				<button onclick="goUpdate();">수정</button>
-				<button onclick="location.href='classNoticeDelete.do'">삭제</button>
+			<% if(loginUser.getUserNo() == 1 || loginUser.getUserNo() == 2 || loginUser.getUserNo() == 3){ %>
+				<button class="btn btn-secondary" onclick="goUpdate();">수정</button>
+				<button class="btn btn-secondary" onclick="goDelete();">삭제</button>
+			<% } %>
 			</div>
 			<form action="" id="postForm" method="post">
 				<input type="hidden" name="nno" value="<%=cNotice.getClassNoticeNo() %>">
 			</form>
 			<script>
 				function goUpdate(){
+					<%-- System.out.println("로그인 회원 비밀번호 : " + loginUser.getUserPwd());--%>
 					$("#postForm").attr("action", "/classNoticeUpdateForm.do");
+					$("#postForm").submit();
+				}
+				function goDelete(){
+					$("#postForm").attr("action", "/classNoticeDelete.do");
 					$("#postForm").submit();
 				}
 			</script>

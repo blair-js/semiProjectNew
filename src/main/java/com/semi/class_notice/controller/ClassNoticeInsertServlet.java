@@ -38,10 +38,7 @@ public class ClassNoticeInsertServlet extends HttpServlet {
 		String writer = request.getParameter("writer");
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
-		// 어느 반의 게시물인지 알아야 하니까 마찬가지로 className 같이 넘겨줘야 할듯
-//		String className = request.getParameter("classname");
-		String className = "햇님반";
-//		System.out.println(className + " : 반이름");
+		String className = request.getParameter("classname");
 		
 		n.setNoticeWriter(writer);
 		n.setClassNoticeTitle(title);
@@ -52,8 +49,8 @@ public class ClassNoticeInsertServlet extends HttpServlet {
 		
 		if(result > 0) {
 			// 게시글 등록 성공할경우 다시 리스트 목록으로 전환
-			request.getSession().setAttribute("msg", "게시물 등록 성공");
-			response.sendRedirect("classNoticeList.do");
+			request.setAttribute("classname", className);
+			request.getRequestDispatcher("classNoticeList.do").forward(request, response);
 		}else {
 			request.setAttribute("msg", "게시물 등록 실패");
 			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);

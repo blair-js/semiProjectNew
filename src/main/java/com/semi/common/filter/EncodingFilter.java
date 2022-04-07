@@ -36,16 +36,12 @@ public class EncodingFilter implements Filter {
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		// doFilter를 기준으로 위쪽에 작성
-		System.out.println("======================== 인코딩 필터 동작 start ======================");
 		
 		if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("post")) {
-			System.out.println("============= post 방식이 요청됨 ============");
 			request.setCharacterEncoding("UTF-8");
 		}
 		
 		chain.doFilter(request, response);// 얘가 기준 위에는 서블릿 전, 밑에는 서블릿 실행 후
-		
-		System.out.println("======================== 서블릿 동작 하고 나서 실행 ======================");
 		
 	}
 

@@ -18,10 +18,9 @@ public class ClassNoticeEnrollFormServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 작성하기 화면으로만 전환해주는 서블릿
-		String classname = (String)request.getAttribute("classname");
+		String classname = (String)request.getParameter("classname");
 		request.setAttribute("classname", classname);
 		request.getRequestDispatcher("views/class_notice/classNoticeEnrollForm.jsp").forward(request, response);
-		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
