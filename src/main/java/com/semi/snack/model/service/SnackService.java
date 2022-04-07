@@ -24,19 +24,15 @@ public class SnackService {
 	 * if(result > 0 ) { commit(conn); }else { rollback(conn); } close(conn); return
 	 * result; }
 	 */
+	
 	public int insertSnack(Snack snack, Attachment at) {
 		Connection conn = getConnection();
 		
 		int result1 = new SnackDao().insertSnack(conn, snack); //게시글등록
 		
-		int result2 = 1;
+		int result2 = new SnackDao().insertAttachment(conn, at, snack.getUserNo());
 		
-		if(at != null) {
-		
-		result2 = new SnackDao().insertAttachment(conn, at, snack.getUserNo());
-		
-		}
-			if(result1 * result2 > 0) {
+			if(result1 > 0 && result2 > 0) {
 				commit(conn);
 			}else {
 				rollback(conn);
