@@ -45,7 +45,7 @@ public class SnackInsertServlet extends HttpServlet {
 
 		if (ServletFileUpload.isMultipartContent(request)) { // 만약에 서블릿파일업로드 멀티파트 컨텐트가 트루이면 실행
 
-			int maxSize = 10 * 369 * 250;
+			int maxSize = 10 * 1024 * 1024;
 
 			// 1_2. 전달된 파일을 저장할 서버의 폴더 경로
 			String resources = request.getSession().getServletContext().getRealPath("/resources");
@@ -55,8 +55,7 @@ public class SnackInsertServlet extends HttpServlet {
 
 			System.out.println("savePath " + savePath); // 경로 잘찍히는지 찍는 용도
 
-			MultipartRequest multiRequest = new MultipartRequest(request, savePath, maxSize, "UTF-8",
-					new MyFileRenamePolicy());
+			MultipartRequest multiRequest = new MultipartRequest(request, savePath, maxSize, "UTF-8", new MyFileRenamePolicy());
 
 			String snackName = multiRequest.getParameter("snackName");
 			int userNo = Integer.parseInt(multiRequest.getParameter("userNo"));
@@ -71,9 +70,9 @@ public class SnackInsertServlet extends HttpServlet {
 			
 
 				Attachment at = null;// 첨부파일을 안넣을수도 있어서 null 선언
-				if(multiRequest.getOriginalFileName("upfile") != null) {
-				String originName = multiRequest.getOriginalFileName("upfile"); // 원본명
-				String changeName = multiRequest.getFilesystemName("upfile"); // 바꾼이름
+				if(multiRequest.getOriginalFileName("file") != null) { //file = snackInsert.jsp에서 넘겨준 파라미터
+				String originName = multiRequest.getOriginalFileName("file"); // 원본명
+				String changeName = multiRequest.getFilesystemName("file"); // 바꾼이름
 
 				System.out.println("originName : " + originName);
 				System.out.println("changeName : " + changeName);

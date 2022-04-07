@@ -124,10 +124,7 @@
 
 						</table>
 								
-					<div id="fileArea">
-					<input type="file" name="file1" id="file1" onchange="loadImg(this, 1);">
 					
-			</div>
 
 					</div>
 					<!-- snack 1 div 끝-->

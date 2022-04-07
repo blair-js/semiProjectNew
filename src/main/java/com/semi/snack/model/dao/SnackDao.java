@@ -105,13 +105,12 @@ public class SnackDao {
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, userNo);
+			
 			pstmt.setString(2, at.getOriginName());
 			pstmt.setString(3, at.getChangeName());
 			pstmt.setString(4, at.getFilePath());
-			
+	
 			result = pstmt.executeUpdate();
-			
-
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
