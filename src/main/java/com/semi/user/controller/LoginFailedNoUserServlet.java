@@ -7,17 +7,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-//소개페이지로 화면전환만 해주는 서블릿임
-@WebServlet("/intro.do")
-public class IntroServlet extends HttpServlet {
+//로그인 실패시(회원의 정보가 없는 경우) 여기로 옴 
+@WebServlet("/loginFailedNoUser.do")
+public class LoginFailedNoUserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    public IntroServlet() {
+
+    public LoginFailedNoUserServlet() {
         super();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.sendRedirect("views/common/intro.jsp");
+
+		//로그인 실패 메세지
+		request.setAttribute("reason", "아이디와 비밀번호가 일치하는 회원이 없습니다.");
+		//request.getSession().setAttribute("msg", "입력하신 아이디와 비밀번호가 일치하는 회원이 없습니다.");
+		
+		//로그인 실패화면 jsp로 이동
+		request.getRequestDispatcher("views/user/loginFailedNoUser.jsp").forward(request, response);
+		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

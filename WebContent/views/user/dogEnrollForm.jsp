@@ -260,7 +260,6 @@ div .bDog{
 				alert('파일을 첨부해주세요.');
 				return false;
 			}
-			
 			if($('#dogName').val() == null){
 				alert('이름을 입력해주세요.');
 				$('#dogName').focus();

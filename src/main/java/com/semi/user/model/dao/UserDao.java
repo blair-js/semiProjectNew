@@ -118,7 +118,7 @@ public class UserDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//findUserId=SELECT USER_ID FROM R_USER WHERE USER_NAME=? AND EMAIL=?
+		//findUserId=SELECT USER_ID FROM R_USER WHERE USER_NAME=? AND EMAIL=? AND STATUS='Y'
 		String sql = prop.getProperty("findUserId");
 		
 		try {
@@ -158,7 +158,7 @@ public class UserDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//findUserPwd=SELECT USER_PWD FROM R_USER WHERE USER_NAME=? AND USER_ID=? AND EMAIL=?
+		//findUserPwd=SELECT USER_PWD FROM R_USER WHERE USER_NAME=? AND USER_ID=? AND EMAIL=? AND STATUS='Y'
 		String sql = prop.getProperty("findUserPwd");
 		
 		try {
