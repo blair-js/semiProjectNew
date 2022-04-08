@@ -89,9 +89,9 @@
 							<tr>
 								<td> 
 								
-								<p> <h5> 간식명  :  <input type="text" name="snackName" value="수정 할 간식명 입력."   required></h5> </p> 
+								<p> <h5> 간식명  :  <input type="text" name="snackName" placeholder="수정 할 간식명 입력."   required></h5> </p> 
 								 
-								<p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" value="수정 할 뼈다귀 입력."  required></h5> </p> 
+								<p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" placeholder="수정 할 뼈다귀 입력."  required></h5> </p> 
 								
 								</td>
 							</tr>

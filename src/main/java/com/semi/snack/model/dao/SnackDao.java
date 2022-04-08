@@ -1,14 +1,16 @@
 package com.semi.snack.model.dao;
 
+import static com.semi.common.JDBCTemplate.close;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Properties;
-
-import static com.semi.common.JDBCTemplate.*;
 
 import com.semi.common.dto.Attachment;
 import com.semi.snack.model.dto.Snack;
@@ -121,6 +123,51 @@ public class SnackDao {
 		
 		return result;
 	}
+
+
+
+	public ArrayList<Snack> selectList(Connection conn) {
+		
+		ArrayList<Snack> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("selectList");
+		
+
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			rset = pstmt.executeQuery();
+			
+			System.out.println("담긴 값 확인하기 : " + rset);
+			
+			while(rset.next()) {
+				Snack snack = new Snack(); //rset을 하나만 담는게 아닌 여러개를 담기위해서 while 안에 넣어야한다.
+				snack.setSanckName(rset.getString("SNACK_NAME"));
+				snack.setPrice(rset.getInt("PRICE"));
+				snack.setTitleImg(rset.getString("CHANGE_NAME"));
+				
+				list.add(snack);
+
+			}
+				
+			System.out.println("list에 담겨있는 값 : " + list);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+	
+		return list;
+		
+		
+	}
+
+
+
 
 
 }
