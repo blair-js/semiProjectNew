@@ -42,25 +42,36 @@ public class LoginServlet extends HttpServlet {
 		
 		if(loginUser != null) { //로그인 된 대상이 있는 경우(반환된 객체가 있는경우)
 			
-			//세션 생성
-			HttpSession session = request.getSession();
-			
-			//세션에 로그인 된 User 객체의 정보를 담아준다.
-			session.setAttribute("loginUser", loginUser);
-			
-			//로그인이 완료되면 홈 화면으로 돌아가기
-			//response.sendRedirect(request.getContextPath());
-			
-			RequestDispatcher view = request.getRequestDispatcher("index.jsp");
-			view.forward(request, response);
+			//0408_그 객체가 이메일인증을 했는지 체크한다. 
+			if(loginUser.getEmailChecked().equals("Y")) {
+				
+				//세션 생성해서
+				HttpSession session = request.getSession();
+				
+				//세션에 로그인 된 User 객체의 정보를 담아준다.
+				session.setAttribute("loginUser", loginUser);
+				
+				//로그인이 완료되면 홈 화면으로 돌아가기
+				//response.sendRedirect(request.getContextPath());
+				
+				RequestDispatcher view = request.getRequestDispatcher("index.jsp");
+				view.forward(request, response);
+				
+			}else { //해당 아이디와 비번은 있지만(객체는 있지만), 해당 회원이 이메일 인증을 하지 않은 경우 
+				
+				//로그인 실패화면을 띄워줄 서블릿으로 이동
+				//근데 실패화면으로 userId를 갖고가야한다. => 왜냐하면 그 아이디를 기준으로 사용자가 원할시 메일을 재발송해야하므로!
+		
+				//LoginFailedEmailServlet으로 이동
+				request.getRequestDispatcher("loginFailedEmail.do?userId="+userId).forward(request, response);
+				
+			}//if~else
 			
 		}else { //로그인 된 대상이 없는 경우(반환값이 null인 경우)
 			
-			//로그인 실패 메세지
-			request.setAttribute("msg", "로그인에 실패하였습니다.");
-			
-			//에러페이지
-			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+			//로그인 실패화면을 띄워줄 서블릿으로 이동
+			//LoginFailedNoUserServlet으로 이동 
+			request.getRequestDispatcher("loginFailedNoUser.do").forward(request, response);
 			
 		}//if-else
 		
