@@ -645,6 +645,164 @@ public class UserDao {
 		return result; //결과 반환
 	}
 
+
+	public int insertUser(Connection conn, User user) {
+
+		//반환할 결과변수
+		int result = 0; 
+		PreparedStatement pstmt = null;
+		
+		//insertUser=INSERT INTO R_USER VALUES  
+		//(SEQ_UNO.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?, DEFAULT, SYSDATE, DEFAULT);
+		String sql = prop.getProperty("insertUser");
+	
+		/*	셋팅해줘야 하는 부분
+			USER_ID	VARCHAR2(30 BYTE)
+			EMAIL	VARCHAR2(100 BYTE)
+			USER_PWD	VARCHAR2(100 BYTE)
+			USER_NAME	VARCHAR2(15 BYTE)
+			PHONE	VARCHAR2(13 BYTE)
+			SMS_CHECKED	VARCHAR2(1 BYTE)
+			EMAIL_HASH	VARCHAR2(64 BYTE)
+			EMAIL_CHECKED	VARCHAR2(1 BYTE)
+			USER_GENDER	VARCHAR2(1 BYTE)
+		 */
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			//쿼리 값 셋팅
+			pstmt.setString(1, user.getUserId());
+			pstmt.setString(2, user.getEmail());
+			pstmt.setString(3, user.getUserPwd());
+			pstmt.setString(4, user.getUserName());
+			pstmt.setString(5, user.getPhone());
+			pstmt.setString(6, user.getSmsChecked());
+			pstmt.setString(7, user.getEmailHash());
+			pstmt.setString(8, user.getEmailChecked());
+			pstmt.setString(9, user.getGender());
+			
+			//쿼리 실행 후 결과 반환
+			result = pstmt.executeUpdate();
+
+			//확인
+			System.out.println("회원 insert 결과 : " + result);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}	
+		
+		return result; //회원 가입 결과 반환 1 or 0
+	}
+
+
+	public String getUserEmail(Connection conn, String userId) {
+
+		//반환해줄 결과 변수
+		String userEmail = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		//getUserEmail=SELECT EMAIL FROM R_USER WHERE USER_ID=?
+		String sql = prop.getProperty("getUserEmail");
+		
+		try {
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			//쿼리 값 셋팅
+			pstmt.setString(1, userId);
+			
+			rset = pstmt.executeQuery();
+			
+			//결과 행은 1개임
+			if(rset.next()) {
+				userEmail = rset.getString(1);
+			}//if
+			
+			//확인
+			System.out.println("userEmail 확인 : " + userEmail);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}	
+		
+		//결과 반환
+		return userEmail;
+	}
+
+
+	public String selectEmailHashCode(Connection conn, String userId) {
+
+		String emailHashCode = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		//selectEmailHashCode=SELECT EMAIL_HASH FROM R_USER WHERE USER_ID=?
+		String sql = prop.getProperty("selectEmailHashCode");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			//쿼리 값 셋팅
+			pstmt.setString(1, userId);
+			
+			//쿼리 실행 후 결과 반환
+			rset = pstmt.executeQuery();
+			
+			//결과가 있다면 1건(1행1열임)
+			if(rset.next()) {
+				emailHashCode = rset.getString(1);
+			}
+			
+			//확인
+			System.out.println("DB에서 emailHashCode 확인 : " + emailHashCode);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return emailHashCode; //조회해온 이메일해쉬코드 반환
+	}
+
+
+	public int updateEmailChecked(Connection conn, String userId) {
+
+		//반환할 결과 변수
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		//updateEmailChecked=UPDATE R_USER SET EMAIL_CHECKED='Y' WHERE USER_ID=?
+		String sql = prop.getProperty("updateEmailChecked");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			//쿼리값셋팅
+			pstmt.setString(1, userId);
+			
+			result = pstmt.executeUpdate();
+			
+			//확인
+			System.out.println("이메일 체크 결과확인 : " + result);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result; //결과 반환
+	}
+
 	
 	/*public String getUserEmailChecked(String userID) {
 		
@@ -682,70 +840,5 @@ public class UserDao {
 	
 	}*/
 
-	/*public String getUserEmail(String userID) {
-		
-		String SQL = "SELECT userEmail FROM LECTURE_USER WHERE USERID=?";
 	
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		
-		try {
-			
-			conn = DatabaseUtil.getConnection();
-			
-			pstmt = conn.prepareStatement(SQL);
-			pstmt.setString(1, userID);
-	
-			rs = pstmt.executeQuery(); 
-			
-			if(rs.next()) {
-				return rs.getString(1); 
-			}
-			
-		}catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-				try {
-					if(conn != null) conn.close();
-					if(pstmt != null) pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-		}
-		
-		return null; //데이터베이스 오류*/
-	
-	/*public String setUserEmailChecked(String userID) {
-		
-		String SQL = "UPDATE LECTURE_USER SET USEREMAIL_CHECKED=\'T\' WHERE USERID=?";
-
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		
-		try {
-			
-			conn = DatabaseUtil.getConnection();
-			
-			pstmt = conn.prepareStatement(SQL);
-			pstmt.setString(1, userID);
-
-			pstmt.executeUpdate();
-
-			return "T";
-			
-		}catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-				try {
-					if(conn != null) conn.close();
-					if(pstmt != null) pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-		}
-		
-		return "F"; //데이터베이스 오류
-	}*/
 }
