@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.semi.common.dto.Attachment;
 import com.semi.snack.model.dto.Snack;
 import com.semi.snack.model.service.SnackService;
 
@@ -34,9 +35,9 @@ public class SnackServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("간식 목록 조회 해오는 서블릿");
 		
-		//ArrayList<Snack> list = new SnackService().selectList();
+		ArrayList<Snack> list = new SnackService().selectList();
 		
-		//request.setAttribute("list", list);
+		request.setAttribute("list", list);
 		
 		RequestDispatcher view = request.getRequestDispatcher("views/snack/snack.jsp");
 		view.forward(request, response);

@@ -115,9 +115,9 @@
 							<tr>
 								<td> 
 								
-								<p> <h5> 간식명  :  <input type="text" name="snackName" value="간식 명을 입력해주세요."  required></h5> </p> 
+								<p> <h5> 간식명  :  <input type="text" name="snackName" placeholder="간식 명을 입력해주세요."  required></h5> </p> 
 								 
-								<p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" value="수량 을 입력해주세요." required></h5> </p> 
+								<p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" placeholder="수량 을 입력해주세요." required></h5> </p> 
 								
 								</td>
 							</tr>

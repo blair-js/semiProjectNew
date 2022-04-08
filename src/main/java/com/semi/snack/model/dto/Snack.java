@@ -24,7 +24,12 @@ public class Snack {
 		this.status = status;
 		this.titleImg = titleImg;
 	}
-	
+
+	public Snack(String sanckName, int price) {
+		super();
+		this.sanckName = sanckName;
+		this.price = price;
+	}
 
 	public int getUserNo() {
 		return userNo;
