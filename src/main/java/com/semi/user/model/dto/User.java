@@ -40,6 +40,20 @@ public class User {
 		this.enrollDate = enrollDate;
 		this.cookieChecked = cookieChecked;
 	}
+	
+	public User(String userId, String userPwd, String userName, String phone,
+			String smsChecked, String gender, String email, String emailHash, String emailChecked) {
+		super();
+		this.userId = userId;
+		this.email = email;
+		this.userPwd = userPwd;
+		this.userName = userName;
+		this.phone = phone;
+		this.smsChecked = smsChecked;
+		this.emailHash = emailHash;
+		this.emailChecked = emailChecked;
+		this.gender = gender;
+	}
 
 	public int getUserNo() {
 		return userNo;

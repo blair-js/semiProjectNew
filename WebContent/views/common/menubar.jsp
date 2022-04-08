@@ -13,7 +13,7 @@
 <head>
 <link rel="icon" href="assets/img/favicons/fdog.ico">
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>둥글개 둥글개</title>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link href="assets/css/theme.css" rel="stylesheet" />
