@@ -41,7 +41,7 @@
 			<div class="row">
 				<div class="col-md-12 text-md-end p-3">
 					<button class="btn btn-secondary m-1" onclick="location.href='<%=contextPath%>/updateFormNotice.do?nno=<%=n.getNoticeNo()%>'">수정</button>
-					<button class="btn btn-secondary m-1" onclick="location.href='<%=contextPath%>/deleteQna.do?nno=<%=n.getNoticeNo()%>'">삭제</button>
+					<button class="btn btn-secondary m-1" onclick="location.href='<%=contextPath%>/deleteNotice.do?nno=<%=n.getNoticeNo()%>'">삭제</button>
 				</div>
 			</div>
 		<% } %>
@@ -81,7 +81,7 @@
 					<tr>
 						<th>첨부파일</th>
 						<td colspan="3">
-							<a download="<%= atList.get(i).getOriginName()%>" href="<%=contextPath%>/resources/notice_upfiles/<%=atList.get(i).getChangeName()%>"><%= atList.get(i).getChangeName()%></a>
+							<a download="<%= atList.get(i).getOriginName()%>" href="<%=contextPath%>/resources/notice_upfiles/<%=atList.get(i).getChangeName()%>"><%= atList.get(i).getOriginName()%></a>
 						</td>
 					</tr>
 					<%} %>	

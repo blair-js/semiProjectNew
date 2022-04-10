@@ -61,6 +61,7 @@
 									<%= atList.get(i).getOriginName()%>
 									<input type='hidden' name='originFile' value='<%=atList.get(i).getChangeName()%>'>
 									<input type='hidden' name='originFileNo' value='<%=atList.get(i).getFileNo()%>'>
+									<input  type="checkbox" name='delFile' value='<%=atList.get(i).getFileNo()%>'>삭제
 								</td>
 							</tr>
 							<%} %>	

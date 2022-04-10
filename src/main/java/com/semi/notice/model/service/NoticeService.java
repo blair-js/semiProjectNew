@@ -89,31 +89,69 @@ public class NoticeService {
 		return n;
 	}
 
-	public int updateNotice(Notice n, ArrayList<Attachment> atList) {
+	public int updateNotice(Notice n, ArrayList<Attachment> atList, String[] delFiles) {
 		Connection conn = getConnection();
 		
 		//게시글 수정
 		int result1 = new NoticeDao().updateNotice(conn, n);
 		
 		//첨부파일 수정
-		int result2 = 1;
-		if(!atList.isEmpty()) {
+		int noticeWriter = Integer.parseInt(n.getNoticeWriter());
+		int result2 = 1; //첨부파일이 없는 경우
+		if(!atList.isEmpty()) { //첨부파일 있는 경우
 			for(int i = 0; i < atList.size(); i++) {
-				if(atList.get(i).getFileNo() != 0) {
-					result2 = new NoticeDao().updateAttachment(conn, atList);
-				}else {
-					result2 = new NoticeDao().insertUpdateAttachment(conn, atList);
-				}
+				//if(atList.get(i).getFileNo() != 0) {
+					//result2 = new NoticeDao().updateAttachment(conn, atList);
+					//result2 = new NoticeDao().updateAttachment(conn, atList, delFiles);
+				//}else {
+					result2 = new NoticeDao().insertUpdateAttachment(conn, atList, noticeWriter);
+				//}
 			}
 		}
+//		if(!atList.isEmpty()) { //첨부파일 있는 경우
+//			for(int i = 0; i < atList.size(); i++) {
+//				result2 = new NoticeDao().insertUpdateAttachment(conn, atList, noticeWriter);				
+//			}
+//		}
+				
+		//첨부파일 삭제에 체크 되어 있는 경우
+		int result3 = 1;
+		if(delFiles != null) {
+			result3 = new NoticeDao().updateDeleteAttachment(conn, delFiles);
+		}
 		
-		if(result1 > 0 && result2 > 0) {
+	
+		if(result1 > 0 && result2 > 0 && result3 > 0) {
 			commit(conn);
 		} else {
 			rollback(conn);
 		}
 		
-		return 0;
+		close(conn);
+		return result1 * result2 * result3;
+	}
+
+	public int deleteNotice(int nno) {
+		Connection conn = getConnection();
+		
+		//게시글 지우기
+		int result1 = new NoticeDao().deleteNotice(conn, nno);
+		
+		//첨부파일 지우기
+		int result2 = 1; //첨부파일 없는 경우
+		ArrayList<Attachment> atList = new NoticeDao().selectAttachment(conn, nno);
+		if(!atList.isEmpty()) {
+			result2 = new NoticeDao().deleteAttachment(conn, nno);
+		}
+		
+		if(result1 > 0 && result2 > 0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		
+		close(conn);
+		return result1 * result2;
 	}
 
 }

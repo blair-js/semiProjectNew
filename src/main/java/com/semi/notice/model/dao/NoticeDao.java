@@ -259,20 +259,156 @@ public class NoticeDao {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		
-		String sql = prop.getProperty(null);
+		//updateNotice=UPDATE NOTICE SET NOTICE_TITLE=?, NOTICE_CONTENT=? WHERE NOTICE_NO=?
+		String sql = prop.getProperty("updateNotice");
 		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, n.getNoticeTitle());
+			pstmt.setString(2, n.getNoticeContent());
+			pstmt.setInt(3, n.getNoticeNo());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
 		
-		return 0;
+		return result;
 	}
 
-	public int updateAttachment(Connection conn, ArrayList<Attachment> atList) {
-		// TODO Auto-generated method stub
-		return 0;
+	/*public int updateAttachment(Connection conn, ArrayList<Attachment> atList) {
+		Attachment at = new Attachment();
+		int result = 0;
+		//int result2 = 0;
+		PreparedStatement pstmt = null;
+		
+		//updateAttachment=UPDATE ATTACHMENT SET CHANGE_NAME=?, ORIGIN_NAME=?, FILE_PATH=? WHERE FILE_NO=?
+		String sql = prop.getProperty("updateAttachment");
+		
+		try {			
+			for(int i = 0; i < atList.size(); i++) {
+				at = atList.get(i);
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, at.getOriginName());
+				pstmt.setString(2, at.getOriginName());
+				pstmt.setString(3, at.getFilePath());
+				pstmt.setInt(4, at.getFileNo());
+				
+				result += pstmt.executeUpdate();
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return result;
+	}*/
+	
+	public int updateDeleteAttachment(Connection conn, String[] delFiles) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		//updateDeleteAttachment=UPDATE ATTACHMENT SET STATUS='N' WHERE FILE_NO=?
+		String sql = prop.getProperty("updateDeleteAttachment");
+		
+		try {			
+			for(String delFile : delFiles) {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, Integer.parseInt(delFile));
+				
+				result += pstmt.executeUpdate();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 
-	public int insertUpdateAttachment(Connection conn, ArrayList<Attachment> atList) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int insertUpdateAttachment(Connection conn, ArrayList<Attachment> atList, int noticeWriter) {
+		Attachment at = new Attachment();
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		//insertUpdateAttachment=INSERT INTO ATTACHMENT VALUES (SEQ_FNO.NEXTVAL, ?, ?, 3, ?, ?, ?, SYSDATE, DEFAULT)
+		String sql = prop.getProperty("insertUpdateAttachment");
+		
+		try {
+			for(int i = 0; i < atList.size(); i++) {
+				at = atList.get(i);
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, noticeWriter);
+				pstmt.setInt(2, at.getRefNo());
+				pstmt.setString(3, at.getOriginName());
+				pstmt.setString(4, at.getChangeName());
+				pstmt.setString(5, at.getFilePath());
+				
+				result += pstmt.executeUpdate(); 
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
 	}
+
+	public int deleteNotice(Connection conn, int nno) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		//deleteNotice=UPDATE NOTICE SET STATUS='N' WHERE NOTICE_NO=?
+		String sql = prop.getProperty("deleteNotice");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, nno);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public int deleteAttachment(Connection conn, int nno) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		//deleteAttachment=UPDATE ATTACHMENT SET STATUS='N' WHERE REF_NO=?
+		String sql = prop.getProperty("deleteAttachment");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, nno);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+	
 
 }

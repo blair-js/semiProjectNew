@@ -5,13 +5,18 @@ import java.sql.Date;
 public class Notice {
 	
 	private int noticeNo;			//공지사항번호
-	private String noticeWriter;		//작성자회원번호
+	private String noticeWriter;	//작성자회원번호
 	private int category;			//분류번호
 	private String noticeTitle;		//공지사항제목
 	private String noticeContent;	//공지사항내용
 	private int count;				//조회수
 	private Date createDate;		//작성일
 	private String status;			//상태값(Y/N)
+	
+	//검색을 위한 field
+	private String keyword;			//검색 카테고리
+	private String searchKey;		//검색할 내용
+	private int page;				//검색할 페이지
 	
 	//기본 생성자
 	public Notice() {

@@ -60,21 +60,23 @@
 			
 			<!-- 검색창 -->
 			<div class="col-md-6 mb-3" id="search">	
-				<form>
+				<form action="<%=contextPath%>/listNotice.do" method="get">
 					<div class="input-group mb-3 input-group-sm">
-						<!-- 검색 키워드 선택 토글 -->
+						<!-- 검색 키워드 선택 select,option -->
+						<!-- 선택된 값이 keyword라는 이름으로 넘어옴 -->
 						<div class="input-group-prepend">
-							<select class="form-select border-1 rounded-0" id="searchSelect">
+							<select class="form-select border-1 rounded-0" id="searchSelect" name="keyword">
 								<option selected value="title">제목</option>
 								<option value="content">내용</option>
 								<option value="writer">작성자</option>
 							</select>
 						</div>
 							
-						<!-- 검색어 입력 -->		
+						<!-- 검색어 입력 -->
+						<!-- 검색어 까지 입력하고 버튼을 누르면 list?keyword=title/content/wirter&searchKey=검색내용 -->		
 						<input type="text" class="form-control" id="searchKey" name="searchKey" placeholder="검색어를 입력하세요.">	
 						<!-- 검색 버튼 --> 
-						<a href="#" class="btn btn-secondary" role="button" id="searchBtn"><b>검색</b></a>							
+						<input type="submit" class="btn btn-secondary" id="searchBtn" value="검색">					
 					</div>	
 				</form>	
 			</div>

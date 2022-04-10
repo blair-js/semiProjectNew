@@ -76,6 +76,13 @@ public class NoticeListServlet extends HttpServlet {
 		
 		ArrayList<Notice> list = new NoticeService().selectList(pi);
 		
+		//검색을 위해 넘어온 파라미터를 받아준다.
+		//list?keyword=title&searchKey=?
+		String keyword = request.getParameter("keyword");
+		String searchKey = request.getParameter("searchKey");
+		
+		
+		
 		//listView에 list를 뿌려주기 위해 가져온 list를 request에 담아준다.
 		request.setAttribute("list", list);
 		//페이징 바를 위한 pi객체
