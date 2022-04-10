@@ -54,6 +54,63 @@ public class SnackService {
 		return list;
 	}
 
+	public Snack selectSnack(int sno) {
+		Connection conn = getConnection();
+		
+		Snack snack = new SnackDao().selectSnack(conn, sno);
+		
+		if(snack != null) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		
+		close(conn);
+		
+		return snack;
+	}
+
+
+
+	public Attachment selectAttachment(int sno) {
+		
+		Connection conn = getConnection();
+		
+		Attachment at = new SnackDao().selectAttachment(conn, sno);
+		
+		close(conn);
+		
+		return at;
+	}
+
+	public int updateSnack(Snack snack, Attachment at) {
+		
+		Connection conn = getConnection();
+		
+		int result1 = new SnackDao().updateSnack(conn, snack);
+		
+		int result2 = 1;
+		
+		if(at != null) {
+			if(at.getFileNo() != 0) {
+				result2 = new SnackDao().updateAttachment(conn, at);
+			}else {
+				//이건 시퀀스 번호가 아닌 서블릿서 현재 게시물 지정을 해두었기에 insert메서드를 따로 만든다.
+				result2 = new SnackDao().insertNewAttachment(conn, at);
+			}
+		}
+		
+		if(result1 > 0 && result2 > 0) {
+			commit(conn);
+		}else {
+			System.out.println("service at ----------" + at);
+			rollback(conn);
+		}
+		close(conn);
+		
+		return result1 * result2;
+	}
+
 
 			
 }

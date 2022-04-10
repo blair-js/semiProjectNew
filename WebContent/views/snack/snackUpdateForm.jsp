@@ -1,5 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import= "java.util.ArrayList, com.semi.snack.model.dto.*"%>
+    <%@ page import= "java.util.ArrayList, com.semi.common.dto.*" %>
+    
+    <%
+   	Snack snack  = (Snack)request.getAttribute("snack"); 
+    Attachment at  = (Attachment)request.getAttribute("at");
+    
+    %>
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,8 +29,7 @@
 <body>
 	
 	<%@ include file="../common/menubar.jsp"%>
-	
-		<div class="container">
+
 		<!-- 컨테이너 시작 div -->
 
 
@@ -57,22 +64,31 @@
 
 			</div>
 		</div>
-
-		
+				
+			<form id="updateForm" action="<%= contextPath %>/snackUpdate.do" method="post" enctype="multipart/form-data"> <!-- 첨부파일이있어서 멀티파트로 넘기고 서블릿에 넘김 -->	
+			<input type="hidden" name="sno" value="<%= snack.getSanckNo() %>">
+			<div class="container">
 			<div class="container-md">
 				<div class="row">
 
 					<div name="snack_img1" id="center">
-						<td><img id="snack1" height="250px" width="369.33px" /></td>
-						<!-- 현재 올릴 사진은 1개이기에 수업 jsp중 tuhmbnailInsertForm.jsp 참고-->
+						<% if(at != null) { %>
+						   <%= at.getOriginName() %>
+						   <input type='hidden' name='originFile' value='<%=at.getChangeName()%>'>
+						   <input type='hidden' name='originFileNo' value='<%=at.getFileNo()%>'>
+						   
+						   <% } %>
+						<td></td>
+						
 					</div>
 
 				</div>
 
 			</div>
-
+			</div>
 			<br> <input type="file" id="center" name="file"
-				onchange="loadImg(this, 1);">
+			onchange="loadImg(this, 1);"> <!-- 서블릿으로 보내는 파일 이름 -->
+				
 
 			<p></p>
 
@@ -89,19 +105,20 @@
 							<tr>
 								<td> 
 								
-								<p> <h5> 간식명  :  <input type="text" name="snackName" placeholder="수정 할 간식명 입력."   required></h5> </p> 
+								<p> <h5> 간식명  :  <input type="text" name="snackName" value="<%= snack.getSanckName() %>"   required></h5> </p> 
 								 
-								<p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" placeholder="수정 할 뼈다귀 입력."  required></h5> </p> 
+								<p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" value="<%= snack.getPrice() %>"  required></h5> </p> 
 								
 								</td>
 							</tr>
 
 						</table>
-
-
+						
+						</div>
+					</div>
 					</div>
 					<!-- snack 1 div 끝-->
-					
+				</form>		
 
 	</div>
 	<!-- container 속성이 아래까지 못내려오도록 닫는 div -->
@@ -125,8 +142,12 @@
 
 	<div class="container-md">
 	
-	<button class="btn btn-outline-warning btn-lg" style="width: 15%"
-		id="center" onclick="goSnackUpdateForm()"><b>간식 수정</b></button>
+	
+	
+  	<button  class="btn btn-outline-warning btn-lg" style="width: 15%"
+		id="center" onclick="goSnackUpdateForm()"><b>간식 수정</b></button> 
+		
+		<!--  <input type="submit"> -->
 	
 	<br>
 	
@@ -164,9 +185,11 @@
 		}
 	}
 	
-	function goSnackUpdateForm(){  //간식 수정을 하기위한 서블릿 여기에 들어가서 snackUpdateServlet를 호출 
-				location.href="<%=request.getContextPath()%>/snackUpdate.do" 	
-	}	
+	function goSnackUpdateForm(){
+		document.getElementById("updateForm").submit();	
+	}
+	
+	
 	
 	function goSnackDelete(){  //간식 수정을 하기위한 서블릿 여기에 들어가서 snackUpdateServlet를 호출 
 		location.href="<%=request.getContextPath()%>/snackDelete.do" 	
