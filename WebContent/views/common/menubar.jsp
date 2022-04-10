@@ -144,29 +144,29 @@ td{
             <%if(loginUser == null) {%>
 	            <a class="btn btn-sm btn-light order-1 m-1" href="<%= contextPath %>/loginForm.do"><b>로그인</b></a>
 	            <a class="btn btn-sm btn-light order-1 m-1" href="<%= contextPath %>/userEnrollForm.do"><b>회원가입</b></a>
-			
 			<%-- 로그인 된 user가 있다면 마이페이지+로그아웃 버튼을 보여준다. --%>            
             <%}else{ %>
             	<table>
             		<tr class="tr1">
-            			<td>
+				            <td>
+           				<%if(loginUser.getAdminChecked().equals("Y")) {%>
+           					<!-- 로그인된 유저가 관리자이면 아래 버튼 보여주고 -->
+			            	<a class="btn btn-sm btn-light order-1 m-1" href="<%= contextPath %>/adminMyPage.do"><b>마이페이지</b></a>
+			            <%} else{ %>
+			            	<!-- 로그인된 유저가 회원이면 아래 버튼 보여주고 -->
 			            	<a class="btn btn-sm btn-light order-1 m-1" href="<%= contextPath %>/userMyDetail.do"><b>마이페이지</b></a>
-			            </td>
-			            <td>
-			            	<a class="btn btn-sm btn-light order-1 m-1" href="<%= contextPath %>/userLogout.do"><b>로그아웃</b></a>
-			            </td>
-			            <td>
-			            	<!-- 아직 구분해줄 객체가 없기 때문에 관리자 페이지 임의 생성 조건문으로 경로만 다르게 잡아줄거이기에 버튼은 하나! -->
-			            	<a class="btn btn-sm btn-light order-1 m-1" href="<%= contextPath %>/adminMyPage.do"><b>Mp</b></a>
-			            </td>
+			            <%} %>
+				            </td>
+				            <td>
+				            	<a class="btn btn-sm btn-light order-1 m-1" href="<%= contextPath %>/userLogout.do"><b>로그아웃</b></a>
+				            </td>
 		            </tr>
 		            <tr>
 		            	<!-- 나중에 로그인 후 버튼은 두개(마이페이지+로그아웃)만 보여지므로 colspan 2로 변경예정 -->
-		            	<td colspan="3"><span class="spname"><%=loginUser.getUserName() %></span> 님 환영합니다.</td>
+		            	<td colspan="2"><span class="spname"><%=loginUser.getUserName() %></span> 님 환영합니다.</td>
 		            </tr>
 	            </table>
 			<%} %>
-            
             
           </div>
         </div>

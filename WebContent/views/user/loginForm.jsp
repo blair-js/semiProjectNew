@@ -84,7 +84,8 @@
 			</div>
 
 			<div class="checkbox mb-3">
-				<label> <input type="checkbox" value="">&nbsp; 로그인 상태 유지</label>
+				<input type="checkbox" name="input_check" value="Y" id="input_check" >&nbsp; 로그인 상태 유지
+				<input type="hidden" name="input_check" value="N" id="input_check_hidden" >
 			</div>
 			
 			<!-- 로그인 버튼 -->
@@ -101,7 +102,15 @@
 	</main>
 
 	<script type="text/javascript">
-		
+		//페이지 로드시 확인
+		$(function () {
+			//아이디가 input_check인 요소가 check 되었다면
+			if($('#input_check').checked){
+				//아이디가 input_check_hidden인 요소의 disabled 속성을 true로 대입
+				$('#input_check_hidden').disabled = true;
+			}
+		})
+	
 		//로그인 폼에서 아이디와 비밀번호를 모두 기입해야만 true 반환하도록 한다.
 		function loginValidate() {
 			//아이디가 userId인 요소의 값의 길이가 0이라면(즉, 아이디를 입력하지 않았다면)

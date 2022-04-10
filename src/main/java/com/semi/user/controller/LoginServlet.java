@@ -6,6 +6,7 @@ import javax.mail.Session;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,6 +35,10 @@ public class LoginServlet extends HttpServlet {
 		System.out.println("userId 파라미터 확인" + userId);
 		System.out.println("userPwd 파라미터 확인" + userPwd);
 		
+		//자동로그인여부 체크 파라미터 확인
+		String input_check = request.getParameter("input_check");
+		System.out.println("input_check 파라미터 확인" + input_check);
+		
 		//파라미터로 받은 아이디와 비번을 
 		//UserService의 loginUser()메소드의 인자로 전달하여 결과 반환받기. => 결과는 User 객체로!
 		User loginUser = new UserService().loginUser(userId, userPwd);
@@ -50,10 +55,34 @@ public class LoginServlet extends HttpServlet {
 				
 				//세션에 로그인 된 User 객체의 정보를 담아준다.
 				session.setAttribute("loginUser", loginUser);
+
+				//위에서 세션에 모든 정보를 담고
+				//아까 받아두었던 자동로그인여부에 대한 파라미터 값이 "Y"라면 if문 진입
+				//아니라면 그냥 pass
+				/*if(input_check.equals("Y")) {
+					
+					//1.회원의 아이디로 쿠키를 생성한다.
+					//쿠키 생성(회원의 아이디로 생성)
+					Cookie cookie = new Cookie("userId", loginUser.getUserId());
+					//유효기간 설정
+					cookie.setMaxAge(26*60*60); //1일 
+					//생성한 쿠키 객체 전송
+					response.addCookie(cookie); 
+					
+					//2.그다음 DB에서 쿠키여부를 Y로 바꿔준다.(회원가입시 DEFAULT로 N으로 들어가기 때문)
+					
+					int result = new UserService().updateCookieChecked(userId);
+
+					/////////////////////////////////////////////////////
+					
+					if(result > 0) {
+						loginUser.setCookieChecked("Y");
+					}
+					
+				}//if*/
 				
 				//로그인이 완료되면 홈 화면으로 돌아가기
 				//response.sendRedirect(request.getContextPath());
-				
 				RequestDispatcher view = request.getRequestDispatcher("index.jsp");
 				view.forward(request, response);
 				

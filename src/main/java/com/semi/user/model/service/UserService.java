@@ -298,4 +298,20 @@ public class UserService {
 		
 	}
 
+	public int updateCookieChecked(String userId) {
+
+		//커넥션 생성
+		Connection conn = getConnection();
+		
+		//커넥션 객체와 userId를 인자로 전달
+		int result = new UserDao().updateCookieChecked(conn, userId);
+		
+		//커넥션 닫기
+		close(conn);
+		
+		//결과 반환
+		return result;
+				
+	}
+
 }
