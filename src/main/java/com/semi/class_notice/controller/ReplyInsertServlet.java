@@ -34,6 +34,7 @@ public class ReplyInsertServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// ajax로 화면에서 넘겨준 값들 변수에 담아준다.
 		String content = request.getParameter("content");
+//		content = content.replace("\r\n", "<br>"); 개행하는거 다시 수정 필요할듯
 		int nno = Integer.parseInt(request.getParameter("nno"));
 		// 작성자 회원 번호
 		int writer = ((User)request.getSession().getAttribute("loginUser")).getUserNo();

@@ -334,5 +334,67 @@ public class ClassNoticeDao {
 		
 		return result;
 	}
+	public ArrayList<Reply> selectRList(Connection conn, int nno) {
+		// 게시글에 달려있는 댓글 조회 하는 메소드
+		
+		ArrayList<Reply> list = new ArrayList<>();
+		
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+//		selectRList=SELECT REPLY_NO, REPLY_CONTENT, USER_ID, CREATE_DATE FROM REPLY A JOIN R_USER ON(REF_WRITER = USER_NO) WHERE REF_NO = ? AND A.STATUS='Y' ORDER BY REPLY_NO DESC
+		String sql = prop.getProperty("selectRList");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			// 참조 게시글 번호 ? 자리에 넣어준다.
+			pstmt.setInt(1, nno);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+//				필요한거 : 작성자, 댓글 내용, 작성일, 댓글번호
+				Reply r = new Reply();
+				r.setReplyId(rset.getInt("REPLY_NO"));
+				r.setReplyContent(rset.getString("REPLY_CONTENT"));
+				r.setReplyWriter(rset.getString("USER_ID"));
+				r.setCreateDate(rset.getDate("CREATE_DATE"));
+				
+				list.add(r);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return list;
+	}
+	public int updateReply(Connection conn, Reply r) {
+		// DB 댓글 수정
+		
+		int result = 0;
+		PreparedStatement pstmt = null;
+//		updateReply=UPDATE CLASS_REPLY SET REPLY_CONTENT = ? WHERE REPLY_NO = ?
+		String sql = prop.getProperty("updateReply");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, r.getReplyContent());
+			pstmt.setInt(2, r.getReplyId());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		
+		
+		return result;
+	}
 
 }
