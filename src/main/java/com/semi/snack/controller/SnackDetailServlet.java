@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.semi.common.dto.Attachment;
 import com.semi.snack.model.dto.Snack;
 import com.semi.snack.model.service.SnackService;
 
@@ -38,12 +39,18 @@ public class SnackDetailServlet extends HttpServlet {
 		
 		Snack snack = new SnackService().selectSnack(sno);
 		
+		Attachment at = new SnackService().selectAttachment(sno); //체인지 네임만 뽑아서 체인지네임 경로 설정만 해주면
+		
+		System.out.println(sno);
+		
 		if(snack != null) {
 			request.setAttribute("snack", snack);
+			request.setAttribute("at", at);
+			
 			request.getRequestDispatcher("views/snack/snackDetail.jsp").forward(request, response);;
 			
 		}else {
-			request.setAttribute("msg", "게시글 상세조회 실패");
+			request.getSession().setAttribute("msg", "게시글 상세조회 실패");
 			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
 		}
 		

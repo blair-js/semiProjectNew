@@ -101,7 +101,7 @@ public class SnackUpdateSerlvet extends HttpServlet {
 		if(result > 0 ) {
 			response.sendRedirect("snackDetail.do?sno="+sno); 
 		}else {
-			request.setAttribute("msg", "게시글 수정 실패 "); //그기 아니라면
+			request.getSession().setAttribute("msg", "게시글 수정 실패 "); //그기 아니라면
 			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response); //에러페이지 전환
 		}		
 	}

@@ -1,6 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-
+	pageEncoding="UTF-8" import="java.util.ArrayList, com.semi.snack.model.dto.*"%>
+	
+	<%
+		UserPoint userPoint = (UserPoint)request.getAttribute("userPoint");
+ 
+	%>
+	
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,11 +43,10 @@
 
 			<p></p>
 
-			<form id="snackOrder"
-				action="<%=request.getContextPath() %>/snackResult.do" method="post">
 				<h4>
 					<img src="assets/img/gallery/point.jpg" alt="" height="40">&nbsp
-					보유중인 뼈다귀 &nbsp:&nbsp 3
+					<input type='text' name='userPoint' value='<%=userPoint.getUserPoint()%>'>	
+					
 				</h4>
 
 			</form>

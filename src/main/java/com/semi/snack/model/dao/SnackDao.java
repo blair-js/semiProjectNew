@@ -14,6 +14,7 @@ import java.util.Properties;
 
 import com.semi.common.dto.Attachment;
 import com.semi.snack.model.dto.Snack;
+import com.semi.snack.model.dto.UserPoint;
 
 public class SnackDao {
 	
@@ -32,40 +33,6 @@ public class SnackDao {
 		}
 	}
 
-	
-	
-	/*
-	public int snackInsert(Connection conn, Snack snack) { //간식추가 메서드
-		
-		//snackInsert="INSERT INTO SNACK VALUES(SEQ_SNO.NEXTVAL, ?, DEFAULT, ?, DEFAULT)
-
-		int result = 0;
-		
-		PreparedStatement pstmt = null;	
-		
-		String sql = prop.getProperty("snackInsert");
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, snack.getSanckName());
-			pstmt.setInt(2, snack.getPrice());
-			
-			result = pstmt.executeUpdate();
-			System.out.println(result);
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally {
-			close(pstmt);
-		}
-		
-		
-		return result;
-	}
-
-
-*/
 
 	public int insertSnack(Connection conn, Snack snack) { //간식 추가 메서드
 		
@@ -192,6 +159,8 @@ public class SnackDao {
 			snack = new Snack(rset.getInt("SNACK_NO"),
 							  rset.getString("SNACK_NAME"),
 							  rset.getInt("PRICE")
+							  
+							  
 							  
 
 							  		);
@@ -330,6 +299,86 @@ public class SnackDao {
 	}
 
 
+
+	public int deleteSnack(Connection conn, int sno) {
+		
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("deleteSnack");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, sno);
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+
+
+	public int deleteAttachment(Connection conn, int sno) {
+		
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("deleteAttachment");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, sno);
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+
+
+	public UserPoint selectUserPoint(Connection conn, int userNo) { //유저 포인트 조회를 하기위한 메서드
+		
+		UserPoint userPoint = null;
+		
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("selectUserPoint");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, userNo);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				
+				userPoint = new UserPoint(rset.getInt("USER_NO"),
+										  rset.getInt("POINT"));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return userPoint;
+	}
 
 
 

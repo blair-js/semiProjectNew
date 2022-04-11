@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import com.semi.common.dto.Attachment;
 import com.semi.snack.model.dao.SnackDao;
 import com.semi.snack.model.dto.Snack;
+import com.semi.snack.model.dto.UserPoint;
 
 
 public class SnackService {
@@ -110,6 +111,46 @@ public class SnackService {
 		
 		return result1 * result2;
 	}
+
+	public int deleteSnack(int sno) { //간식 삭제를 하기위한 메서드
+		
+		Connection conn = getConnection();
+		
+		int result1 = new SnackDao().deleteSnack(conn, sno);
+		int result2 = 1;
+		
+		//미리 만들어둔 메서드를 통해 조회해서 결과가 있으면 담는다
+		Attachment at = new SnackDao().selectAttachment(conn, sno);
+		
+		if(at != null) {
+			result2 = new SnackDao().deleteAttachment(conn, sno); // 첨부파일을 지우는 메서드로 이동 시켜준다. 삭제하기 위해
+		}
+		
+		if(result1 > 0 && result2 > 0 ) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		close(conn);
+		
+		return result1 * result2;
+	}
+
+	public UserPoint selectUserPoint(UserPoint up) {
+		
+		Connection conn = getConnection();
+		
+		UserPoint userPoint = new SnackDao().selectUserPoint(conn, up.getUserNo());
+		
+		if(userPoint != null) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		
+		return userPoint;
+	}
+
 
 
 			
