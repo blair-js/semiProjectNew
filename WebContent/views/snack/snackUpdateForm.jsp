@@ -74,7 +74,7 @@
 					<div name="snack_img1" id="center">
 						<% if(at != null) { %>
 						   <%= at.getOriginName() %>
-						   <input type='hidden' name='originFile' value='<%=at.getChangeName()%>'>
+						   <input type='hidden' name='originFile' value='<%=at.getChangeName()%>'>	 
 						   <input type='hidden' name='originFileNo' value='<%=at.getFileNo()%>'>
 						   
 						   <% } %>
@@ -86,10 +86,24 @@
 
 			</div>
 			</div>
-			<br> <input type="file" id="center" name="file"
+			<br>
+			<div name="snack_no" id="center">
+						<p id="center">간식 번호 : <%=snack.getSanckNo() %></p>
+						<br>
+					</div>
+			<br>
+			<pre id="center"><p>수정 전                                                        수정 후</p></pre>
+			<div id="center">
+					
+			<td><img src="<%= contextPath %>/resources/FileUpload_test(SNACK)/<%= at.getChangeName() %>">
+			<img id="snackImg" height="293px" width="279px" /></td>
+			</div>
+			<div id="fileArea">	
+			
+			<br> <input type="file" id="file" name="file"
 			onchange="loadImg(this, 1);"> <!-- 서블릿으로 보내는 파일 이름 -->
 				
-
+			</div>
 			<p></p>
 
 			<!-- multipart/form-data 을 사용하여 데이터 전송 -->
@@ -106,7 +120,7 @@
 								<td> 
 								
 								<p> <h5> 간식명  :  <input type="text" name="snackName" value="<%= snack.getSanckName() %>"   required></h5> </p> 
-								 
+								   
 								<p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" value="<%= snack.getPrice() %>"  required></h5> </p> 
 								
 								</td>
@@ -160,13 +174,25 @@
 	</div>
 
 
-
+	
 	</div>
 	<!-- 컨테이너 끝 div -->
 
 	<script>
 	
 
+	$(function(){
+		$("#fileArea").hide();
+		
+		
+		$("#snackImg").click(function(){ 
+			$("#file").click();
+	
+		});
+			
+	});
+	
+	
 	function loadImg(inputFile, num){ 
 		if(inputFile.files.length == 1){
 			var reader = new FileReader(); // 파일 읽어 들이는 객체 생성 (미리보기)
@@ -178,7 +204,7 @@
 			reader.onload = function(e){ // 파일 읽기가 다 완료되면 실행
 				switch(num){
 				// e.target.result(URL 형식) 결과값을 src에 다 담아주고 있다. 각각의 파일을 읽어들여서 미리보기가 가능하게된다.
-				case 1 : $("#snack1").attr("src", e.target.result); break; //src 속성을 titleImg 속성을 걸어주니가 load가 가능한거이다.
+				case 1 : $("#snackImg").attr("src", e.target.result); break; //src 속성을 titleImg 속성을 걸어주니가 load가 가능한거이다.
 			
 				}
 			}
