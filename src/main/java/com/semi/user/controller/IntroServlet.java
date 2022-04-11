@@ -1,6 +1,8 @@
 package com.semi.user.controller;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +19,9 @@ public class IntroServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.sendRedirect("views/common/intro.jsp");
+		
+		request.getRequestDispatcher("views/common/intro.jsp").forward(request, response);
+		//response.sendRedirect("views/common/intro.jsp");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

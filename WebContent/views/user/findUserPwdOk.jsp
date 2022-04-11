@@ -4,6 +4,7 @@
 	//UserPwdFindServlet에서 request 객체에 담은 userPwd get
 	String userPwd = (String)request.getAttribute("userPwd");
 	String userName = (String)request.getAttribute("userName");
+	String userId = (String)request.getAttribute("userId");
 %>
 <!DOCTYPE html>
 <html>
@@ -116,7 +117,7 @@ main form{
 	<!-- 아이디찾기 버튼 클릭시 UserIdFindServlet 로 이동 -->
 	<script type="text/javascript">
 		function goLogin() {
-			location.href="<%= request.getContextPath()%>/loginForm.do;"
+			location.href="<%= contextPath %>/loginForm.do?userId=<%=userId%>";	
 		}
 	</script>
 

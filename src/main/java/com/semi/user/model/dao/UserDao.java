@@ -839,4 +839,95 @@ public class UserDao {
 		return result; //결과 반환
 	}
 
+
+	public User selectUserbyGoogle(Connection conn, String userName, String userEmail) {
+		//구글 로그인을 위한 객체의 정보를 조회해오는 메소드
+		
+		//인자로 들어온 아이디와 비번을 가진 회원이 없으면 null을 반환할 것
+		User loginUser = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		//selectUserbyGoogle=SELECT * FROM R_USER WHERE USER_NAME=? AND EMAIL=?
+		String sql = prop.getProperty("selectUserbyGoogle");
+		
+		/*  조회되는 컬럼 
+		 	USER_NO	NUMBER
+			USER_ID	VARCHAR2(30 BYTE)
+			EMAIL	VARCHAR2(100 BYTE)
+			USER_PWD	VARCHAR2(100 BYTE)
+			USER_NAME	VARCHAR2(15 BYTE)
+			PHONE	VARCHAR2(13 BYTE)
+			SMS_CHECKED	VARCHAR2(1 BYTE)
+			EMAIL_HASH	VARCHAR2(64 BYTE)
+			EMAIL_CHECKED	VARCHAR2(1 BYTE)
+			USER_GENDER	VARCHAR2(1 BYTE)
+			STATUS	VARCHAR2(1 BYTE)
+			ENROLL_DATE	DATE
+			COOKIE_CHECKED	VARCHAR2(1 BYTE)
+			ADMIN_CHECKED	VARCHAR2(1 BYTE) 
+		 */
+		try {
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			//쿼리 값 셋팅
+			pstmt.setString(1, userName);
+			pstmt.setString(2, userEmail);
+			
+			//쿼리 실행 후 결과 받기
+			rset = pstmt.executeQuery();
+			
+			/*
+			 	USER_NO
+				USER_ID
+				EMAIL
+				USER_PWD
+				USER_NAME
+				PHONE
+				SMS_CHECKED
+				EMAIL_HASH
+				EMAIL_CHECKED
+				USER_GENDER
+				STATUS
+				ENROLL_DATE
+				COOKIE_CHECKED
+				ADMIN_CHECKED
+			 */
+			
+			//조회결과로 오는 행은 1개이므로 반복문은 필요없음 
+			if(rset.next()) { //조회 결과가 있다면
+				
+				//rset의 컬럼 값을 담아서 User 객체를 생성
+				loginUser = new User(rset.getInt("USER_NO")
+										, rset.getString("USER_ID")
+										, rset.getString("EMAIL")
+										, rset.getString("USER_PWD")
+										, rset.getString("USER_NAME")
+										, rset.getString("PHONE")
+										, rset.getString("SMS_CHECKED")
+										, rset.getString("EMAIL_HASH")
+										, rset.getString("EMAIL_CHECKED")
+										, rset.getString("USER_GENDER")
+										, rset.getString("STATUS")
+										, rset.getDate("ENROLL_DATE")
+										, rset.getString("COOKIE_CHECKED")
+										, rset.getString("ADMIN_CHECKED")
+									);
+				
+			}//if
+			
+			//확인
+			//System.out.println(loginUser.toString());
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return loginUser; //정보가 담겨있는 User 객체 반환(없으면 null 반환)
+	}
+
 }
