@@ -15,7 +15,7 @@
 	<%@ include file="../common/menubar.jsp"%>
 
 	<div class="container" id="container">
-		<form id="frm" action="classNoticeInsert.do" method="post">
+		<form id="frm" action="classNoticeInsert.do" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="classname" value="<%=classname %>">
 		<input type="hidden" name="writer" value="<%= loginUser.getUserNo()%>">
 			<p>제목</p>
@@ -23,7 +23,7 @@
 				placeholder="게시글 제목을 입력하세요." style="width: 100%;">
 			<div id="smarteditor">
 				<p>내용</p>
-				<div class="thumbnail mb-3 mt-2">썸네일이미지 선택 : <input type="file" name="titleimg"></div>
+				<div class="thumbnail mb-3 mt-2">썸네일이미지 선택 : <input type="file" id="titleimg" name="titleimg"></div>
 				<textarea name="content" id="content" rows="20" cols="10"
 					style="width: 100%"></textarea>
 			</div>
@@ -69,6 +69,8 @@
 			function validation() {
 				var contents = $.trim(oEditors[0].getContents());
 				// 내용 textarea가 비어있는지 확인 비어있으면 경고창 생성 후 포커스 이동
+				var fileCheck = document.getElementById("titleimg").value;
+				
 				if (contents === '<p>&nbsp;</p>' || contents === '') { // 아무것도 입력 안해도 값이 들어있음
 					alert("내용을 입력하세요.");
 					oEditors.getById['content'].exec('FOCUS');
@@ -78,6 +80,10 @@
 					// 제목 입력 부분 비어있는지 체크 비어 있으면 포커스 이동
 					alert("제목을 입력하세요.");
 					$("#title").focus();
+					return false;
+				}else if (!(fileCheck)){
+					alert("대표 이미지를 선택해주세요.")
+					$("#titleimg").focus();
 					return false;
 				}
 				return true;

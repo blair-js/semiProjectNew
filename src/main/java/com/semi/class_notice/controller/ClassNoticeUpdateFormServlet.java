@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.semi.class_notice.model.dto.ClassNotice;
 import com.semi.class_notice.model.service.ClassNoticeService;
+import com.semi.common.dto.Attachment;
 
 /**
  * Servlet implementation class classNoticeUpdateFormServlet
@@ -30,13 +31,21 @@ public class ClassNoticeUpdateFormServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		String classname = request.getParameter("classname");
 		int nno = Integer.parseInt(request.getParameter("nno"));
 		// 수정할 게시글 화면에 뿌려주어야 하니까 조회
 		ClassNotice cn = new ClassNoticeService().selectNewNotice(nno);
+		Attachment at = new ClassNoticeService().selectAttachment(nno);
 		
-		request.setAttribute("cNotice", cn);
-		request.getRequestDispatcher("views/class_notice/classNoticeUpdateForm.jsp").forward(request, response);
+		if(cn != null) {
+			request.setAttribute("cNotice", cn);
+			request.setAttribute("at", at);
+			request.getRequestDispatcher("views/class_notice/classNoticeUpdateForm.jsp").forward(request, response);
+			
+		}else {
+			request.setAttribute("msg", "수정할 게시글을 불러오는데 실패하였습니다.");
+			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+		}
 	}
 
 	/**

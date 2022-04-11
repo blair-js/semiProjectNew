@@ -53,11 +53,18 @@ button:hover {
 					<div class="col">
 					<input type="hidden" name="nNo" value="<%=n.getClassNoticeNo()%>">
 						<div class="card shadow">
-							<div id="img-center">
+							<div id="img-center" style="text-align:center">
+							<% if(n.getTitleImg() != null) { %>
+								<a href="#"
+									style="text-decoration: none"> <img class="img-thumbnail mt-3" style="width:100%; height:16rem;"
+									src="/resources/board_upfiles/<%= n.getTitleImg() %>">
+								</a>
+							<% }else { %>
 								<a href="#"
 									style="text-decoration: none"> <img class="card-img-top"
 									src="assets/img/gallery/fdog.png">
 								</a>
+							<% } %>
 							</div>
 							<div class="card-body">
 								<p class="card-text text-dark">
@@ -156,7 +163,7 @@ button:hover {
 		$(function(){
 			$(".col").click(function(){
 				var nno = $(this).children().eq(0).val();
-				location.href="/classNoticeDetail.do?nno=" + nno;
+				location.href="/classNoticeDetail.do?nno=" +nno+"&classname=<%=classname%>";
 			})
 		})
 	</script>

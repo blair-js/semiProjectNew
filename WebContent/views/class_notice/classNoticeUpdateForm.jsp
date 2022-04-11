@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="com.semi.class_notice.model.dto.*"%>
-<% ClassNotice cn = (ClassNotice)request.getAttribute("cNotice"); %>
+    pageEncoding="UTF-8" import="com.semi.class_notice.model.dto.*, com.semi.common.dto.*"%>
+<%
+	ClassNotice cn = (ClassNotice)request.getAttribute("cNotice"); 
+	Attachment at = (Attachment)request.getAttribute("at");	
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,14 +15,21 @@
 <body>
 	<%@ include file="../common/menubar.jsp" %>
 	<div class="container" id="container">
-		<form id="frm" action="classNoticeUpdate.do" method="post">
+		<form id="frm" action="classNoticeUpdate.do" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="writer" value="<%= loginUser.getUserNo() %>">
+		<input type="hidden" name="classname" value="<%= cn.getClassName() %>">
 		<input type="hidden" name="nno" value="<%= cn.getClassNoticeNo() %>">
 			<p>제목</p>
 			<input type="text" id="title" name="title" class="mb-3" style="width: 100%;" value="<%=cn.getClassNoticeTitle() %>">
 			<div id="smarteditor">
 				<p>내용</p>
-				<div class="thumbnail mb-3 mt-2">썸네일이미지 선택 : <input type="file" name="titleimg"></div>
+				<div class="thumbnail mb-3 mt-2">
+					<%=at.getOriginName() %>
+					<input type="hidden" name="originFile" value="<%=at.getChangeName() %>">
+					<input type="hidden" name="originFileNo" value="<%=at.getFileNo() %>">
+						&nbsp; &nbsp;<b>썸네일 변경&nbsp; </b><input type="file" name="titleimg">
+				
+				</div>
 				<textarea name="content" id="content" rows="20" cols="10"
 					style="width: 100%"><%=cn.getClassNoticeContent() %></textarea>
 			</div>
@@ -79,7 +89,7 @@
 			}
 			// 취소 버튼 클릭시 목록 화면으로 전환
 			$("#close").click(function() {
-				$(location).attr("href", "classNoticeList.do");
+				$(location).attr("href", "classNoticeList.do?classname=<%= cn.getClassName()%>");
 			});
 		});
 	</script>
