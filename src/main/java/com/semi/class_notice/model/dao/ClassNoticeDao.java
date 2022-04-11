@@ -13,7 +13,9 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import com.semi.class_notice.model.dto.ClassNotice;
+import com.semi.common.dto.Attachment;
 import com.semi.common.dto.PageInfo;
+import com.semi.common.dto.Reply;
 
 public class ClassNoticeDao {
 	
@@ -72,6 +74,15 @@ public class ClassNoticeDao {
 		int startRow = (pi.getCurrentPage()-1) * pi.getBoardLimit() + 1;
 		int endRow = startRow + pi.getBoardLimit() - 1;
 		// 반 별 게시판 목록 다르게 보여주어야 하니까 앞에서 매개변수로 받아주어야함 우선 여기서 담아준다
+
+//			selectList=(SELECT ROWNUM RNUM, A.* FROM \
+//					(SELECT CLASS_NOTICE_NO, CLASS_NOTICE_TITLE,CHANGE_NAME, USER_ID, COUNT, CREATE_DATE \
+//					FROM CLASS_NOTICE B JOIN R_USER C ON (NOTICE_WRITER=USER_NO) \
+//                    LEFT JOIN ATTACHMENT D ON (C.USER_NO = D.USER_NO) \
+//					WHERE CLASS_NAME= ? AND B.STATUS='Y' AND B.CLASS_NOTICE_NO = D.REF_NO \
+//                    AND D.CATEGORY = B.CATEGORY ORDER BY CLASS_NOTICE_NO DESC) A) \
+//					WHERE RNUM BETWEEN ? AND ?
+
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, className);
@@ -80,12 +91,6 @@ public class ClassNoticeDao {
 			
 			rset = pstmt.executeQuery();
 
-//			selectList=SELECT * FROM 
-//					(SELECT ROWNUM RNUM, A.* FROM 
-//					(SELECT CLASS_NOTICE_NO, CLASS_NOTICE_TITLE, USER_ID, COUNT, CREATE_DATE 
-//					FROM CLASS_NOTICE B JOIN "USER" ON (NOTICE_WRITER=USER_NO) 
-//					WHERE CLASS_NAME= '?' AND B.STATUS='Y' ORDER BY CLASS_NOTICE_NO DESC) A)
-//					WHERE RNUM BETWEEN ? AND ?
 
 			while(rset.next()) {
 				ClassNotice c = new ClassNotice();
@@ -94,6 +99,7 @@ public class ClassNoticeDao {
 				c.setNoticeWriter(rset.getString("USER_ID"));
 				c.setCreateDate(rset.getDate("CREATE_DATE"));
 				c.setCount(rset.getInt("COUNT"));
+				c.setTitleImg(rset.getString("CHANGE_NAME"));
 				
 				list.add(c);
 			}
@@ -176,6 +182,7 @@ public class ClassNoticeDao {
 				cn.setClassNoticeNo(rset.getInt("CLASS_NOTICE_NO"));
 				cn.setClassNoticeTitle(rset.getString("CLASS_NOTICE_TITLE"));
 				cn.setClassNoticeContent(rset.getString("CLASS_NOTICE_CONTENT"));
+				cn.setClassName(rset.getString("CLASS_NAME"));
 				cn.setNoticeWriter(rset.getString("USER_ID"));
 				cn.setCount(rset.getInt("COUNT"));
 				cn.setCreateDate(rset.getDate("CREATE_DATE"));
@@ -192,7 +199,7 @@ public class ClassNoticeDao {
 		
 		return cn;
 	}
-	public int updateNotice(Connection conn, ClassNotice cn, int nno) {
+	public int updateNotice(Connection conn, ClassNotice cn) {
 		
 		int result = 0;
 		PreparedStatement pstmt = null;
@@ -204,7 +211,117 @@ public class ClassNoticeDao {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, cn.getClassNoticeTitle());
 			pstmt.setString(2, cn.getClassNoticeContent());
-			pstmt.setInt(3, nno);
+			pstmt.setInt(3, cn.getClassNoticeNo());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+	public int insertAttachment(Connection conn, Attachment at) {
+		// 첨부파일 저장하는 메소드
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+//		insertAttachment=INSERT INTO ATTACHMENT VALUES(SEQ_FNO.NEXTVAL, ?, SEQ_CNNO.NEXTVAL, 5, ?, ?, ?, SYSDATE, DEFAULT)
+		String sql = prop.getProperty("insertAttachment");
+		
+//		ORIGIN_NAME
+//		CHANGE_NAME
+//		FILE_PATH
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, at.getUserNo());
+			pstmt.setString(2, at.getOriginName());
+			pstmt.setString(3, at.getChangeName());
+			pstmt.setString(4, at.getFilePath());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+	public Attachment selectAttachment(Connection conn, int nno) {
+
+		Attachment at = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+//		selectAttachment=SELECT FILE_NO, ORIGIN_NAME, CHANGE_NAME FROM ATTACHMENT WHERE REF_BNO=? AND CATEGORY= 5 AND STATUS='Y'
+		
+		String sql = prop.getProperty("selectAttachment");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, nno);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				at = new Attachment();
+				at.setFileNo(rset.getInt("FILE_NO"));
+				at.setOriginName(rset.getString("ORIGIN_NAME"));
+				at.setChangeName(rset.getString("CHANGE_NAME"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return at;
+	}
+	public int updateAttachment(Connection conn, Attachment at) {
+		
+		int result = 0;
+		PreparedStatement pstmt = null;
+//		updateAttachment=UPDATE ATTACHMENT SET CHANGE_NAME=?, ORIGIN_NAME=?, FILE_PATH=? WHERE FILE_NO=?		
+		
+		String sql = prop.getProperty("updateAttachment");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, at.getChangeName());
+			pstmt.setString(2, at.getOriginName());
+			pstmt.setString(3, at.getFilePath());
+			pstmt.setInt(4, at.getFileNo());
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+	public int insertReply(Connection conn, Reply r) {
+		
+		int result = 0;
+		PreparedStatement pstmt = null;
+//		insertReply=INSERT INTO CLASS_REPLY VALUES(SEQ_CRNO.NEXTVAL, ?, ?, SYSDATE, ?, DEFAULT)
+		String sql = prop.getProperty("insertReply");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, r.getRefBoardId());
+			pstmt.setInt(2, Integer.parseInt(r.getReplyWriter()));
+			pstmt.setString(3, r.getReplyContent());
 			
 			result = pstmt.executeUpdate();
 			

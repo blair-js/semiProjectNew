@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.semi.class_notice.model.dto.ClassNotice;
 import com.semi.class_notice.model.service.ClassNoticeService;
+import com.semi.common.dto.Attachment;
 
 @WebServlet("/classNoticeDetail.do")
 public class ClassNoticeDetailServlet extends HttpServlet {
@@ -27,12 +28,13 @@ public class ClassNoticeDetailServlet extends HttpServlet {
 		// DB에서 조회 해온 뒤 화면에 조회한 게시글 보여준다
 		// 게시물 객체, 첨부파일 객체 setAttribute로 request에 변경
 		int nno = Integer.parseInt(request.getParameter("nno"));
-		
 		ClassNotice cn = new ClassNoticeService().selectNotice(nno);
+		Attachment at = new ClassNoticeService().selectAttachment(nno);
 		
 		String view = "";
 		if(cn != null) {
 			request.setAttribute("cn", cn);
+			request.setAttribute("at", at);
 			view = "views/class_notice/classNoticeDetailView.jsp";
 		}else {
 			request.setAttribute("msg", "게시물 조회에 실패했습니다.");

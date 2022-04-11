@@ -2,9 +2,8 @@
 	pageEncoding="UTF-8"
 	import="java.util.ArrayList, com.semi.class_notice.model.dto.*, com.semi.common.dto.*"%>
 <%
-ArrayList<Attachment> fileList = (ArrayList<Attachment>) request.getAttribute("fileList");
 PageInfo pi = (PageInfo) request.getAttribute("pi");
-//Attachment img = fileList.get(0);
+Attachment at = (Attachment)request.getAttribute("at");
 ClassNotice cNotice = (ClassNotice)request.getAttribute("cn");
 %>
 <!DOCTYPE html>
@@ -32,7 +31,11 @@ ClassNotice cNotice = (ClassNotice)request.getAttribute("cn");
 			<small class="text-muted"><%=cNotice.getCreateDate() %>
 			| <%=cNotice.getCount() %></small>
 			</small>
+			<div class="text-lg-end mb-3">
+			<a download="<%= at.getOriginName() %>" href="/resources/board_upfiles/<%=at.getChangeName()%>">대표이미지 : <%= at.getOriginName() %></a>
+			</div>
 			<div class="col-lg-12 col-sm-12 text-lg-end text-center">
+				<button class="btn btn-secondary" onclick="goList();">목록으로</button>
 			<% if(loginUser.getUserNo() == 1 || loginUser.getUserNo() == 2 || loginUser.getUserNo() == 3){ %>
 				<button class="btn btn-secondary" onclick="goUpdate();">수정</button>
 				<button class="btn btn-secondary" onclick="goDelete();">삭제</button>
@@ -40,16 +43,19 @@ ClassNotice cNotice = (ClassNotice)request.getAttribute("cn");
 			</div>
 			<form action="" id="postForm" method="post">
 				<input type="hidden" name="nno" value="<%=cNotice.getClassNoticeNo() %>">
+				<input type="hidden" name="classname" value="<%=cNotice.getClassName() %>">
 			</form>
 			<script>
 				function goUpdate(){
-					<%-- System.out.println("로그인 회원 비밀번호 : " + loginUser.getUserPwd());--%>
 					$("#postForm").attr("action", "/classNoticeUpdateForm.do");
 					$("#postForm").submit();
 				}
 				function goDelete(){
 					$("#postForm").attr("action", "/classNoticeDelete.do");
 					$("#postForm").submit();
+				}
+				function goList(){
+					location.href = "classNoticeList.do?classname=<%= cNotice.getClassName()%>";
 				}
 			</script>
 			<hr class="line">
@@ -58,15 +64,41 @@ ClassNotice cNotice = (ClassNotice)request.getAttribute("cn");
 		<div class="container">
 			<hr class="line">
 			<div class="comment-txt">
+			
 				<textarea cols="120" rows="3" id="replyCnt" style="resize: none;"
 					placeholder="댓글을 남겨보세요."></textarea>
-				<button id="addreply-btn" class="btn btn-dark btn-lg mb-6 pl-3 "
-					style="height: 4.5rem">등록하기</button>
+				<button onclick="replySave()" id="addreply-btn" class="btn btn-dark btn-lg mb-6 pl-3 " style="height: 4.5rem">등록하기</button>
+			
+			<%-- 댓글 기능 구현 어렵다... --%>
+			<script>
+				function replySave(){
+					var content = $("#replyCnt").val();
+					var nno = <%=cNotice.getClassNoticeNo() %>;
+					
+					$.ajax({
+						type:"post",
+						url: "rinsert.do",
+						data:{
+							content:content,
+							nno:nno
+						},
+						success:function(status){
+							if(status == "success"){
+								//selectReplyList();
+								console.log("통신 성공");
+							}
+						},
+						error:function(){
+							console.log("ajax 통신 실패 - 댓글 등록");
+						}
+					})
+				}
+			</script>
 			</div>
 		</div>
 		<div class="container">
 			<div class="row">
-				<table class="table table-striped"
+				<table class="table table-striped" id="replyList"
 					style="text-align: center; border: 1px solid #dddddd">
 					<tbody>
 						<tr>
