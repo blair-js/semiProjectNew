@@ -1,16 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-	String userId = (String)request.getAttribute("userId");
+	//값이 있으면 그 userId를 넣어주고, 없으면 빈문자열""
+	String userId = (String)request.getAttribute("userId") != null ? (String)request.getAttribute("userId") : "";
 %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+
+<meta name="google-signin-scope" content="profile email">
+<meta name="google-signin-client_id" content="952213952257-qfucuv5qsicj7vihnm1kndfbqdseqpaa.apps.googleusercontent.com">
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
 <title>둥글개 로그인</title>
 
 <!-- 제이쿼리 사용하기 위해 CDN 연결 -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script type="text/javascript" src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js" charset="utf-8"></script>
 
 <style>
 @font-face {
@@ -71,13 +79,13 @@
 		<form action="<%= request.getContextPath() %>/login.do" method="post" onsubmit="return loginValidate();">
 		<%-- onsubmit : form에서 데이터를 보내기 전에 데이터의 유효성을 체크해주는 속성이다. 해당 값이 true이어야만 데이터가 전송된다. --%> 
 		<%-- 그래서 데이터의 유효성을 체크하기 위한 함수 loginValidate를 생성했다! --%> 
-			<h2 class="h2 mb-3 mt-3 fw-normal" style="font-family: 'LeferiPoint-BlackA'">WELCOME</h2>
+			<h2 class="h2 mb-2 mt-3 fw-normal" style="font-family: 'LeferiPoint-BlackA'">WELCOME</h2>
 			<h6 class="h6 mb-0 fw-normal" style="font-family: 'LeferiPoint-BlackA'">둥글개 둥글개 유치원에 오신 걸 환영합니다.</h6>
-			<h6 class="h6 mb-3 fw-normal" style="font-family: 'LeferiPoint-BlackA'">회원 정보를 입력해 주세요.</h6>
+			<h6 class="h6 mt-0 mb-3 fw-normal" style="font-family: 'LeferiPoint-BlackA'">회원 정보를 입력해 주세요.</h6>
 			<img class="mb-4" src="assets/img/gallery/login2.png" alt="사용자로고" width="150">
 
 			<div class="form-floating">
-				<input type="text" class="form-control" id="userId" name="userId" value="" placeholder="아이디를 입력하세요.">
+				<input type="text" class="form-control" id="userId" name="userId" value="<%=userId %>" placeholder="아이디를 입력하세요.">
 			</div>
 			<div class="form-floating">
 				<input type="password" class="form-control" id="userPwd" name="userPwd" value="" placeholder="비밀번호를 입력하세요.">
@@ -90,18 +98,59 @@
 			
 			<!-- 로그인 버튼 -->
 			<button type="submit" class="w-100 btn btn-lg btn-primary mb-2"><b>로그인</b></button>
-			
+			<!-- 구글 로그인 버튼 -->
+			<!-- onSuccess : 데이터 발행 및 수신 성공을 확인하는 속성 -->
+				<div class="g-signin2 btn px-0" data-width="300" data-height="45" data-onsuccess="onSignIn" data-longtitle="true" data-theme="dark"></div>
+				<!-- 구글 로그인 취소 버튼 -->
+				<!-- 0411_원하는 데이터만 저장 후 커넥션은 바로 끊어줄 예정 -->
+				<!--<button class="btn btn-primary" type="button" onclick="signOut();">Google Sign Out</button> -->
 			<!-- 빠른이동 아이디,비번찾기 및 회원가입 -->
-			<div class="btns" align="center">
+			<div class="btns mt-3" align="center">
 				<a href="<%=request.getContextPath() %>/findIdForm.do">아이디찾기&nbsp;</a> 
 				<a href="<%=request.getContextPath() %>/findPwdForm.do">비밀번호찾기&nbsp;</a> 
 				<a href="<%=request.getContextPath() %>/userEnrollForm.do">회원가입</a>
 			</div>
+			
 		</form>
 		<!-- 로그인 양식 form 끝 -->
-	</main>
 
+	</main>
+		
+	
 	<script type="text/javascript">
+		
+		//
+		function onSignIn(googleUser) {
+	        //구글 api를 통해 얻어온 값들 확인하여, 사용하고자 하는 데이터(이름, 이메일)는 아래에서 추출하여 변수에 담을 예정.
+	        var profile = googleUser.getBasicProfile();
+	        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+	        console.log('Full Name: ' + profile.getName());
+	        console.log('Given Name: ' + profile.getGivenName());
+	        console.log('Family Name: ' + profile.getFamilyName());
+	        console.log("Image URL: " + profile.getImageUrl());
+	        console.log("Email: " + profile.getEmail());
+	
+	        // The ID token you need to pass to your backend:
+	        var id_token = googleUser.getAuthResponse().id_token;
+	        console.log("ID Token: " + id_token);
+	        
+	        //1.사용자의 이름과 이메일을 저장해서 
+	        var userName = profile.getName();
+	        var userEmail = profile.getEmail();
+	        
+	        //구글 api와 연결된 커넥션을 끊어야 하므로, 함수 호출
+	        signOut();
+	        
+	        //2.구글전용 로그인 서블릿으로 파라미터를 넘긴다.
+	        location.href="<%=contextPath%>/googleLogin.do?userName="+userName+"&userEmail="+userEmail;
+	         
+	      }
+		
+		//구글 api와 연결된 커넥션을 끊어주는 함수
+		function signOut() {
+			gapi.auth2.getAuthInstance().disconnect();
+		}
+	
 		//페이지 로드시 확인
 		$(function () {
 			//아이디가 input_check인 요소가 check 되었다면
@@ -128,6 +177,7 @@
 			//위의 두 if 조건문을 통과했다면 true 반환하며 submit이 되고 로그인 성공!
 			return true;
 		}
+		
 	</script>
 
 	<!-- footer -->

@@ -314,4 +314,20 @@ public class UserService {
 				
 	}
 
+	public User selectUserbyGoogle(String userName, String userEmail) {
+
+		//커넥션 생성
+		Connection conn = getConnection();
+		
+		//커넥션 객체와 이름, 이메일 인자로 전달
+		User loginUser = new UserDao().selectUserbyGoogle(conn, userName, userEmail);
+		
+		//커넥션 닫기
+		close(conn);
+		
+		//정보가 담긴 user객체 반환 
+		return loginUser;
+		
+	}
+
 }

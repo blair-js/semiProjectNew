@@ -42,7 +42,7 @@ public class EmailSendServlet extends HttpServlet {
 		//여기서 구글 SMTP가 사용된다. 
 		String host = "http://localhost:8086/";
 		
-		String from = "kjisu@gmail.com"; //보내는 사람 메일 계정(고정)
+		String from = "kjisu4717@gmail.com"; //보내는 사람 메일 계정(고정)
 		String to = new UserService().getUserEmail(userId); //받는 사람 메일(메소드 실행하여 가져오기)
 		String subject = "회원가입을 위한 이메일 인증 메일입니다."; //메일 제목(고정)
 		
