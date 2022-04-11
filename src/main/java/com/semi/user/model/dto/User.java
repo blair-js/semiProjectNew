@@ -17,14 +17,15 @@ public class User {
 	private String status;
 	private Date enrollDate;
 	private String cookieChecked;
+	private String adminChecked;
 
 	//기본 생성자
 	public User() {	}
 
-	//매개변수 생성자 
+	//매개변수 생성자1(전 필드 값 모두 있음)
 	public User(int userNo, String userId, String email, String userPwd, String userName, String phone,
 			String smsChecked, String emailHash, String emailChecked, String gender, String status, Date enrollDate,
-			String cookieChecked) {
+			String cookieChecked, String adminChecked) {
 		super();
 		this.userNo = userNo;
 		this.userId = userId;
@@ -39,6 +40,22 @@ public class User {
 		this.status = status;
 		this.enrollDate = enrollDate;
 		this.cookieChecked = cookieChecked;
+		this.adminChecked = adminChecked;
+	}
+	
+	//매개변수 생성자2
+	public User(String userId, String userPwd, String userName, String phone,
+			String smsChecked, String gender, String email, String emailHash, String emailChecked) {
+		super();
+		this.userId = userId;
+		this.email = email;
+		this.userPwd = userPwd;
+		this.userName = userName;
+		this.phone = phone;
+		this.smsChecked = smsChecked;
+		this.emailHash = emailHash;
+		this.emailChecked = emailChecked;
+		this.gender = gender;
 	}
 
 	public int getUserNo() {
@@ -145,12 +162,21 @@ public class User {
 		this.cookieChecked = cookieChecked;
 	}
 
+	public String getAdminChecked() {
+		return adminChecked;
+	}
+
+	public void setAdminChecked(String adminChecked) {
+		this.adminChecked = adminChecked;
+	}
+
 	@Override
 	public String toString() {
 		return "User [userNo=" + userNo + ", userId=" + userId + ", email=" + email + ", userPwd=" + userPwd
 				+ ", userName=" + userName + ", phone=" + phone + ", smsChecked=" + smsChecked + ", emailHash="
 				+ emailHash + ", emailChecked=" + emailChecked + ", gender=" + gender + ", status=" + status
-				+ ", enrollDate=" + enrollDate + ", cookieChecked=" + cookieChecked + "]";
-	}	
-	
+				+ ", enrollDate=" + enrollDate + ", cookieChecked=" + cookieChecked + ", adminChecked=" + adminChecked
+				+ "]";
+	}
+
 }

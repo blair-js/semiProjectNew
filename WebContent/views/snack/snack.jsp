@@ -2,8 +2,7 @@
 	pageEncoding="UTF-8" import= "java.util.ArrayList, com.semi.snack.model.dto.*"%>
 	
 	<%
-		ArrayList<Snack> list = (ArrayList<Snack>)request.getAttribute("list");
-		
+		ArrayList<Snack> list = (ArrayList<Snack>)request.getAttribute("list"); 
 	%>
 	
 <!DOCTYPE html>
@@ -19,6 +18,40 @@
 	justify-content: center;
 	display: flex;
 }
+	.listArea{
+		width:1000px;
+		height:1200px;
+		margin:auto;
+		
+	}
+	.thumbnail{
+		display:inline-block;
+		width:300px;
+		border:1px solid white;
+	
+	}
+	
+	#img {
+	width: 600px;
+	height: 250px;
+	padding-top:20px; padding-bottom:10px; padding-left:90px; padding-right:0px;
+	margin: auto;
+}
+	
+
+
+
+@keyframes blink-effect {
+  90% {
+    opacity: 0;
+  }
+}
+
+.blink {
+  animation: blink-effect 1s step-end infinite;
+
+
+
 </style>
 
 </head>
@@ -41,7 +74,9 @@
 			<hr style="height: 7px;  color: #FDC800";  id="center">
 
 			<p></p>
-
+			
+			
+			
 			<h4>
 				<img src="assets/img/gallery/point.jpg" alt="" height="40">&nbsp
 			보유중인 뼈다귀 &nbsp:&nbsp 5
@@ -92,230 +127,50 @@
 
 	<br>
 	<br>
+	
+	
+	<div class="listArea">
+				<% if (list.isEmpty()) { %>
+						<h3 id ="center">현재 간식은 준비중에 있습니다.</h3>
+				<% } else { %>						
 
-	<div class="container-md">
-		<div class="row">
-
-			<div class="col-sm row gx-10" onclick="goDetail()">
-				<img src="assets/img/gallery/test_snack_1.JPG" height="250px" />
+			
+			  <%for(Snack s : list) { %>
+			<div class="thumbnail" align="center">				
+				<input type="hidden" value="<%=s.getSanckNo()%>">
+				
+				<div class="container-md">
+				<div class="row">
+				<div class="col-sm row gx-0">
+				
+				<img src="<%= contextPath %>/resources/FileUpload_test(SNACK)/<%= s.getTitleImg() %>" id="img">
+				
+				<p style="margin:30px"> &nbsp&nbsp이름 :	<%=s.getSanckName() %>
+					<br>
+					<br>
+				뼈다귀 :  <%=s.getPrice() %>
+				</p>
+				<pre class="blink" id="center" style="margin:0px; color:#FDC800; font-size:20px">        New</pre>
+				</div>
+				</div>
+				</div>
+					
 			</div>
-			<div class="col-sm row gx-10" onclick="goDetail()">
-				<img src="assets/img/gallery/test_snack_2.JPG" height="250px" />
-			</div>
-			<div class="col-sm row gx-10" onclick="goDetail()">
-				<img src="assets/img/gallery/test_snack_3.JPG" height="250px" />
-			</div>
+					<%} %>  
+			<% } %>
+			
 
-		</div>
-
-	</div>
+			<br><br>
+			<div align="center">
 
 	<p></p>
-
-
-		<div class="container-md">
-			<div class="row">
-
-				<div class="col-sm row gx-10">
-					<!-- snack 1 div 시작 -->
-
-					<table id="center">
-						<tr>
-							<td>뼈다귀 : 1 &nbsp&nbsp <input type="checkbox" id="snack1"
-									name="snack1" value="snack1">
-							</td>
-						</tr>
-
-					</table>
-
-
-				</div>
-				<!-- snack 1 div 끝-->
-
-				<div class="col-sm row gx-10">
-					<!-- snack 2 div 시작 -->
-
-
-					<table id="center">
-						<tr>
-							<td>뼈다귀 : 1 &nbsp&nbsp <input type="checkbox" id="snack2"
-									name="snack2" value="snack2">
-							</td>
-						</tr>
-
-					</table>
-
-
-				</div>
-				<!-- snack 2 div 끝-->
-
-				<div class="col-sm row gx-10">
-					<!-- snack 3 div 시작 -->
-
-
-					<table id="center">
-						<tr>
-							<td>뼈다귀 : 1 &nbsp&nbsp <input type="checkbox" id="snack3"
-									name="snack3" value="snack3">
-							</td>
-						</tr>
-					</table>
-
-				</div>
-				<!-- snack 3 div 끝-->
-
-
-				<div class="px-4 py-1 my-5 text-center">
-					<!-- br 적용 시 체크박스 2, 3이 같이 내려오기에 중간에 여백을 위한 div  줄 바꿈을 위해 b -->
-					<p class="display-5 fw-bold"></p>
-				</div>
-
-				<div class="col-sm row gx-10" onclick="goDetail()">
-					<img src="assets/img/gallery/test_snack_4.JPG" height="250px" />
-				</div>
-				<div class="col-sm row gx-10" onclick="goDetail()">
-					<img src="assets/img/gallery/test_snack_5.JPG" height="250px" />
-				</div>
-				<div class="col-sm row gx-10" onclick="goDetail()">
-					<img src="assets/img/gallery/test_snack_6.JPG" height="250px" />
-				</div>
-
-
-				<div class="container-md">
-					<div class="row">
-
-						<p></p>
-						<div class="col-sm row gx-10">
-							<!-- snack 4 div 시작 -->
-
-							<table id="center">
-								<tr>
-									<td>뼈다귀 : 2 &nbsp&nbsp <input type="checkbox" id="snack4"
-											name="snack4" value="snack4">
-									</td>
-								</tr>
-
-							</table>
-
-
-						</div>
-						<!-- snack 4 div 끝-->
-
-
-
-						<div class="col-sm row gx-10">
-							<!-- snack 5 div 시작 -->
-
-
-							<table id="center">
-								<tr>
-									<td>뼈다귀 : 2 &nbsp&nbsp <input type="checkbox" id="snack5"
-											name="snack5" value="snack5">
-									</td>
-								</tr>
-
-							</table>
-
-
-						</div>
-						<!-- snack 5 div 끝-->
-
-
-						<div class="col-sm row gx-10">
-							<!-- snack 6 div 시작 -->
-
-
-							<table id="center">
-								<tr>
-									<td>뼈다귀 : 2 &nbsp&nbsp <input type="checkbox" id="snack6"
-											name="snack6" value="snack6">
-									</td>
-								</tr>
-							</table>
-
-						</div>
-						<!-- snack 6 div 끝 -->
-
-					</div>
-					<!-- container 속성이 아래까지 못내려오도록 닫는 div -->
-				</div>
-				<!-- container 속성이 아래까지 못내려오도록 닫는 div -->
-
-
-				<div class="px-4 py-1 my-5 text-center">
-					<!-- br 적용 시 체크박스 2, 3이 같이 내려오기에 중간에 여백을 위한 div  줄 바꿈을 위해 b -->
-					<p class="display-5 fw-bold"></p>
-				</div>
-
-				<div class="col-sm row gx-10" onclick="goDetail()">
-					<img src="assets/img/gallery/test_snack_7.JPG" height="250px" />
-				</div>
-				<div class="col-sm row gx-10" onclick="goDetail()">
-					<img src="assets/img/gallery/test_snack_8.JPG" height="250px" />
-				</div>
-				<div class="col-sm row gx-10" onclick="goDetail()">
-					<img src="assets/img/gallery/test_snack_9.JPG" height="250px" />
-				</div>
-
-
-				<div class="container-md">
-					<div class="row">
-
-						<p></p>
-
-
-						<div class="container-md">
-							<div class="row">
-
-								<div class="col-sm row gx-10">
-									<!-- snack 7 div 시작 -->
-
-									<table id="center">
-										<tr>
-											<td>뼈다귀 : 5 &nbsp&nbsp <input type="checkbox"
-													id="snack7" name="snack7" value="snack7">
-											</td>
-										</tr>
-
-									</table>
-
-
-								</div>
-								<!-- snack 7 div 끝-->
-
-								<div class="col-sm row gx-10">
-									<!-- snack 8 div 시작 -->
-
-
-									<table id="center">
-										<tr>
-											<td>뼈다귀 : 5 &nbsp&nbsp <input type="checkbox"
-													id="snack8" name="snack8" value="snack8">
-											</td>
-										</tr>
-
-									</table>
-
-
-								</div>
-								<!-- snack 8 div 끝-->
-
-								<div class="col-sm row gx-10">
-									<!-- snack 9 div 시작 -->
-
-
-									<table id="center">
-										<tr>
-											<td>뼈다귀 : 5 &nbsp&nbsp <input type="checkbox"
-													id="snack9" name="snack9" value="snack9">
-											</td>
-										</tr>
-									</table>
-
-								</div>
-								<!-- snack 9 div 끝 -->
+	
+</div>
+</div>
+</form>
 
 							</div>
+							
 							<!-- container 속성이 아래까지 못내려오도록 닫는 div -->
 						</div>
 						<!-- container 속성이 아래까지 못내려오도록 닫는 div -->
@@ -370,10 +225,6 @@
 </div> <!-- 컨테이너 끝 div -->
 
 	<script>
-				//Detail은 관리자만 들어갈 수 있도록 조건문 걸어주기
-			function goDetail(){
-			    location.href = "<%=request.getContextPath()%>/snackDetail.do;"
-			}	
 	
 		//서블릿 잘 다녀오는지 테스트차 만들어봄
 			function goSnackResult() { //간식 구매 완료 후 이동 되는 서블릿
@@ -394,9 +245,16 @@
 			}
 			
 			
-
-			
+			 //간식 번호를 가지고 디테일로 이동
+			$(function(){
+				$(".thumbnail").click(function(){
+					var sno = $(this).children().eq(0).val();
+					location.href="<%=contextPath%>/snackDetail.do?sno=" + sno;
+				});
+			});
+	
 	</script>
+	
 	<%@ include file="../common/footer.jsp"%>
 </body>
 </html>
