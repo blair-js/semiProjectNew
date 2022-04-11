@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" import= "java.util.ArrayList, com.semi.snack.model.dto.*"%>
 	
-<%@ page import= "java.util.ArrayList, com.semi.common.dto.*"%>
-	
 	<%
 		ArrayList<Snack> list = (ArrayList<Snack>)request.getAttribute("list"); 
 	%>
@@ -20,10 +18,9 @@
 	justify-content: center;
 	display: flex;
 }
-
 	.listArea{
 		width:1000px;
-		height:1150px;
+		height:1200px;
 		margin:auto;
 		
 	}
@@ -31,15 +28,30 @@
 		display:inline-block;
 		width:300px;
 		border:1px solid white;
-		margin:10px; 
+	
 	}
 	
 	#img {
-	width: 300px;
+	width: 600px;
 	height: 250px;
-	vertical-align: top;
+	padding-top:20px; padding-bottom:10px; padding-left:90px; padding-right:0px;
+	margin: auto;
 }
 	
+
+
+
+@keyframes blink-effect {
+  90% {
+    opacity: 0;
+  }
+}
+
+.blink {
+  animation: blink-effect 1s step-end infinite;
+
+
+
 </style>
 
 </head>
@@ -119,21 +131,30 @@
 	
 	<div class="listArea">
 				<% if (list.isEmpty()) { %>
-						<h3>현재 간식은 준비중에 있습니다.</h3>
+						<h3 id ="center">현재 간식은 준비중에 있습니다.</h3>
 				<% } else { %>						
 
-			  <%for(Snack s : list) { %>
 			
-			<div class="thumbnail" align="center">
-
-				<img src="<%= contextPath %>/resources/FileUpload_test(SNACK)/<%= s.getTitleImg() %>" id="img" style="padding:10px">
+			  <%for(Snack s : list) { %>
+			<div class="thumbnail" align="center">				
+				<input type="hidden" value="<%=s.getSanckNo()%>">
 				
-				<br>
-				<p>
-				<p> &nbsp&nbsp이름 :	<%=s.getSanckName() %></p>
-
-				<p> 뼈다귀 :	 <%=s.getPrice() %></p>
-		
+				<div class="container-md">
+				<div class="row">
+				<div class="col-sm row gx-0">
+				
+				<img src="<%= contextPath %>/resources/FileUpload_test(SNACK)/<%= s.getTitleImg() %>" id="img">
+				
+				<p style="margin:30px"> &nbsp&nbsp이름 :	<%=s.getSanckName() %>
+					<br>
+					<br>
+				뼈다귀 :  <%=s.getPrice() %>
+				</p>
+				<pre class="blink" id="center" style="margin:0px; color:#FDC800; font-size:20px">        New</pre>
+				</div>
+				</div>
+				</div>
+					
 			</div>
 					<%} %>  
 			<% } %>
@@ -204,10 +225,6 @@
 </div> <!-- 컨테이너 끝 div -->
 
 	<script>
-				//Detail은 관리자만 들어갈 수 있도록 조건문 걸어주기
-			function goDetail(){
-			    location.href = "<%=request.getContextPath()%>/snackDetail.do;"
-			}	
 	
 		//서블릿 잘 다녀오는지 테스트차 만들어봄
 			function goSnackResult() { //간식 구매 완료 후 이동 되는 서블릿
@@ -228,9 +245,16 @@
 			}
 			
 			
-
-			
+			 //간식 번호를 가지고 디테일로 이동
+			$(function(){
+				$(".thumbnail").click(function(){
+					var sno = $(this).children().eq(0).val();
+					location.href="<%=contextPath%>/snackDetail.do?sno=" + sno;
+				});
+			});
+	
 	</script>
+	
 	<%@ include file="../common/footer.jsp"%>
 </body>
 </html>

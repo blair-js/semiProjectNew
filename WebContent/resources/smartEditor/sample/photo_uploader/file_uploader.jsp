@@ -71,6 +71,7 @@
 					os.flush();
 					os.close();
 
+					request.setAttribute("realname", realname);
 					System.out.println("path : "+path);
 					System.out.println("realname : "+realname);
 

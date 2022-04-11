@@ -24,6 +24,34 @@ public class Snack {
 		this.status = status;
 		this.titleImg = titleImg;
 	}
+	
+
+	public Snack(int sanckNo, String sanckName, int category, int price, String status) {
+		super();
+		this.sanckNo = sanckNo;
+		this.sanckName = sanckName;
+		this.category = category;
+		this.price = price;
+		this.status = status;
+	}
+
+	
+	
+	public Snack(int sanckNo, String sanckName, int price) {
+		super();
+		this.sanckNo = sanckNo;
+		this.sanckName = sanckName;
+		this.price = price;
+	}
+	
+
+	public Snack(int sanckNo, String sanckName, int price, String titleImg) {
+		super();
+		this.sanckNo = sanckNo;
+		this.sanckName = sanckName;
+		this.price = price;
+		this.titleImg = titleImg;
+	}
 
 	public Snack(String sanckName, int price) {
 		super();
