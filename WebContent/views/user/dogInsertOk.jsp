@@ -51,11 +51,10 @@ button b {
 		</button>
 	</div>
 
-	<!-- 51행 경로는 바꿔야함! (뼈다귀 충전페이지) 현재는 404에러임 -->
 	<script type="text/javascript">
 		//뼈다귀 충전하기
 		function goPointCharge() {
-			location.href="<%= request.getContextPath()%>/pointInsert.do;"
+			location.href="<%= contextPath%>/chargePoint.do;"
 		}
 		//통학버스 신청하기
 		function goSchoolBus() {
