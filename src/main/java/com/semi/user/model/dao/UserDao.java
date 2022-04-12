@@ -930,4 +930,40 @@ public class UserDao {
 		return loginUser; //정보가 담겨있는 User 객체 반환(없으면 null 반환)
 	}
 
+
+	public int updateUserPoint(Connection conn, String userId, int updatePoint) {
+		//회원의 포인트를 업데이트 해주는 메소드
+		
+		//결과 변수
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		//updateUserPoint=UPDATE USER_POINT SET POINT =? 
+		//WHERE USER_NO =(SELECT USER_NO FROM R_USER WHERE USER_ID =?)
+		String sql = prop.getProperty("updateUserPoint");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			//쿼리 값 셋팅
+			pstmt.setInt(1, updatePoint);
+			pstmt.setString(2, userId);
+			
+			//쿼리 실행 후 결과
+			result = pstmt.executeUpdate();
+			
+			//확인
+			System.out.println("포인트 업데이트 결과 확인 : " + result);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result; //결과 반환
+	}
+
+
+
 }
