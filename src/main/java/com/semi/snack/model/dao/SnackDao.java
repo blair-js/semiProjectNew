@@ -62,7 +62,7 @@ public class SnackDao {
 
 
 
-	public int insertAttachment(Connection conn, Attachment at, int userNo) {
+	public int insertAttachment(Connection conn, Attachment at, int userNo) { //간식 (첨부파일 추가 메서드)
 		//insertAttachmentSnack=INSERT INTO ATTACHMENT VALUES(SEQ_FNO.NEXTVAL, ?, SEQ_SNO.CURRVAL, 2, ?, ?, ?, SYSDATE, DEFAULT)
 		
 		int result = 0;
@@ -93,7 +93,7 @@ public class SnackDao {
 
 
 
-	public ArrayList<Snack> selectList(Connection conn) {
+	public ArrayList<Snack> selectList(Connection conn) { //간식에 대한 정보를 화면에 뿌려줄 메서드
 		
 		ArrayList<Snack> list = new ArrayList<>();
 		PreparedStatement pstmt = null;
@@ -136,7 +136,7 @@ public class SnackDao {
 
 
 
-	public Snack selectSnack(Connection conn, int sno) {
+	public Snack selectSnack(Connection conn, int sno) { //첨부파일 없이 필요한 간식 정보만 조회하는 메서드
 		
 		Snack snack = null;
 		
@@ -180,7 +180,7 @@ public class SnackDao {
 
 
 
-	public Attachment selectAttachment(Connection conn, int sno) {
+	public Attachment selectAttachment(Connection conn, int sno) { //첨부파일 조회하는 메서드
 		
 		Attachment at = null;
 		PreparedStatement pstmt = null;
@@ -216,7 +216,7 @@ public class SnackDao {
 
 
 
-	public int updateSnack(Connection conn, Snack snack) {
+	public int updateSnack(Connection conn, Snack snack) { //간식 수정 메서드
 		
 		int result = 0;
 		PreparedStatement pstmt = null;
@@ -244,7 +244,7 @@ public class SnackDao {
 
 
 
-	public int updateAttachment(Connection conn, Attachment at) {
+	public int updateAttachment(Connection conn, Attachment at) { //간식 첨부파일 수정 메서드
 		
 		int result = 0;
 		PreparedStatement pstmt = null;
@@ -272,7 +272,7 @@ public class SnackDao {
 
 
 
-	public int insertNewAttachment(Connection conn, Attachment at) {
+	public int insertNewAttachment(Connection conn, Attachment at) { //간식 수정 새로운 첨부파일 메서드
 		
 		int result = 0;
 		PreparedStatement pstmt = null;
@@ -300,7 +300,7 @@ public class SnackDao {
 
 
 
-	public int deleteSnack(Connection conn, int sno) {
+	public int deleteSnack(Connection conn, int sno) { //간식 삭제 메서드
 		
 		int result = 0;
 		PreparedStatement pstmt = null;
@@ -324,7 +324,7 @@ public class SnackDao {
 
 
 
-	public int deleteAttachment(Connection conn, int sno) {
+	public int deleteAttachment(Connection conn, int sno) { //간식 첨부파일 삭제 메서드
 		
 		int result = 0;
 		PreparedStatement pstmt = null;
@@ -365,7 +365,7 @@ public class SnackDao {
 			
 			if(rset.next()) {
 				
-				userPoint = new UserPoint(rset.getInt("USER_NO"),
+				userPoint = new UserPoint(rset.getInt("USER_NO"),  
 										  rset.getInt("POINT"));
 			}
 			
@@ -378,6 +378,92 @@ public class SnackDao {
 		}
 		
 		return userPoint;
+	}
+
+
+	public int OrderEnd(Connection conn, UserPoint up) {
+		
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("orderEnd");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, up.getPoint());
+			pstmt.setInt(2, up.getUserNo());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+
+	public int insertOrder(Connection conn, String snackNo, int uno) {
+		
+		int result2 = 0;
+		
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("insertOrder");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, snackNo);
+			pstmt.setInt(2, uno);
+			
+			result2 = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		
+		
+		return result2;
+	}
+
+
+	public Snack selectSnack(Connection conn, String snackNo) { //간식 가격을 알기위한 메서드
+		
+		Snack snack = null;
+		
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("selectPrice");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, snackNo);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+			
+			snack = new Snack(rset.getInt("PRICE"));
+			
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return snack;
 	}
 
 

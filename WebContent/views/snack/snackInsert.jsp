@@ -174,7 +174,7 @@
 	<!-- 컨테이너 끝 div -->
 
 	<script>
-
+	console.log(<%=loginUser.getUserNo()%>)
 	$(function(){
 		$("#fileArea").hide();
 		
