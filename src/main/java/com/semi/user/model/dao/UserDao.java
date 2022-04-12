@@ -73,6 +73,7 @@ public class UserDao {
 				STATUS
 				ENROLL_DATE
 				COOKIE_CHECKED
+				ADMIN_CHECKED
 			 */
 			
 			//조회결과로 오는 행은 1개이므로 반복문은 필요없음 
@@ -92,6 +93,7 @@ public class UserDao {
 										, rset.getString("STATUS")
 										, rset.getDate("ENROLL_DATE")
 										, rset.getString("COOKIE_CHECKED")
+										, rset.getString("ADMIN_CHECKED")
 									);
 				
 			}//if
@@ -118,7 +120,7 @@ public class UserDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//findUserId=SELECT USER_ID FROM R_USER WHERE USER_NAME=? AND EMAIL=?
+		//findUserId=SELECT USER_ID FROM R_USER WHERE USER_NAME=? AND EMAIL=? AND STATUS='Y'
 		String sql = prop.getProperty("findUserId");
 		
 		try {
@@ -158,7 +160,7 @@ public class UserDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//findUserPwd=SELECT USER_PWD FROM R_USER WHERE USER_NAME=? AND USER_ID=? AND EMAIL=?
+		//findUserPwd=SELECT USER_PWD FROM R_USER WHERE USER_NAME=? AND USER_ID=? AND EMAIL=? AND STATUS='Y'
 		String sql = prop.getProperty("findUserPwd");
 		
 		try {
@@ -229,6 +231,7 @@ public class UserDao {
 										, rset.getString("STATUS")
 										, rset.getDate("ENROLL_DATE")
 										, rset.getString("COOKIE_CHECKED")
+										, rset.getString("ADMIN_CHECKED")
 									);
 				
 			}//if
@@ -645,107 +648,286 @@ public class UserDao {
 		return result; //결과 반환
 	}
 
-	
-	/*public String getUserEmailChecked(String userID) {
-		
-		String SQL = "SELECT USEREMAIL_CHECKED FROM LECTURE_USER WHERE USERID=?";
 
-		Connection conn = null;
+	public int insertUser(Connection conn, User user) {
+
+		//반환할 결과변수
+		int result = 0; 
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
+		
+		//insertUser=INSERT INTO R_USER VALUES  
+		//(SEQ_UNO.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?, DEFAULT, SYSDATE, DEFAULT, DEFAULT);
+		String sql = prop.getProperty("insertUser");
+	
+		/*	셋팅해줘야 하는 부분
+			USER_ID	VARCHAR2(30 BYTE)
+			EMAIL	VARCHAR2(100 BYTE)
+			USER_PWD	VARCHAR2(100 BYTE)
+			USER_NAME	VARCHAR2(15 BYTE)
+			PHONE	VARCHAR2(13 BYTE)
+			SMS_CHECKED	VARCHAR2(1 BYTE)
+			EMAIL_HASH	VARCHAR2(64 BYTE)
+			EMAIL_CHECKED	VARCHAR2(1 BYTE)
+			USER_GENDER	VARCHAR2(1 BYTE)
+			ADMIN_CHECKED	VARCHAR2(1 BYTE)
+		 */
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			//쿼리 값 셋팅
+			pstmt.setString(1, user.getUserId());
+			pstmt.setString(2, user.getEmail());
+			pstmt.setString(3, user.getUserPwd());
+			pstmt.setString(4, user.getUserName());
+			pstmt.setString(5, user.getPhone());
+			pstmt.setString(6, user.getSmsChecked());
+			pstmt.setString(7, user.getEmailHash());
+			pstmt.setString(8, user.getEmailChecked());
+			pstmt.setString(9, user.getGender());
+			
+			//쿼리 실행 후 결과 반환
+			result = pstmt.executeUpdate();
+
+			//확인
+			System.out.println("회원 insert 결과 : " + result);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}	
+		
+		return result; //회원 가입 결과 반환 1 or 0
+	}
+
+
+	public String getUserEmail(Connection conn, String userId) {
+
+		//반환해줄 결과 변수
+		String userEmail = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		//getUserEmail=SELECT EMAIL FROM R_USER WHERE USER_ID=?
+		String sql = prop.getProperty("getUserEmail");
 		
 		try {
 			
-			conn = DatabaseUtil.getConnection();
+			pstmt = conn.prepareStatement(sql);
 			
-			pstmt = conn.prepareStatement(SQL);
-			pstmt.setString(1, userID);
+			//쿼리 값 셋팅
+			pstmt.setString(1, userId);
+			
+			rset = pstmt.executeQuery();
+			
+			//결과 행은 1개임
+			if(rset.next()) {
+				userEmail = rset.getString(1);
+			}//if
+			
+			//확인
+			System.out.println("userEmail 확인 : " + userEmail);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}	
+		
+		//결과 반환
+		return userEmail;
+	}
 
-			rs = pstmt.executeQuery(); 
+
+	public String selectEmailHashCode(Connection conn, String userId) {
+
+		String emailHashCode = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		//selectEmailHashCode=SELECT EMAIL_HASH FROM R_USER WHERE USER_ID=?
+		String sql = prop.getProperty("selectEmailHashCode");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
 			
-			if(rs.next()) {
-				return rs.getString(1); //이메일 인증여부 T, F가 넘어갈 것.
+			//쿼리 값 셋팅
+			pstmt.setString(1, userId);
+			
+			//쿼리 실행 후 결과 반환
+			rset = pstmt.executeQuery();
+			
+			//결과가 있다면 1건(1행1열임)
+			if(rset.next()) {
+				emailHashCode = rset.getString(1);
 			}
 			
-		}catch(Exception e) {
+			//확인
+			System.out.println("DB에서 emailHashCode 확인 : " + emailHashCode);
+			
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-				try {
-					if(conn != null) conn.close();
-					if(pstmt != null) pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+			close(rset);
+			close(pstmt);
 		}
 		
-		return "F"; //데이터베이스 오류
-	
-	}*/
+		return emailHashCode; //조회해온 이메일해쉬코드 반환
+	}
 
-	/*public String getUserEmail(String userID) {
+
+	public int updateEmailChecked(Connection conn, String userId) {
+		//이메일 인증체크여부를 업데이트 해주는 메소드(N -> Y)
 		
-		String SQL = "SELECT userEmail FROM LECTURE_USER WHERE USERID=?";
-	
-		Connection conn = null;
+		//반환할 결과 변수
+		int result = 0;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
+		
+		//updateEmailChecked=UPDATE R_USER SET EMAIL_CHECKED='Y' WHERE USER_ID=?
+		String sql = prop.getProperty("updateEmailChecked");
 		
 		try {
+			pstmt = conn.prepareStatement(sql);
 			
-			conn = DatabaseUtil.getConnection();
+			//쿼리값셋팅
+			pstmt.setString(1, userId);
 			
-			pstmt = conn.prepareStatement(SQL);
-			pstmt.setString(1, userID);
-	
-			rs = pstmt.executeQuery(); 
+			result = pstmt.executeUpdate();
 			
-			if(rs.next()) {
-				return rs.getString(1); 
-			}
+			//확인
+			System.out.println("이메일 체크 결과확인 : " + result);
 			
-		}catch(Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-				try {
-					if(conn != null) conn.close();
-					if(pstmt != null) pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+			close(pstmt);
 		}
 		
-		return null; //데이터베이스 오류*/
-	
-	/*public String setUserEmailChecked(String userID) {
-		
-		String SQL = "UPDATE LECTURE_USER SET USEREMAIL_CHECKED=\'T\' WHERE USERID=?";
+		return result; //결과 반환
+	}
 
-		Connection conn = null;
+
+	public int updateCookieChecked(Connection conn, String userId) {
+		//자동 로그인 여부를 업데이트 해주는 메소드(N -> Y)
+		
+		//반환할 결과 변수
+		int result = 0;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
+		
+		//updateCookieChecked=UPDATE R_USER SET COOKIE_CHECKED='Y' WHERE USER_ID=?
+		String sql = prop.getProperty("updateEmailChecked");
 		
 		try {
+			pstmt = conn.prepareStatement(sql);
 			
-			conn = DatabaseUtil.getConnection();
+			//쿼리값셋팅
+			pstmt.setString(1, userId);
 			
-			pstmt = conn.prepareStatement(SQL);
-			pstmt.setString(1, userID);
-
-			pstmt.executeUpdate();
-
-			return "T";
+			result = pstmt.executeUpdate();
 			
-		}catch(Exception e) {
+			//확인
+			System.out.println("자동로그인 업데이트 결과확인 : " + result);
+			
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-				try {
-					if(conn != null) conn.close();
-					if(pstmt != null) pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+			close(pstmt);
 		}
 		
-		return "F"; //데이터베이스 오류
-	}*/
+		return result; //결과 반환
+	}
+
+
+	public User selectUserbyGoogle(Connection conn, String userName, String userEmail) {
+		//구글 로그인을 위한 객체의 정보를 조회해오는 메소드
+		
+		//인자로 들어온 아이디와 비번을 가진 회원이 없으면 null을 반환할 것
+		User loginUser = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		//selectUserbyGoogle=SELECT * FROM R_USER WHERE USER_NAME=? AND EMAIL=?
+		String sql = prop.getProperty("selectUserbyGoogle");
+		
+		/*  조회되는 컬럼 
+		 	USER_NO	NUMBER
+			USER_ID	VARCHAR2(30 BYTE)
+			EMAIL	VARCHAR2(100 BYTE)
+			USER_PWD	VARCHAR2(100 BYTE)
+			USER_NAME	VARCHAR2(15 BYTE)
+			PHONE	VARCHAR2(13 BYTE)
+			SMS_CHECKED	VARCHAR2(1 BYTE)
+			EMAIL_HASH	VARCHAR2(64 BYTE)
+			EMAIL_CHECKED	VARCHAR2(1 BYTE)
+			USER_GENDER	VARCHAR2(1 BYTE)
+			STATUS	VARCHAR2(1 BYTE)
+			ENROLL_DATE	DATE
+			COOKIE_CHECKED	VARCHAR2(1 BYTE)
+			ADMIN_CHECKED	VARCHAR2(1 BYTE) 
+		 */
+		try {
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			//쿼리 값 셋팅
+			pstmt.setString(1, userName);
+			pstmt.setString(2, userEmail);
+			
+			//쿼리 실행 후 결과 받기
+			rset = pstmt.executeQuery();
+			
+			/*
+			 	USER_NO
+				USER_ID
+				EMAIL
+				USER_PWD
+				USER_NAME
+				PHONE
+				SMS_CHECKED
+				EMAIL_HASH
+				EMAIL_CHECKED
+				USER_GENDER
+				STATUS
+				ENROLL_DATE
+				COOKIE_CHECKED
+				ADMIN_CHECKED
+			 */
+			
+			//조회결과로 오는 행은 1개이므로 반복문은 필요없음 
+			if(rset.next()) { //조회 결과가 있다면
+				
+				//rset의 컬럼 값을 담아서 User 객체를 생성
+				loginUser = new User(rset.getInt("USER_NO")
+										, rset.getString("USER_ID")
+										, rset.getString("EMAIL")
+										, rset.getString("USER_PWD")
+										, rset.getString("USER_NAME")
+										, rset.getString("PHONE")
+										, rset.getString("SMS_CHECKED")
+										, rset.getString("EMAIL_HASH")
+										, rset.getString("EMAIL_CHECKED")
+										, rset.getString("USER_GENDER")
+										, rset.getString("STATUS")
+										, rset.getDate("ENROLL_DATE")
+										, rset.getString("COOKIE_CHECKED")
+										, rset.getString("ADMIN_CHECKED")
+									);
+				
+			}//if
+			
+			//확인
+			//System.out.println(loginUser.toString());
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return loginUser; //정보가 담겨있는 User 객체 반환(없으면 null 반환)
+	}
+
 }

@@ -43,6 +43,7 @@ public class UserPwdFindServlet extends HttpServlet {
 			//request 객체에 패스워드로 속성값 설정, 이름도 보내줄 것(받아주는 화면에서 필요)
 			request.setAttribute("userPwd", userPwd);
 			request.setAttribute("userName", userName);
+			request.setAttribute("userId", userId);
 			
 			//비밀번호 찾기 완료 페이지로 이동
 			request.getRequestDispatcher("views/user/findUserPwdOk.jsp").forward(request, response);

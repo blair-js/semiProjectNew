@@ -7,72 +7,73 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>둥글개 둥글개</title>
+<style type="text/css">
+.alert{
+	background-color: #f7f7f9;
+}
+div .btns{
+	background-color: #0099FF;
+}
+div h5{
+	color: #0099FF;
+}
+.send b{
+	color: #0099FF;
+}
+div .warn b{
+	color: #0099FF;
+	font-size: 20px;
+}
+</style>
 </head>
 <body>
 
-<%
-	request.setCharacterEncoding("UTF-8");
-	
-	String code = null;
+	<!-- menubar -->
+	<%@ include file="../common/menubar.jsp"%>
 
-	if(request.getParameter("code") != null){
-		code = request.getParameter("code");
-	}
+	<div class="row mt-5 mb-1">
+		<!-- 비어있는 div -->
+		<div class="col-md-3"></div>
+		<!-- 인증메일요청내용 -->
+		<div class="col-md-6 text-center">
+			<div class="">
+				<img class="col-md-3 mb-2" src="assets/img/gallery/okSign.png" alt="오케이로고" style="width: 150px">
+			</div>
+			<h2>이메일 인증이 완료되었습니다.</h2>
+		</div>
+		<!-- 비어있는 div -->
+		<div class="col-md-3"></div>
+	</div>
+
+	<!-- 주의사항 div -->
+	<div class="container mt-3 mb-5" style="max-width: 560px;">
+		<div class="alert text-center" role="alert">
+			<span class="warn"><b>WELCOME</b></span>
+			<br>회원가입을 축하합니다.<br> 로그인 후 서비스를 이용해주세요.<br>
+			<div class="col-md-12 mt-3 text-center">
+				<button class="w-100 btn btn-lg mb-2 btns" onclick="goLogin()">
+					<b style="color: white;">로그인</b>
+				</button>
+			</div>
+		</div>
+	</div>
+	<!-- 주의사항 div 끝 -->
+
+	<script type="text/javascript">
 	
-	UserDao userDao = new UserDao();
-	//String userId = null;
-			
-	//로그인 한 상태
-	/*if(session.getAttribute("userId") != null){
-		userID = (String)session.getAttribute("userID");
-	}
-	
-	//로그인되지 않은 상태
-	if(userID == null){
-		PrintWriter script = response.getWriter();
-		script.println("<script>");
-		script.println("alert('로그인을 해주세요');");
-		script.println("location.href='userLogin.jsp'");
-		script.println("</script>");
-		script.close();
-		return;
-	}*/
-	
-	/*String userEmail = userDao.getUserEmail(userId);
-	
-	//boolean isRight = (new SHA256().getSHA256(userEmail).equals(code)) ? true : false;
-	
-	boolean isRight = true;
-	
-	if(isRight == true){
-		//해당 아이디를 이메일인증 ok로 해주는 메소드 호출
-		userDao.setUserEmailChecked(userId);
+		$(function() {
+			alert('이메일 인증이 완료되었습니다. 로그인 후 서비스를 이용해주세요.')
+		})
 		
-		PrintWriter script = response.getWriter();
-		script.println("<script>");
-		script.println("alert('인증에 성공했습니다.');");
-		script.println("location.href='loginForm.jsp'");
-		script.println("</script>");
-		script.close();
-		return;
-	}*/
-	
-	/*else{
-		PrintWriter script = response.getWriter();
-		script.println("<script>");
-		script.println("alert('유효하지 않은 코드입니다.');");
-		script.println("location.href='index.jsp'");
-		script.println("</script>");
-		script.close();
-		return;
-	}*/
-	
-%>
-	<script>
-		alert('이메일 인증완료')
+		//로그인 함수
+		function goLogin() {
+			location.href="<%= request.getContextPath()%>/loginForm.do;"
+		}
 	</script>
-
+	
+	<!-- footer -->
+	<%@ include file="../common/footer.jsp"%>
 
 </body>
 </html>

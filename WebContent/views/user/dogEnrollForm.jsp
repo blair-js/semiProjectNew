@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>둥글개 입학신청</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <style type="text/css">
 @font-face {
@@ -260,7 +260,6 @@ div .bDog{
 				alert('파일을 첨부해주세요.');
 				return false;
 			}
-			
 			if($('#dogName').val() == null){
 				alert('이름을 입력해주세요.');
 				$('#dogName').focus();

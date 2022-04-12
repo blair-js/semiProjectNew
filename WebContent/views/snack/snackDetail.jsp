@@ -1,10 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8" import= "java.util.ArrayList, com.semi.snack.model.dto.*"%>
+	<%@ page import= 'java.util.ArrayList, com.semi.common.dto.*' %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>둥글개 둥글개</title>
+
+	<%
+	Snack snack = (Snack)request.getAttribute("snack");
+	Attachment at = (Attachment)request.getAttribute("at");
+	%>
+	
 
 <style>
 
@@ -62,21 +69,31 @@
 			<div class="container-md">
 				<div class="row">
 
-					<div name="snack_img1" id="center">
-						<td><img id="snack1" height="250px" width="369.33px" /></td>
+					<div name="snack_no" id="center">
+						<p id="center">간식 번호 : <%=snack.getSanckNo() %></p>
+						<br>
+					</div>
+
+				</div>
+
+			</div>
+				
+			<p></p>
+			
+			
+			<div class="container-md">
+				<div class="row">
+
+					<div name="snack_img" id="center">
+						<table>
+						<td><img src="<%= contextPath %>/resources/FileUpload_test(SNACK)/<%= at.getChangeName() %>" id="img"></td>
+						</table>
 						<!-- 현재 올릴 사진은 1개이기에 수업 jsp중 tuhmbnailInsertForm.jsp 참고-->
 					</div>
 
 				</div>
 
 			</div>
-
-			<br> <input type="file" id="center" name="file"
-				onchange="loadImg(this, 1);">
-
-			<p></p>
-
-			<!-- multipart/form-data 을 사용하여 데이터 전송 -->
 
 			<!-- 구매에 대한 체크박스 필요 뼈다귀 수량이 있어야할 컨테이너 -->
 			<div class="container-md">
@@ -89,9 +106,9 @@
 							<tr>
 								<td> 
 								
-								<p> <h5> 간식명  :  <input type="text" name="snackName" value="현재 기본 값"  readonly></h5> </p> 
+								<p> <h5> 간식명  :  <input type="text" name="snackName" value="<%=snack.getSanckName() %>"  readonly></h5> </p> 
 								 
-								<p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" value="현재 기본 값" readonly></h5> </p> 
+								<p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" value="<%=snack.getPrice() %>" readonly></h5> </p> 
 								
 								</td>
 							</tr>
@@ -133,7 +150,10 @@
 	<button class="btn btn-outline-warning btn-lg" style="width: 15%"
 		id="center" onclick="goSnackDelete()"><b>간식 삭제</b></button>
 	
+	<br>
 	
+	<button class="btn btn-outline-warning btn-lg" style="width: 15%"
+		id="center" onclick="goSnack()"><b>간식 목록</b></button>
 	</div>
 
 
@@ -141,38 +161,47 @@
 		<p class="display-5 fw-bold"></p>
 	</div>
 
-
+	<form action="" id="postForm" method="post"> <!-- updateform 서블릿으로 sno를 가지고 간다. -->
+			<input type="hidden" name="sno" value="<%= snack.getSanckNo() %>">
+		</form>
 
 	</div>
 	<!-- 컨테이너 끝 div -->
+	
 
+	
 	<script>
 	
+	/*
 
-	function loadImg(inputFile, num){ 
-		if(inputFile.files.length == 1){
-			var reader = new FileReader(); // 파일 읽어 들이는 객체 생성 (미리보기)
-			
-			//파일이 존재하면 URL을 읽어와서 가져오겠다는 함수
-			reader.readAsDataURL(inputFile.files[0]); // 파일을 일단 가져오면 배열의 0번째 인덱스에 들어있다. 파일 읽어 들이는 메소드
-			
-			<!-- 파일리더 API = https://developer.mozilla.org/ko/docs/Web/API/FileReader -->
-			reader.onload = function(e){ // 파일 읽기가 다 완료되면 실행
-				switch(num){
-				// e.target.result(URL 형식) 결과값을 src에 다 담아주고 있다. 각각의 파일을 읽어들여서 미리보기가 가능하게된다.
-				case 1 : $("#snack1").attr("src", e.target.result); break; //src 속성을 titleImg 속성을 걸어주니가 load가 가능한거이다.
-			
-				}
-			}
-		}
-	}
+	$(function(){
+		$("#fileArea").hide();
+		
+		
+		$("#snackImg").click(function(){ 
+			$("#file").click();
 	
-	function goSnackUpdateForm(){  //간식 수정을 하기위한 서블릿 여기에 들어가서 snackUpdateServlet를 호출 
-				location.href="<%=request.getContextPath()%>/snackUpdateForm.do" 	
+		});
+			
+	});
+	
+	*/
+	function goSnackUpdateForm(){
+		$("#postForm").attr("action", "<%=contextPath%>/snackUpdateForm.do"); 
+		<!--hidden으로 sno 값을 가지고 서블릿으로 간다 액션 속성값을 정의 : -->
+		<!-- action = 서식 데이터(form data)를 서버로 보낼 때 해당 데이터가 도착할 URL -->
+		$("#postForm").submit();  <!--updateForm을 눌렀을때 submit을 수행-->
 	}	
 	
 	function goSnackDelete(){  //간식 수정을 하기위한 서블릿 여기에 들어가서 snackUpdateServlet를 호출 
-		location.href="<%=request.getContextPath()%>/snackDelete.do" 	
+		$("#postForm").attr("action", "<%=contextPath%>/snackDelete.do"); 
+		<!--hidden으로 sno 값을 가지고 서블릿으로 간다 액션 속성값을 정의 : -->
+		<!-- action = 서식 데이터(form data)를 서버로 보낼 때 해당 데이터가 도착할 URL -->
+		$("#postForm").submit();  <!--delete를 눌렀을때 submit을 수행-->
+	}	
+	
+	function goSnack(){  
+		location.href="<%=request.getContextPath()%>/snack.do" 	
 	}	
 
 	</script>

@@ -10,7 +10,9 @@ import java.util.ArrayList;
 
 import com.semi.class_notice.model.dao.ClassNoticeDao;
 import com.semi.class_notice.model.dto.ClassNotice;
+import com.semi.common.dto.Attachment;
 import com.semi.common.dto.PageInfo;
+import com.semi.common.dto.Reply;
 
 public class ClassNoticeService {
 
@@ -34,20 +36,26 @@ public class ClassNoticeService {
 		return list;
 	}
 
-	public int insertNotice(ClassNotice n) {
-		// 게시물 추가 메소드
+	public int insertNotice(ClassNotice n, Attachment at) {
+		// 게시물 추가 메소드, 썸네일 첨부파일도 추가 해주어야 함
 		Connection conn = getConnection();
 		
-		int result = new ClassNoticeDao().insertNotice(conn, n);
+		int result1 = new ClassNoticeDao().insertNotice(conn, n);
 		
-		if(result > 0) {
+		int result2 = 1;
+		
+		if(at != null) {
+			result2 = new ClassNoticeDao().insertAttachment(conn, at);
+		}
+		
+		if(result1 * result2 > 0) {
 			commit(conn);
 		}else {
 			rollback(conn);
 		}
 		close(conn);
 		
-		return result;
+		return result1 * result2;
 	}
 
 	public ClassNotice selectNotice(int nno) {
@@ -79,24 +87,82 @@ public class ClassNoticeService {
 		
 		return cn;
 	}
-
-	public ClassNotice updateNotice(ClassNotice cn, int nno) {
-		// 게시글 수정 메소드
+	
+	public Attachment selectAttachment(int nno) {
+		// 첨부파일 조회 메소드
 		Connection conn = getConnection();
-		ClassNotice updateCn = null;
 		
-		int result = new ClassNoticeDao().updateNotice(conn, cn, nno);
+		Attachment at = new ClassNoticeDao().selectAttachment(conn, nno);
 		
-		if(result > 0) {
+		close(conn);
+		
+		return at;
+	}
+
+	public int updateNotice(ClassNotice cn, Attachment at) {
+		// 게시글 수정 메소드 첨부파일도 수정 가능
+		Connection conn = getConnection();
+		
+		int result1 = new ClassNoticeDao().updateNotice(conn, cn);
+		int result2 = 1;
+		if(at != null) {
+			if(at.getFileNo() != 0) {
+				result2 = new ClassNoticeDao().updateAttachment(conn, at);
+			}else {
+				result2 = new ClassNoticeDao().insertAttachment(conn, at);
+			}
+		}
+		
+		if(result1 > 0 && result2 > 0) {
 			commit(conn);
-			updateCn = new ClassNoticeDao().selectNotice(conn, nno);
 		}else {
 			rollback(conn);
 		}
 		
 		close(conn);
 		
-		return updateCn;
+		return result1 * result2;
+	}
+
+	public int insertReply(Reply r) {
+		// 댓글 추가 구현 메소드
+		Connection conn = getConnection();
+		
+		int result = new ClassNoticeDao().insertReply(conn, r);
+		
+		if(result > 0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		close(conn);
+		return result;
+	}
+
+	public ArrayList<Reply> selectRList(int nno) {
+		// 참조게시글 번호로 댓글 목록 뿌려줄 메소드
+		Connection conn = getConnection();
+		
+		ArrayList<Reply> list = new ClassNoticeDao().selectRList(conn, nno);
+		
+		close(conn);
+		
+		return list;
+	}
+
+	public int updateReply(Reply r) {
+		// 댓글 수정 메소드
+		
+		Connection conn = getConnection();
+		
+		int result = new ClassNoticeDao().updateReply(conn, r);
+		
+		if(result > 0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		return result;
 	}
 
 }

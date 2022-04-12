@@ -1,13 +1,27 @@
 package com.semi.user.controller;
 
 import java.io.IOException;
+import java.util.Properties;
 
+import javax.mail.Address;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.semi.user.model.dto.User;
+import com.semi.user.model.service.UserService;
+
+import util.Gmail;
+import util.SHA256;
 
 //userEnrollForm.jsp에서 넘어옴
 @WebServlet("/insertUser.do")
@@ -29,8 +43,8 @@ public class UserInsertServlet extends HttpServlet {
 		String userName = request.getParameter("userName");
 		String phone = request.getParameter("phone");
 		String smsCheck = request.getParameter("chk_sms");
-		String userEmail = request.getParameter("userEmail");
 		String gender = request.getParameter("gender");
+		String userEmail = request.getParameter("userEmail");
 		/*System.out.println(userId);
 		System.out.println(userPwd);
 		System.out.println(userName);
@@ -39,9 +53,26 @@ public class UserInsertServlet extends HttpServlet {
 		System.out.println(userEmail);
 		System.out.println(gender);*/
 		
+		//파라미터로 객체 생성
+		User user = new User(userId, userPwd, userName, phone, smsCheck, gender, userEmail, util.SHA256.getSHA256(userEmail), "N");
 		
-		//회원 가입이 정상 완료되면 => 이메일 발송 페이지로 이동 
-		request.getRequestDispatcher("views/user/emailSendAction.jsp").forward(request, response);
+		int result = new UserService().insertUser(user);
+		
+		//////////////////////////////////////////////////////////////////////////////////////////
+		
+		if(result > 0) { //회원가입 성공시
+			
+			System.out.println("회원가입성공");
+			
+			//회원가입(등록)이 정상적으로 완료되었다면
+			//이메일을 보내주는 서블릿(EmailSendServlet)으로 이동
+			request.getRequestDispatcher("sendEmail.do?userId="+userId).forward(request, response);
+			
+		}else { //회원가입 실패시
+			
+			System.out.println("회원가입실패");
+			
+		}//if~else
 		
 	}
 

@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>둥글개 아이디찾기</title>
 <style>
 @font-face {
 	font-family: 'LeferiPoint-BlackA';
@@ -122,8 +122,9 @@ main form{
 	<!-- 아이디찾기 버튼 클릭시 UserIdFindServlet 로 이동 -->
 	<script type="text/javascript">
 		function goLogin() {
-			location.href="<%= contextPath %>/loginForm.do;"
+			location.href="<%= contextPath %>/loginForm.do?userId=<%=userId%>";	
 		}
+		
 	</script>
 
 	<!-- footer -->

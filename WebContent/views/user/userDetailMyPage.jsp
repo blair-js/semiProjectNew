@@ -57,7 +57,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>둥글개 마이페이지</title>
 <style>
 @font-face {
 	font-family: 'LeferiPoint-BlackA';
@@ -175,7 +175,7 @@ main .sm{
 					<h4 class="mb-3">Your Info</h4>
 					
 					<!-- 사용자의 정보를 뿌려주는 form이자 수정이 가능한 form -->
-					<form action="<%= contextPath%>/updateUser.do;" id="updateForm" class="needs-validation" method="post" >
+					<form action="<%= contextPath%>/updateUser.do;" id="updateForm" class="needs-validation" method="post" onsubmit="return updatePwdCheck();">
 					<!-- 사용자 정보 업데이트시 필요한 부분이므로 hidden으로 넘겨준다. -->
 					<input type="hidden" id="userNo" name="userNo" value="<%= u.getUserNo()%>">
 					<input type="hidden" id = "userPwd" name ="userPwd" value="<%=userPwd %>" readonly>
@@ -284,7 +284,25 @@ main .sm{
 	<!-- 컨테이너 끝 -->
 	
 	<script type="text/javascript">
-		
+		//회원정보 수정 전 비번 체크
+		function updatePwdCheck() {
+			//비밀번호를 입력받을 프롬프트 창 열기
+			var inputPwd = prompt("현재 비밀번호를 입력하세요.");
+			var originPwd = $('#userPwd').val(); //위 form안에서 hidden으로 숨기고있는 요소에서 현재 user의 비밀번호를 가져온다. 
+			
+			if(inputPwd != null){
+				if(inputPwd === originPwd){ //같다면
+					return true;
+				}else{ //다르다면
+					alert('비밀번호가 일치하지 않습니다.')
+					return false;
+				}
+			}else{
+				alert('현재 비밀번호를 입력하세요.')
+				return false;
+			}	
+		}	
+	
 		function deleteUser() {
 			
 			//비밀번호를 입력받을 프롬프트 창 열기

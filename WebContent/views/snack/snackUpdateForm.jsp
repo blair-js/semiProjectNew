@@ -1,5 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import= "java.util.ArrayList, com.semi.snack.model.dto.*"%>
+    <%@ page import= "java.util.ArrayList, com.semi.common.dto.*" %>
+    
+    <%
+   	Snack snack  = (Snack)request.getAttribute("snack"); 
+    Attachment at  = (Attachment)request.getAttribute("at");
+    
+    %>
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,8 +29,7 @@
 <body>
 	
 	<%@ include file="../common/menubar.jsp"%>
-	
-		<div class="container">
+
 		<!-- 컨테이너 시작 div -->
 
 
@@ -57,23 +64,46 @@
 
 			</div>
 		</div>
-
-		
+				
+			<form id="updateForm" action="<%= contextPath %>/snackUpdate.do" method="post" enctype="multipart/form-data"> <!-- 첨부파일이있어서 멀티파트로 넘기고 서블릿에 넘김 -->	
+			<input type="hidden" name="sno" value="<%= snack.getSanckNo() %>">
+			<div class="container">
 			<div class="container-md">
 				<div class="row">
 
 					<div name="snack_img1" id="center">
-						<td><img id="snack1" height="250px" width="369.33px" /></td>
-						<!-- 현재 올릴 사진은 1개이기에 수업 jsp중 tuhmbnailInsertForm.jsp 참고-->
+						<% if(at != null) { %>
+						   <%= at.getOriginName() %>
+						   <input type='hidden' name='originFile' value='<%=at.getChangeName()%>'>	 
+						   <input type='hidden' name='originFileNo' value='<%=at.getFileNo()%>'>
+						   
+						   <% } %>
+						<td></td>
+						
 					</div>
 
 				</div>
 
 			</div>
-
-			<br> <input type="file" id="center" name="file"
-				onchange="loadImg(this, 1);">
-
+			</div>
+			<br>
+			<div name="snack_no" id="center">
+						<p id="center">간식 번호 : <%=snack.getSanckNo() %></p>
+						<br>
+					</div>
+			<br>
+			<pre id="center"><p>수정 전                                                        수정 후</p></pre>
+			<div id="center">
+					
+			<td><img src="<%= contextPath %>/resources/FileUpload_test(SNACK)/<%= at.getChangeName() %>">
+			<img id="snackImg" height="293px" width="279px" /></td>
+			</div>
+			<div id="fileArea">	
+			
+			<br> <input type="file" id="file" name="file"
+			onchange="loadImg(this, 1);"> <!-- 서블릿으로 보내는 파일 이름 -->
+				
+			</div>
 			<p></p>
 
 			<!-- multipart/form-data 을 사용하여 데이터 전송 -->
@@ -89,19 +119,20 @@
 							<tr>
 								<td> 
 								
-								<p> <h5> 간식명  :  <input type="text" name="snackName" value="수정 할 간식명 입력."   required></h5> </p> 
-								 
-								<p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" value="수정 할 뼈다귀 입력."  required></h5> </p> 
+								<p> <h5> 간식명  :  <input type="text" name="snackName" value="<%= snack.getSanckName() %>"   required></h5> </p> 
+								   
+								<p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" value="<%= snack.getPrice() %>"  required></h5> </p> 
 								
 								</td>
 							</tr>
 
 						</table>
-
-
+						
+						</div>
+					</div>
 					</div>
 					<!-- snack 1 div 끝-->
-					
+				</form>		
 
 	</div>
 	<!-- container 속성이 아래까지 못내려오도록 닫는 div -->
@@ -125,8 +156,12 @@
 
 	<div class="container-md">
 	
-	<button class="btn btn-outline-warning btn-lg" style="width: 15%"
-		id="center" onclick="goSnackUpdateForm()"><b>간식 수정</b></button>
+	
+	
+  	<button  class="btn btn-outline-warning btn-lg" style="width: 15%"
+		id="center" onclick="goSnackUpdateForm()"><b>간식 수정</b></button> 
+		
+		<!--  <input type="submit"> -->
 	
 	<br>
 	
@@ -139,13 +174,25 @@
 	</div>
 
 
-
+	
 	</div>
 	<!-- 컨테이너 끝 div -->
 
 	<script>
 	
 
+	$(function(){
+		$("#fileArea").hide();
+		
+		
+		$("#snackImg").click(function(){ 
+			$("#file").click();
+	
+		});
+			
+	});
+	
+	
 	function loadImg(inputFile, num){ 
 		if(inputFile.files.length == 1){
 			var reader = new FileReader(); // 파일 읽어 들이는 객체 생성 (미리보기)
@@ -157,16 +204,18 @@
 			reader.onload = function(e){ // 파일 읽기가 다 완료되면 실행
 				switch(num){
 				// e.target.result(URL 형식) 결과값을 src에 다 담아주고 있다. 각각의 파일을 읽어들여서 미리보기가 가능하게된다.
-				case 1 : $("#snack1").attr("src", e.target.result); break; //src 속성을 titleImg 속성을 걸어주니가 load가 가능한거이다.
+				case 1 : $("#snackImg").attr("src", e.target.result); break; //src 속성을 titleImg 속성을 걸어주니가 load가 가능한거이다.
 			
 				}
 			}
 		}
 	}
 	
-	function goSnackUpdateForm(){  //간식 수정을 하기위한 서블릿 여기에 들어가서 snackUpdateServlet를 호출 
-				location.href="<%=request.getContextPath()%>/snackUpdate.do" 	
-	}	
+	function goSnackUpdateForm(){
+		document.getElementById("updateForm").submit();	
+	}
+	
+	
 	
 	function goSnackDelete(){  //간식 수정을 하기위한 서블릿 여기에 들어가서 snackUpdateServlet를 호출 
 		location.href="<%=request.getContextPath()%>/snackDelete.do" 	

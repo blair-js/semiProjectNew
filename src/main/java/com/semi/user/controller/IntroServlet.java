@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+//소개페이지로 화면전환만 해주는 서블릿임
 @WebServlet("/intro.do")
 public class IntroServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -19,9 +20,8 @@ public class IntroServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		//소개 페이지로~
-		RequestDispatcher view = request.getRequestDispatcher("views/common/intro.jsp");
-		view.forward(request, response);
+		request.getRequestDispatcher("views/common/intro.jsp").forward(request, response);
+		//response.sendRedirect("views/common/intro.jsp");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

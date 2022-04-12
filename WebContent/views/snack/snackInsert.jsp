@@ -96,10 +96,12 @@
 				</div>
 
 			</div>
-
-			<br> <input type="file" id="center" name="file"
+				
+			<div id="fileArea">	
+			<br> <input type="file" id="file" name="file"
 				onchange="loadImg(this, 1);">
-
+			</div>
+			
 			<p></p>
 
 			<!-- multipart/form-data 을 사용하여 데이터 전송 -->
@@ -115,19 +117,17 @@
 							<tr>
 								<td> 
 								
-								<p> <h5> 간식명  :  <input type="text" name="snackName" value="간식 명을 입력해주세요."  required></h5> </p> 
+								<p> <h5> 간식명  :  <input type="text" name="snackName" placeholder="간식 명을 입력해주세요."  required></h5> </p> 
 								 
-								<p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" value="수량 을 입력해주세요." required></h5> </p> 
+								<p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" placeholder="수량 을 입력해주세요." required></h5> </p> 
 								
 								</td>
 							</tr>
 
 						</table>
 								
-					<div id="fileArea">
-					<input type="file" name="file1" id="file1" onchange="loadImg(this, 1);">
-					
-			</div>
+					</div>
+					</div>
 
 					</div>
 					<!-- snack 1 div 끝-->
@@ -174,17 +174,18 @@
 	<!-- 컨테이너 끝 div -->
 
 	<script>
-	<!--
+
 	$(function(){
 		$("#fileArea").hide();
 		
 		
-		$("#snack1").click(function(){ 
-			$("#file1").click();
+		$("#snackImg").click(function(){ 
+			$("#file").click();
+	
 		});
 			
 	});
-	-->
+
 	
 
 	function loadImg(inputFile, num){ 
