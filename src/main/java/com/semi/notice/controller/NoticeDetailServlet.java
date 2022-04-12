@@ -34,18 +34,16 @@ public class NoticeDetailServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//번호를 파라미터로 받는다.
 		int nno = Integer.parseInt(request.getParameter("nno"));
-		
+		System.out.println("nno" + nno);
 		//글 내용
 		Notice n = new NoticeService().selectNotice(nno);
 		//첨부파일
-		ArrayList<Attachment> atList = new NoticeService().selectAttachment(nno);
-		
-		System.out.println(n);
-		System.out.println(atList);
-		
+		//ArrayList<Attachment> atList = new NoticeService().selectAttachment(nno);
+		Attachment at = new NoticeService().selectAttachment(nno);
+
 		if(n != null) {
 			request.setAttribute("n", n);
-			request.setAttribute("atList", atList);
+			request.setAttribute("at", at);
 			request.getRequestDispatcher("views/notice/noticeDetailView.jsp").forward(request, response);
 		}else {
 			request.setAttribute("msg", "게시글 상세조회에 실패하였습니다.");

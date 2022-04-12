@@ -2,8 +2,9 @@
     pageEncoding="UTF-8" import="java.util.ArrayList, com.semi.notice.model.dto.*, com.semi.common.dto.*"%>
  <%
  	Notice n = (Notice)request.getAttribute("n");
- 	ArrayList<Attachment> atList = (ArrayList<Attachment>)request.getAttribute("atList");
- %>
+ 	//ArrayList<Attachment> atList = (ArrayList<Attachment>)request.getAttribute("atList");
+ 	Attachment at = (Attachment)request.getAttribute("at");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -53,31 +54,33 @@
 								<textarea class="form-control form-control-lg rounded-0" name="content" rows="20" style="resize:none"><%= n.getNoticeContent() %></textarea>
 							</td>
 						</tr>
-						<% if(!atList.isEmpty()) {%>
-							<%for(int i = 0; i < atList.size(); i++) { %>
+						<!--< if(at != null) {%>
+							 <for(int i = 0; i < atList.size(); i++) { %>  -->
 							<tr>
-								<th>첨부파일</th>
-								<td colspan="3">
-									<%= atList.get(i).getOriginName()%>
-									<input type='hidden' name='originFile' value='<%=atList.get(i).getChangeName()%>'>
-									<input type='hidden' name='originFileNo' value='<%=atList.get(i).getFileNo()%>'>
-									<input  type="checkbox" name='delFile' value='<%=atList.get(i).getFileNo()%>'>삭제
-								</td>
+								<% if(at != null) {%>
+									<th>첨부파일</th>
+									<td colspan="3">
+										<%= at.getOriginName()%>
+										<input type='hidden' name='originFile' value='<%=at.getChangeName()%>'>
+										<input type='hidden' name='originFileNo' value='<%=at.getFileNo()%>'>
+										<!-- <input  type="checkbox" name='delFile' value='<=at.getFileNo()%>'>삭제 -->
+									</td>
+								<%} %>
 							</tr>
-							<%} %>	
-						<%} %>
+							<!--< } %>-->
+						<!-- <} %> -->
 						<tr>
-							<td>첨부파일1</td>
-							<td><input type="file" name="upfile1"></td>
+							<td>첨부파일</td>
+							<td><input type="file" name="upfile"></td>
 						</tr>
-						<tr>
+						<!-- <tr>
 							<td>첨부파일2</td>
 							<td><input type="file" name="upfile2"></td>
 						</tr>
 						<tr>
 							<td>첨부파일3</td>
 							<td><input type="file" name="upfile3"></td>
-						</tr>					
+						</tr> -->				
 					</tbody>	
 				</table>
 			</div>

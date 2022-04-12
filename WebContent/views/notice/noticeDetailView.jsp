@@ -2,7 +2,8 @@
     pageEncoding="UTF-8" import="java.util.ArrayList, com.semi.notice.model.dto.*, com.semi.common.dto.*"%>
 <%
 	Notice n = (Notice)request.getAttribute("n");
-	ArrayList<Attachment> atList = (ArrayList<Attachment>)request.getAttribute("atList");
+	//ArrayList<Attachment> atList = (ArrayList<Attachment>)request.getAttribute("atList");
+	Attachment at = (Attachment)request.getAttribute("at");
 %>
 <!DOCTYPE html>
 <html>
@@ -70,22 +71,20 @@
 				
 				<tr>
 					<td colspan="4"><%=n.getNoticeContent() %></td>
-				</tr>			
-				<% if(atList.isEmpty()) {%>
-					<tr>
-						<th>첨부파일</th>
-						<td colspan="3">첨부파일이 존재하지 않습니다.</td>
-					</tr>
+				</tr>								
+				<tr>
+				<%if(at != null) {%>
+					<th>첨부파일</th>
+					<td colspan="3">
+						<a download="<%= at.getOriginName()%>" href="<%=contextPath%>/resources/notice_upfiles/<%=at.getChangeName()%>"><%= at.getOriginName()%></a>
+					</td>
 				<%} else {%>
-					<%for(int i = 0; i < atList.size(); i++) { %>
-					<tr>
-						<th>첨부파일</th>
-						<td colspan="3">
-							<a download="<%= atList.get(i).getOriginName()%>" href="<%=contextPath%>/resources/notice_upfiles/<%=atList.get(i).getChangeName()%>"><%= atList.get(i).getOriginName()%></a>
-						</td>
-					</tr>
-					<%} %>	
-				<%} %>						
+					<th>첨부파일</th>
+					<td colspan="3">
+						첨부파일이 없습니다.
+					</td>
+				<%} %>
+				</tr>									
 			</tbody>	
 		</table>
 		

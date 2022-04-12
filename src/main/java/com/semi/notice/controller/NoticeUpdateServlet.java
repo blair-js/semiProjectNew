@@ -53,13 +53,8 @@ public class NoticeUpdateServlet extends HttpServlet {
 			//userNo를 가져와서 넘겨준다.
 			int userNo = ((User)request.getSession().getAttribute("loginUser")).getUserNo();
 			
-			//체크 박스 체크 된 경우
-			String[] delFiles = multiRequest.getParameterValues("delFile");
-			
-			//String delFile = "";
-			//if(delFile != null) {
-			//	delFile = String.join(",", delFiles);
-			//}
+			//삭제 체크 박스 체크 된 경우
+			//String delFile = multiRequest.getParameter("delFile");
 			
 			Notice n = new Notice();
 			n.setNoticeTitle(multiRequest.getParameter("title"));
@@ -68,40 +63,40 @@ public class NoticeUpdateServlet extends HttpServlet {
 			n.setNoticeWriter(String.valueOf(userNo));
 			
 			//넘어오는 첨부파일이 여러 개일 수 있기 때문에 arrayList
-			ArrayList<Attachment> atList = new ArrayList<Attachment>();
+			//ArrayList<Attachment> atList = new ArrayList<Attachment>();
 			
-			for(int i = 1; i <= atList.size(); i++) {
-				String name = "upfile" + i;
+			//넘어오는 첨부파일 1개
+			Attachment at = null;
+			//for(int i = 1; i <= atList.size(); i++) {
+				//String name = "upfile" + i;
 				
 				//첨부파일을 새로 첨부하는 경우
-				if(multiRequest.getOriginalFileName(name) != null) {
-					 String originName = multiRequest.getOriginalFileName(name);
-					 String changeName = multiRequest.getFilesystemName(name);
+				if(multiRequest.getOriginalFileName("upfile") != null) {
+					 String originName = multiRequest.getOriginalFileName("upfile");
+					 String changeName = multiRequest.getFilesystemName("upfile");
 					 System.out.println("originName : " + originName);
 					 System.out.println("changeName : " + changeName);
 					 
-					 Attachment at = new Attachment();
+					 at = new Attachment();
 					 at.setFilePath(savePath);
 					 at.setOriginName(originName);
 					 at.setChangeName(changeName);
 					 
-					 atList.add(at);
-					 
-					 System.out.println(atList);
+					 //atList.add(at);
 					 
 					 if(multiRequest.getParameter("originFile") != null) { //기존 첨부파일이 있는 경우
 						 File deleteFile = new File(savePath + multiRequest.getParameter("originFile"));
 						 
 						 deleteFile.delete();
 						 
-						 atList.get(i).setFileNo(Integer.parseInt(multiRequest.getParameter("originFileNo")));
+						 at.setFileNo(Integer.parseInt(multiRequest.getParameter("originFileNo")));
 					 }else {
 						at.setRefNo(nno); 
 					 }
 				}
-			}
+			//}
 			
-			int result = new NoticeService().updateNotice(n, atList, delFiles);
+			int result = new NoticeService().updateNotice(n, at/*, delFile*/);
 			
 			if(result > 0) {
 				response.sendRedirect("detailNotice.do?nno="+nno);

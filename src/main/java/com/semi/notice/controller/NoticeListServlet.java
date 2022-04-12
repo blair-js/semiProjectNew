@@ -42,13 +42,30 @@ public class NoticeListServlet extends HttpServlet {
 		int pageLimit;
 		int boardLimit;
 		
+		//검색을 위해 넘어온 파라미터를 받아준다.
+		//검색어는 들어올 수도 있고 아닐 수도 있다. -> 임시변수로 받아준다.
+		//list?keyword=title&searchKey=?
+		String testKeyword = request.getParameter("keyword");
+		String testSearchKey = request.getParameter("searchKey");
+		
+		//사용자가 전달하는 값이 null이 아닌 경우에 대한 조건
+		String keyword = "NOTICE_TITLE"; //전달되지 않았을 때의 기본 값
+		if(testKeyword != null && !testKeyword.equals("")) { //아무것도 없을 때 빈문자열이 넘어온다.
+			keyword = testKeyword;
+		}		
+		
+		String searchKey = ""; //전달되지 않았을 때의 기본값
+		if(testSearchKey != null && !testSearchKey.equals("")) {
+			searchKey = testSearchKey;
+		}
+		
 		//총 게시글 개수
-		listCount = new NoticeService().getListCount();
+		listCount = new NoticeService().getListCount(searchKey, keyword);
 		System.out.println(listCount);
 		
 		//현재 페이지
 		currentPage = 1;
-		if(request.getParameter("currentPage") != null) {
+		if(request.getParameter("currentPage") != null && !request.getParameter("currentPage").equals("")) {
 			currentPage = Integer.parseInt(request.getParameter("currentPage"));
 		}
 		
@@ -74,14 +91,8 @@ public class NoticeListServlet extends HttpServlet {
 		//페이지 정보를 담아주는 객체 생성
 		PageInfo pi = new PageInfo(listCount, currentPage, startPage, endPage, maxPage, pageLimit, boardLimit);
 		
-		ArrayList<Notice> list = new NoticeService().selectList(pi);
-		
-		//검색을 위해 넘어온 파라미터를 받아준다.
-		//list?keyword=title&searchKey=?
-		String keyword = request.getParameter("keyword");
-		String searchKey = request.getParameter("searchKey");
-		
-		
+		//ArrayList<Notice> searchList = new NoticeService().searchList(nSearch, pi); //페이지 정보를 가져가야 하기 때문에 pi도 함께 전달
+		ArrayList<Notice> list = new NoticeService().selectList(pi, keyword, searchKey);
 		
 		//listView에 list를 뿌려주기 위해 가져온 list를 request에 담아준다.
 		request.setAttribute("list", list);

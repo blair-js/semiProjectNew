@@ -62,13 +62,39 @@ public class NoticeDao {
 		
 		return listCount;
 	}
+	
+	public int getSearchListCount(Connection conn, String searchKey, String keyword) {
+		int listCount = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		//String sql = prop.getProperty("getSearchListCount");
+		String sql = "SELECT COUNT(*) FROM NOTICE WHERE STATUS='Y' AND "+keyword+" LIKE ?";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%"+searchKey+"%");
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				listCount = rset.getInt(1);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return listCount;
+	}
 
 	public ArrayList<Notice> selectList(Connection conn, PageInfo pi) {
 		ArrayList<Notice> list = new ArrayList<Notice>();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//selectList=SELECT * FROM (SELECT ROWNUM RNUM, A.* FROM (SELECT NOTICE_NO, NOTICE_TITLE, USER_ID, COUNT, CREATE_DATE FROM NOTICE A JOIN R_USER B ON NOTICE_WRITER=USER_NO WHERE A.STATUS = 'Y' ORDER BY A.NOTICE_NO DESC) A) WHERE RNUM BETWEEN ? AND ?
+		//selectList=SELECT * FROM (SELECT ROWNUM RNUM, A.*  FROM (SELECT NOTICE_NO, NOTICE_TITLE, USER_ID, COUNT, CREATE_DATE FROM NOTICE A JOIN R_USER B ON NOTICE_WRITER=USER_NO WHERE A.STATUS = 'Y' ORDER BY A.NOTICE_NO DESC) A) WHERE RNUM BETWEEN ? AND ?
 		String sql = prop.getProperty("selectList");
 		
 		//where 조건문에는 한 페이지 당 보여지는 게시물(10개)를 보여주기 위해
@@ -88,7 +114,8 @@ public class NoticeDao {
 									rset.getString("NOTICE_TITLE"),
 									rset.getString("USER_ID"),
 									rset.getInt("COUNT"),	
-									rset.getDate("CREATE_DATE")
+									rset.getDate("CREATE_DATE"),
+									rset.getInt("RNUM")
 									));
 			}
 		
@@ -102,6 +129,52 @@ public class NoticeDao {
 		
 		return list;
 	}
+	
+	public ArrayList<Notice> searchList(Connection conn, String keyword, String searchKey, PageInfo pi) {
+		ArrayList<Notice> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		int startRow = (pi.getCurrentPage() - 1) * pi.getBoardLimit() + 1; //1
+		int endRow = startRow + pi.getBoardLimit() - 1; //10
+		
+		//searchList=SELECT * FROM (SELECT ROWNUM RNUM, A.* FROM (SELECT NOTICE_NO, NOTICE_TITLE, USER_ID, COUNT, CREATE_DATE FROM NOTICE A JOIN R_USER B ON NOTICE_WRITER=USER_NO WHERE A.STATUS = 'Y' AND ? LIKE ? ORDER BY A.NOTICE_NO DESC) A) WHERE RNUM BETWEEN ? AND ?
+		//?로 인자를 먼저 올려놓으면 값으로 인식하여 "title" -> 이렇게 들어가기 때문에 앞뒤로 "++"를 넣어주고 그 안에 keyword를 넣어준다.
+		//String sql = prop.getProperty("searchList"); -> properties 파일에 jsp에서 받아온 keyword가 들어가지 않아서 sql을 따로 빼서 작성
+		String sql = "SELECT * FROM (SELECT ROWNUM RNUM, A.* FROM ("
+						+ "SELECT NOTICE_NO, NOTICE_TITLE, USER_ID, COUNT, CREATE_DATE "
+						+ "FROM NOTICE A JOIN R_USER B ON NOTICE_WRITER=USER_NO WHERE A.STATUS = 'Y' AND "+keyword+" LIKE ? "
+						+ "ORDER BY A.NOTICE_NO DESC) A) WHERE RNUM BETWEEN ? AND ?";
+				
+		try {
+			pstmt = conn.prepareStatement(sql);
+			//pstmt.setString(1, keyword);
+			pstmt.setString(1, "%"+searchKey+"%"); //searchKey가 포함된 게시물을 모두 찾기 위하여 앞뒤로 %%를 붙인다.
+			pstmt.setInt(2, startRow);
+			pstmt.setInt(3, endRow);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				list.add(new Notice(rset.getInt("NOTICE_NO"),
+						rset.getString("NOTICE_TITLE"),
+						rset.getString("USER_ID"),
+						rset.getInt("COUNT"),	
+						rset.getDate("CREATE_DATE")
+						));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+			close(rset);
+		}
+		
+		return list;
+	}
+
 
 	public int increaseCount(Connection conn, int nno) {
 		int result = 0;
@@ -160,9 +233,9 @@ public class NoticeDao {
 		
 		return n;
 	}
-
-	public ArrayList<Attachment> selectAttachment(Connection conn, int nno) {
-		ArrayList<Attachment> atList = new ArrayList<Attachment>();
+	
+	public Attachment selectAttachment(Connection conn, int nno) {
+		Attachment at = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
@@ -175,14 +248,12 @@ public class NoticeDao {
 			
 			rset = pstmt.executeQuery();
 			
-			while(rset.next()) {
-				Attachment at = new Attachment();
+			if(rset.next()) {
+				at = new Attachment();
 				at.setFileNo(rset.getInt("FILE_NO"));
 				at.setOriginName(rset.getString("ORIGIN_NAME"));
 				at.setChangeName(rset.getString("CHANGE_NAME"));
 				
-				atList.add(at);
-				System.out.println(atList);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -191,8 +262,41 @@ public class NoticeDao {
 			close(rset);
 			close(pstmt);
 		}
-		return atList;
+		return at;
 	}
+
+//	public ArrayList<Attachment> selectAttachment(Connection conn, int nno) {
+//		ArrayList<Attachment> atList = new ArrayList<Attachment>();
+//		PreparedStatement pstmt = null;
+//		ResultSet rset = null;
+//		
+//		//selectAttachment=SELECT FILE_NO, ORIGIN_NAME, CHANGE_NAME FROM ATTACHMENT WHERE REF_NO=? AND CATEGORY=3 AND STATUS='Y'
+//		String sql = prop.getProperty("selectAttachment");
+//		
+//		try {
+//			pstmt = conn.prepareStatement(sql);
+//			pstmt.setInt(1, nno);
+//			
+//			rset = pstmt.executeQuery();
+//			
+//			while(rset.next()) {
+//				Attachment at = new Attachment();
+//				at.setFileNo(rset.getInt("FILE_NO"));
+//				at.setOriginName(rset.getString("ORIGIN_NAME"));
+//				at.setChangeName(rset.getString("CHANGE_NAME"));
+//				
+//				atList.add(at);
+//				System.out.println(atList);
+//			}
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} finally {
+//			close(rset);
+//			close(pstmt);
+//		}
+//		return atList;
+//	}
 
 	public int insertNotice(Connection conn, Notice n) {
 		int result = 0;
@@ -224,9 +328,8 @@ public class NoticeDao {
 			
 		return result;
 	}
-
-	public int insertAttachment(Connection conn, int noticeWriter, ArrayList<Attachment> fileList) {
-		Attachment at = new Attachment();
+	
+	public int insertAttachment(Connection conn, int noticeWriter, Attachment at) {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		
@@ -234,17 +337,14 @@ public class NoticeDao {
 		String sql = prop.getProperty("insertAttachment");
 		
 		try {
-			for(int i = 0; i < fileList.size(); i++) {
-				at = fileList.get(i);
-				
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setInt(1, noticeWriter);
-				pstmt.setString(2, at.getOriginName());
-				pstmt.setString(3, at.getChangeName());
-				pstmt.setString(4, at.getFilePath());
-				
-				result += pstmt.executeUpdate();
-			}
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, noticeWriter);
+			pstmt.setString(2, at.getOriginName());
+			pstmt.setString(3, at.getChangeName());
+			pstmt.setString(4, at.getFilePath());
+			
+			result = pstmt.executeUpdate();
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -254,6 +354,37 @@ public class NoticeDao {
 		
 		return result;
 	}
+
+
+//	public int insertAttachment(Connection conn, int noticeWriter, ArrayList<Attachment> fileList) {
+//		Attachment at = new Attachment();
+//		int result = 0;
+//		PreparedStatement pstmt = null;
+//		
+//		//insertAttachment=INSERT INTO ATTACHMENT VALUES(SEQ_FNO.NEXTVAL, ?, SEQ_NNO.CURRVAL, 3, ?, ?, ?, SYSDATE, DEFAULT)
+//		String sql = prop.getProperty("insertAttachment");
+//		
+//		try {
+//			for(int i = 0; i < fileList.size(); i++) {
+//				at = fileList.get(i);
+//				
+//				pstmt = conn.prepareStatement(sql);
+//				pstmt.setInt(1, noticeWriter);
+//				pstmt.setString(2, at.getOriginName());
+//				pstmt.setString(3, at.getChangeName());
+//				pstmt.setString(4, at.getFilePath());
+//				
+//				result += pstmt.executeUpdate();
+//			}
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} finally {
+//			close(pstmt);
+//		}
+//		
+//		return result;
+//	}
 
 	public int updateNotice(Connection conn, Notice n) {
 		int result = 0;
@@ -267,6 +398,32 @@ public class NoticeDao {
 			pstmt.setString(1, n.getNoticeTitle());
 			pstmt.setString(2, n.getNoticeContent());
 			pstmt.setInt(3, n.getNoticeNo());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+	
+	public int updateAttachment(Connection conn, Attachment at) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		//updateAttachment=UPDATE ATTACHMENT SET CHANGE_NAME=?, ORIGIN_NAME=?, FILE_PATH=? WHERE FILE_NO=?
+		String sql = prop.getProperty("updateAttachment");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);			
+			pstmt.setString(1, at.getChangeName());
+			pstmt.setString(2, at.getOriginName());
+			pstmt.setString(3, at.getFilePath());
+			pstmt.setInt(4, at.getFileNo());
 			
 			result = pstmt.executeUpdate();
 			
@@ -310,30 +467,33 @@ public class NoticeDao {
 		return result;
 	}*/
 	
-	public int updateDeleteAttachment(Connection conn, String[] delFiles) {
+	//일단 사용 안함
+	public int updateDeleteAttachment(Connection conn, String delFile) {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		
-		//updateDeleteAttachment=UPDATE ATTACHMENT SET STATUS='N' WHERE FILE_NO=?
+		//updateDeleteAttachment=DELETE FROM ATTACHMENT WHERE STATUS='Y' AND FILE_NO=?
 		String sql = prop.getProperty("updateDeleteAttachment");
 		
 		try {			
-			for(String delFile : delFiles) {
+			//for(String delFile : delFiles) {
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, Integer.parseInt(delFile));
+				System.out.println(delFile);
 				
-				result += pstmt.executeUpdate();
-			}
+				result = pstmt.executeUpdate();
+			//}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			close(pstmt);
 		}
 		
 		return result;
 	}
 
-	public int insertUpdateAttachment(Connection conn, ArrayList<Attachment> atList, int noticeWriter) {
-		Attachment at = new Attachment();
+	public int insertUpdateAttachment(Connection conn,  Attachment at, int noticeWriter) {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		
@@ -341,9 +501,8 @@ public class NoticeDao {
 		String sql = prop.getProperty("insertUpdateAttachment");
 		
 		try {
-			for(int i = 0; i < atList.size(); i++) {
-				at = atList.get(i);
-				
+			//for(int i = 0; i < atList.size(); i++) {
+				//at = atList.get(i);				
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, noticeWriter);
 				pstmt.setInt(2, at.getRefNo());
@@ -351,8 +510,8 @@ public class NoticeDao {
 				pstmt.setString(4, at.getChangeName());
 				pstmt.setString(5, at.getFilePath());
 				
-				result += pstmt.executeUpdate(); 
-			}
+				result = pstmt.executeUpdate(); 
+			//}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -408,7 +567,5 @@ public class NoticeDao {
 		
 		return result;
 	}
-
-	
 
 }
