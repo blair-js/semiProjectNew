@@ -3,8 +3,24 @@
 	import="java.util.ArrayList, com.semi.snack.model.dto.*"%>
 
 <%
-ArrayList<Snack> list = (ArrayList<Snack>) request.getAttribute("list");
+	ArrayList<Snack> list = (ArrayList<Snack>) request.getAttribute("list");
+	//String userId = ((User)request.getSession().getAttribute("loginUser")).getUserId() != null ? ((User)request.getSession().getAttribute("loginUser")).getUserId() : "";
+	 User user = (User)request.getSession().getAttribute("loginUser");
+	
+	 
+	int userNo = 0;
+
+	if(user != null){
+		userNo = user.getUserNo();
+	}else{
+		userNo = 0;
+	} 
+	
+
+	int userPoint = (Integer)request.getAttribute("up");
+	
 %>
+
 
 <!DOCTYPE html>
 <html>
@@ -42,8 +58,7 @@ ArrayList<Snack> list = (ArrayList<Snack>) request.getAttribute("list");
 	margin: auto;
 }
 
-@
-keyframes blink-effect { 90% {
+@keyframes blink-effect { 90% {
 	opacity: 0;
 }
 
@@ -79,7 +94,11 @@ keyframes blink-effect { 90% {
 
 			<h4>
 				<img src="assets/img/gallery/point.jpg" alt="" height="40">&nbsp
-				보유중인 뼈다귀 &nbsp:&nbsp 5
+				<!-- 비회원일떄는 안보이게 if문 걸기 -->
+			
+				보유중인 뼈다귀 &nbsp:&nbsp <%=userPoint%>
+			
+				
 			</h4>
 			<!--  style="float:left" -->
 
@@ -130,12 +149,18 @@ keyframes blink-effect { 90% {
 			<%
 			} else {
 			%>
-
+				
+			
+			
+			
+				
+			
 			<form id="snackOrder"
 				action="<%=request.getContextPath()%>/snackResult.do" method="post">
+				
 				<input type="hidden" id="userNo" name="userNo"
-					value="<%=loginUser.getUserNo()%>">
-
+					value="<%=userNo%>">
+			
 				<%
 				for (Snack s : list) {
 				%>
@@ -149,7 +174,7 @@ keyframes blink-effect { 90% {
 
 				<div class="thumbnail" align="center">
 					<input type="hidden" name="sno" value="<%=s.getSanckNo()%>">
-
+	
 					<div class="container-md">
 						<div class="row">
 							<div class="col-sm row gx-0">
@@ -163,8 +188,10 @@ keyframes blink-effect { 90% {
 									<%=s.getSanckName()%>
 									<br> <br> 뼈다귀 :
 									<%=s.getPrice()%>
-									&nbsp<input type="checkbox" id="snackArray" name="snackArray"
+									&nbsp<input type="checkbox" id= "snackNo" name="snackNo"
 										value="<%=s.getSanckNo()%>">
+								
+										
 
 								</p>
 								<pre class="blink" id="center"
@@ -180,6 +207,7 @@ keyframes blink-effect { 90% {
 				<%
 				}
 				%>
+				
 
 			</form>
 			<br> <br>
@@ -247,16 +275,15 @@ keyframes blink-effect { 90% {
 	<!-- 컨테이너 끝 div -->
 
 	<script>
-			
-	 //간식 번호를 가지고 디테일로 이동 관리자만
-	<%if (loginUser != null && loginUser.getUserId().contains("admin1")) {%>
+	
+	<%if (loginUser != null && loginUser.getUserId().contains("admin1")) {%> //간식 번호를 가지고 디테일로 이동 관리자만
 	$(function(){
 		$(".thumbnail").click(function(){
 			var sno = $(this).children().eq(0).val();
 			location.href="<%=contextPath%>/snackDetail.do?sno=" + sno;
-	});
-});
-<%}%>
+			});
+		});
+		<%}%>
 	
 		//서블릿 잘 다녀오는지 테스트차 만들어봄
 			function goSnackResult() { //간식 구매 완료 후 이동 되는 서블릿

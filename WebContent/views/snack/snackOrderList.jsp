@@ -171,19 +171,11 @@ td {
 	</div>
 	<!-- 컨테이너 끝 div -->
 
-	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
-			id="center"  onclick="goSnackOrderList()">구매 내역 조회</button>
-
 
 	<div class="px-4 py-1 my-5 text-center">
 		<p class="display-5 fw-bold"></p>
 	</div>
 	
-	<script>
-	function goSnackOrderList(){ 
-				location.href="<%=request.getContextPath()%>/snackOrderList.do;"
-		}
-	</script>
 
 	<%@ include file="../common/footer.jsp"%>
 

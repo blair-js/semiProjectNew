@@ -49,7 +49,7 @@
 					
 				</h4>
 
-			</form>
+
 
 			<p></p>
 
@@ -101,7 +101,8 @@
 
 
 			<script>
-		
+	
+			
 		function goMypage(){//간식 삭제를 하기위해 form으로 페이지 전환
 			location.href="<%=request.getContextPath()%>/userMyDetail.do"
 		}

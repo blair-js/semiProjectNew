@@ -102,7 +102,7 @@ td{
               <li class="nav-item px-2 linav"><a class="nav-link" aria-current="page" href="<%= contextPath %>/intro.do">소개</a></li>
               <li class="nav-item px-2 linav"><a class="nav-link" aria-current="page" href="<%=contextPath%>/listQna.do">Q&A</a></li>
               <li class="nav-item px-2 linav"><a class="nav-link" aria-current="page" href="<%=contextPath%>/listNotice.do">공지사항</a></li>
-              <li class="nav-item px-2 linav"><a class="nav-link" aria-current="page" href="<%=contextPath%>/snack.do">나만 먹을개</a></li>
+              <li class="nav-item px-2 linav"><a class="nav-link" aria-current="page" href="#" onclick="goSnack();">나만 먹을개</a></li>
               <li class="nav-item px-2 linav"><a class="nav-link" aria-current="page" href="views/common/charge.jsp">뼈다귀 충전</a></li>
 
               <!-- 드롭다운 설정 해보기 -->
@@ -138,6 +138,13 @@ td{
             			alert("회원 전용 게시판입니다. 로그인이 필요합니다.");
             		<% } %>
             	}
+	            function goSnack(){
+	        		<% if(loginUser == null){ %>
+	        			location.href ="/snack.do";
+	        		<% }else{ %>
+	        			location.href ="/snack.do?userNo=<%=loginUser.getUserNo()%>";
+	        		<% } %>
+	        	}
             </script>
             
             <%-- 로그인 된 user가 없다면 로그인+회원가입 버튼을 보여주고 --%>
