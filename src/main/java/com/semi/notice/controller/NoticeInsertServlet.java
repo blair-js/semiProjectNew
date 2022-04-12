@@ -59,35 +59,39 @@ public class NoticeInsertServlet extends HttpServlet {
 			n.setNoticeWriter(String.valueOf(userNo));
 			
 			//파일이 여러 개
-			ArrayList<Attachment> fileList = new ArrayList<Attachment>();
+			//ArrayList<Attachment> fileList = new ArrayList<Attachment>();
 			
-			for(int i = 1; i <= 3; i++) {
-				String name = "upfile" + i;
+			//파일이 하나
+			Attachment at = null;
+			
+			//for(int i = 1; i <= 3; i++) {
+				//String name = "upfile" + i;
 				
-				if(multiRequest.getOriginalFileName(name) != null) {
-					String originName = multiRequest.getOriginalFileName(name);
-					String changeName = multiRequest.getFilesystemName(name);
+				if(multiRequest.getOriginalFileName("upfile") != null) {
+					String originName = multiRequest.getOriginalFileName("upfile");
+					String changeName = multiRequest.getFilesystemName("upfile");
 					
-					Attachment at = new Attachment();
+					at = new Attachment();
 					at.setFilePath(savePath);
 					at.setOriginName(originName);
 					at.setChangeName(changeName);
 					
-					fileList.add(at);
+					//fileList.add(at);
 				}
-			}
+			//}
 			
-			int result = new NoticeService().insertNotice(n, fileList);
+			int result = new NoticeService().insertNotice(n, at);
 			
 			if(result > 0) {
+				request.getSession().setAttribute("msg", "게시글이 성공적으로 등록되었습니다.");
 				response.sendRedirect("listNotice.do");
 			}else {
 				//실패할 경우 업로드 된 파일을 지운다.
-				for(int i = 0; i < fileList.size(); i++) {
-					File failedFile = new File(savePath + fileList.get(i).getChangeName());
+				//for(int i = 0; i < fileList.size(); i++) {
+					File failedFile = new File(savePath + at.getChangeName());
 					
 					failedFile.delete();
-				}
+				//}
 				request.setAttribute("msg", "사진 게시글 등록 실패");
 				request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
 			}

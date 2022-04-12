@@ -17,6 +17,7 @@ import com.semi.common.MyFileRenamePolicy;
 import com.semi.common.dto.Attachment;
 import com.semi.notice.model.dto.Notice;
 import com.semi.notice.model.service.NoticeService;
+import com.semi.user.model.dto.User;
 
 /**
  * Servlet implementation class NoticeUpdateServlet
@@ -43,38 +44,47 @@ public class NoticeUpdateServlet extends HttpServlet {
 			
 			String resources = request.getSession().getServletContext().getRealPath("/resources");
 			
-			String savePath = resources + "\\board_upfiles\\";
-			System.out.println("savePath : " + savePath);
+			String savePath = resources + "\\notice_upfiles\\";
 			
 			MultipartRequest multiRequest = new MultipartRequest(request, savePath, maxSize, "UTF-8", new MyFileRenamePolicy());
 			
 			int nno = Integer.parseInt(multiRequest.getParameter("nno"));
-			System.out.println(nno);
+			
+			//userNo를 가져와서 넘겨준다.
+			int userNo = ((User)request.getSession().getAttribute("loginUser")).getUserNo();
+			
+			//삭제 체크 박스 체크 된 경우
+			//String delFile = multiRequest.getParameter("delFile");
 			
 			Notice n = new Notice();
 			n.setNoticeTitle(multiRequest.getParameter("title"));
-			n.setNoticeContent(multiRequest.getParameter("content"));
+			n.setNoticeContent(multiRequest.getParameter("content").replace("\n", "<br>"));
 			n.setNoticeNo(nno);
+			n.setNoticeWriter(String.valueOf(userNo));
 			
-			System.out.println(n);
+			//넘어오는 첨부파일이 여러 개일 수 있기 때문에 arrayList
+			//ArrayList<Attachment> atList = new ArrayList<Attachment>();
 			
-			ArrayList<Attachment> atList = null;
-			for(int i = 1; i <= 3; i++) {
-				String name = "upfile" + i;
+			//넘어오는 첨부파일 1개
+			Attachment at = null;
+			//for(int i = 1; i <= atList.size(); i++) {
+				//String name = "upfile" + i;
 				
 				//첨부파일을 새로 첨부하는 경우
-				if(multiRequest.getOriginalFileName(name) != null) {
-					 String originName = multiRequest.getOriginalFileName(name);
-					 String changeName = multiRequest.getFilesystemName(name);
+				if(multiRequest.getOriginalFileName("upfile") != null) {
+					 String originName = multiRequest.getOriginalFileName("upfile");
+					 String changeName = multiRequest.getFilesystemName("upfile");
+					 System.out.println("originName : " + originName);
+					 System.out.println("changeName : " + changeName);
 					 
-					 Attachment at = new Attachment();
+					 at = new Attachment();
 					 at.setFilePath(savePath);
 					 at.setOriginName(originName);
 					 at.setChangeName(changeName);
 					 
-					 atList.add(at);
+					 //atList.add(at);
 					 
-					 if(multiRequest.getParameter("originFile") != null) {
+					 if(multiRequest.getParameter("originFile") != null) { //기존 첨부파일이 있는 경우
 						 File deleteFile = new File(savePath + multiRequest.getParameter("originFile"));
 						 
 						 deleteFile.delete();
@@ -84,9 +94,9 @@ public class NoticeUpdateServlet extends HttpServlet {
 						at.setRefNo(nno); 
 					 }
 				}
-			}
+			//}
 			
-			int result = new NoticeService().updateNotice(n, atList);
+			int result = new NoticeService().updateNotice(n, at/*, delFile*/);
 			
 			if(result > 0) {
 				response.sendRedirect("detailNotice.do?nno="+nno);
