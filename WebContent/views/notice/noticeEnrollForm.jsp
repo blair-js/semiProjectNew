@@ -48,17 +48,17 @@
 							</td>
 						</tr>
 						<tr>
-							<td>첨부파일1</td>
-							<td><input type="file" name="upfile1"></td>
+							<td>첨부파일</td>
+							<td><input type="file" name="upfile"></td>
 						</tr>
-						<tr>
+						<!-- <tr>
 							<td>첨부파일2</td>
 							<td><input type="file" name="upfile2"></td>
 						</tr>
 						<tr>
 							<td>첨부파일3</td>
 							<td><input type="file" name="upfile3"></td>
-						</tr>
+						</tr> -->
 					</tbody>	
 				</table>
 			</div>

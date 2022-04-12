@@ -96,10 +96,12 @@
 				</div>
 
 			</div>
-
-			<br> <input type="file" id="center" name="file"
+				
+			<div id="fileArea">	
+			<br> <input type="file" id="file" name="file"
 				onchange="loadImg(this, 1);">
-
+			</div>
+			
 			<p></p>
 
 			<!-- multipart/form-data 을 사용하여 데이터 전송 -->
@@ -124,7 +126,8 @@
 
 						</table>
 								
-					
+					</div>
+					</div>
 
 					</div>
 					<!-- snack 1 div 끝-->
@@ -171,17 +174,18 @@
 	<!-- 컨테이너 끝 div -->
 
 	<script>
-	<!--
+
 	$(function(){
 		$("#fileArea").hide();
 		
 		
-		$("#snack1").click(function(){ 
-			$("#file1").click();
+		$("#snackImg").click(function(){ 
+			$("#file").click();
+	
 		});
 			
 	});
-	-->
+
 	
 
 	function loadImg(inputFile, num){ 

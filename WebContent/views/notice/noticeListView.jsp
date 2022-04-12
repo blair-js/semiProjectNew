@@ -60,21 +60,25 @@
 			
 			<!-- 검색창 -->
 			<div class="col-md-6 mb-3" id="search">	
-				<form>
+				<form action="<%=contextPath%>/listNotice.do" method="get">
 					<div class="input-group mb-3 input-group-sm">
-						<!-- 검색 키워드 선택 토글 -->
+						<!-- 검색 키워드 선택 select,option -->
+						<!-- 선택된 값이 keyword라는 이름으로 넘어옴 -->
 						<div class="input-group-prepend">
-							<select class="form-select border-1 rounded-0" id="searchSelect">
-								<option selected value="title">제목</option>
-								<option value="content">내용</option>
-								<option value="writer">작성자</option>
+							<!-- 쿼리에 필드값을 넣기 위해 DB의 컬럼명과 같은 이름으로 value를 넣어준다. -->
+							<select class="form-select border-1 rounded-0" id="searchSelect" name="keyword">
+								<!-- 담겨있는 keyword의 값이 같으면 selected가 계속 유지되도록 한다. -->
+								<option ${(param.keyword == "NOTICE_TITLE") ? "selected" : "" } value="NOTICE_TITLE">제목</option>
+								<option ${(param.keyword == "NOTICE_CONTENT") ? "selected" : "" } value="NOTICE_CONTENT">내용</option>
+								<option ${(param.keyword == "USER_ID") ? "selected" : "" } value="USER_ID">작성자</option>
 							</select>
 						</div>
 							
-						<!-- 검색어 입력 -->		
-						<input type="text" class="form-control" id="searchKey" name="searchKey" placeholder="검색어를 입력하세요.">	
+						<!-- 검색어 입력 -->
+						<!-- 검색어 까지 입력하고 버튼을 누르면 list?keyword=title/content/wirter&searchKey=검색내용 -->		
+						<input type="text" class="form-control" id="searchKey" name="searchKey" placeholder="검색어를 입력하세요." value="${param.searchKey}"> <!-- 검색어가 있을 경우 계속 유지되도록 한다. -->	
 						<!-- 검색 버튼 --> 
-						<a href="#" class="btn btn-secondary" role="button" id="searchBtn"><b>검색</b></a>							
+						<input type="submit" class="btn btn-secondary" id="searchBtn" value="검색">					
 					</div>	
 				</form>	
 			</div>
@@ -102,7 +106,8 @@
 				<%} else { %>
 					<% for(Notice n : list) { %>
 					<tr>
-						<td><%=n.getNoticeNo() %></td>
+						<td class="d-none"><%=n.getNoticeNo() %></td>
+						<td><%=n.getRowNo() %></td>
 						<td><%=n.getNoticeTitle() %></td>
 						<td><%=n.getNoticeWriter() %></td>
 						<td><%=n.getCount() %></td>
@@ -110,7 +115,7 @@
 					</tr>
 					<%} %>
 				<%} %>
-			</tbody>
+			</tbody> 
 		</table>
 
 		<%-- 글쓰기 버튼 -> 관리자에게만 보이도록한다. --%>
@@ -123,13 +128,13 @@
 		<!-- 페이징바 만들기 -->
 		<div class="pagingArea mt-4 mb-4" align="center">
 			<!-- 맨 처음으로 (<<) -->
-			<button class="btn btn-outline-dark" onclick="location.href='<%=contextPath%>/listNotice.do?currentPage=1'"> &lt;&lt; </button>
+			<button class="btn btn-outline-dark" onclick="location.href='<%=contextPath%>/listNotice.do?currentPage=1&keyword=${param.keyword}&searchKey=${param.searchKey}'"> &lt;&lt; </button>
 		
 			<!-- 이전 페이지로(<) -->
 			<%if(currentPage == 1){ %>
 			<button class="btn btn-outline-dark" disabled> &lt; </button>
 			<%}else{ %>
-			<button class="btn btn-outline-dark" onclick="location.href='<%= contextPath %>/listNotice.do?currentPage=<%= currentPage-1 %>'"> &lt; </button>
+			<button class="btn btn-outline-dark" onclick="location.href='<%= contextPath %>/listNotice.do?currentPage=<%= currentPage-1 %>&keyword=${param.keyword}&searchKey=${param.searchKey}'"> &lt; </button>
 			<%} %>
 			
 			<!-- 페이지 목록 -->
@@ -138,7 +143,7 @@
 				<%if(p == currentPage){ %>
 				<button class="btn btn-outline-dark" disabled> <%= p %> </button>
 				<%}else{ %>
-				<button class="btn btn-outline-dark" onclick="location.href='<%=contextPath %>/listNotice.do?currentPage=<%= p %>'"> <%= p %> </button>
+				<button class="btn btn-outline-dark" onclick="location.href='<%=contextPath %>/listNotice.do?currentPage=<%= p %>&keyword=${param.keyword}&searchKey=${param.searchKey}'"> <%= p %> </button>
 				<%} %>				
 			<%} %>
 			
@@ -146,11 +151,11 @@
 			<%if(currentPage == maxPage){ %>
 			<button class="btn btn-outline-dark" disabled> &gt; </button>
 			<%}else { %>
-			<button class="btn btn-outline-dark" onclick="location.href='<%= contextPath %>/listNotice.do?currentPage=<%= currentPage+1 %>'"> &gt; </button>
+			<button class="btn btn-outline-dark" onclick="location.href='<%= contextPath %>/listNotice.do?currentPage=<%= currentPage+1 %>&keyword=${param.keyword}&searchKey=${param.searchKey}'"> &gt; </button>
 			<%} %>
 		
 			<!-- 맨 끝으로 (>>) -->
-			<button class="btn btn-outline-dark" onclick="location.href='<%=contextPath%>/listNotice.do?currentPage=<%=maxPage%>'"> &gt;&gt; </button>
+			<button class="btn btn-outline-dark" onclick="location.href='<%=contextPath%>/listNotice.do?currentPage=<%= maxPage %>&keyword=${param.keyword}&searchKey=${param.searchKey}'"> &gt;&gt; </button>
 		</div> 	
 	</div>
 	

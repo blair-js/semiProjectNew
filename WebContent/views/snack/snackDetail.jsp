@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" import= "java.util.ArrayList, com.semi.snack.model.dto.*"%>
+	<%@ page import= 'java.util.ArrayList, com.semi.common.dto.*' %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +9,7 @@
 
 	<%
 	Snack snack = (Snack)request.getAttribute("snack");
+	Attachment at = (Attachment)request.getAttribute("at");
 	%>
 	
 
@@ -75,10 +77,23 @@
 				</div>
 
 			</div>
-
+				
 			<p></p>
+			
+			
+			<div class="container-md">
+				<div class="row">
 
-			<!-- multipart/form-data 을 사용하여 데이터 전송 -->
+					<div name="snack_img" id="center">
+						<table>
+						<td><img src="<%= contextPath %>/resources/FileUpload_test(SNACK)/<%= at.getChangeName() %>" id="img"></td>
+						</table>
+						<!-- 현재 올릴 사진은 1개이기에 수업 jsp중 tuhmbnailInsertForm.jsp 참고-->
+					</div>
+
+				</div>
+
+			</div>
 
 			<!-- 구매에 대한 체크박스 필요 뼈다귀 수량이 있어야할 컨테이너 -->
 			<div class="container-md">
@@ -135,7 +150,10 @@
 	<button class="btn btn-outline-warning btn-lg" style="width: 15%"
 		id="center" onclick="goSnackDelete()"><b>간식 삭제</b></button>
 	
+	<br>
 	
+	<button class="btn btn-outline-warning btn-lg" style="width: 15%"
+		id="center" onclick="goSnack()"><b>간식 목록</b></button>
 	</div>
 
 
@@ -146,7 +164,6 @@
 	<form action="" id="postForm" method="post"> <!-- updateform 서블릿으로 sno를 가지고 간다. -->
 			<input type="hidden" name="sno" value="<%= snack.getSanckNo() %>">
 		</form>
-	
 
 	</div>
 	<!-- 컨테이너 끝 div -->
@@ -155,6 +172,20 @@
 	
 	<script>
 	
+	/*
+
+	$(function(){
+		$("#fileArea").hide();
+		
+		
+		$("#snackImg").click(function(){ 
+			$("#file").click();
+	
+		});
+			
+	});
+	
+	*/
 	function goSnackUpdateForm(){
 		$("#postForm").attr("action", "<%=contextPath%>/snackUpdateForm.do"); 
 		<!--hidden으로 sno 값을 가지고 서블릿으로 간다 액션 속성값을 정의 : -->
@@ -163,7 +194,14 @@
 	}	
 	
 	function goSnackDelete(){  //간식 수정을 하기위한 서블릿 여기에 들어가서 snackUpdateServlet를 호출 
-		location.href="<%=request.getContextPath()%>/snackDelete.do" 	
+		$("#postForm").attr("action", "<%=contextPath%>/snackDelete.do"); 
+		<!--hidden으로 sno 값을 가지고 서블릿으로 간다 액션 속성값을 정의 : -->
+		<!-- action = 서식 데이터(form data)를 서버로 보낼 때 해당 데이터가 도착할 URL -->
+		$("#postForm").submit();  <!--delete를 눌렀을때 submit을 수행-->
+	}	
+	
+	function goSnack(){  
+		location.href="<%=request.getContextPath()%>/snack.do" 	
 	}	
 
 	</script>
