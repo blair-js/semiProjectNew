@@ -10,19 +10,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.semi.class_notice.model.service.ClassNoticeService;
-import com.semi.common.dto.Reply;
 
 /**
- * Servlet implementation class ReplyUpdateServlet
+ * Servlet implementation class ReplyDeleteServlet
  */
-@WebServlet("/rupdate.do")
-public class ReplyUpdateServlet extends HttpServlet {
+@WebServlet("/rdelete.do")
+public class ReplyDeleteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ReplyUpdateServlet() {
+    public ReplyDeleteServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,18 +30,12 @@ public class ReplyUpdateServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String content = request.getParameter("content");
+		// 화면에서 삭제버튼 클릭시 댓글 번호를 넘겨준다.
 		int rno = Integer.parseInt(request.getParameter("rno"));
-		content.replace("\r\n", "<br>");
+		// 간단하게 댓글 번호로 DB에 데이터 삭제
+		int result = new ClassNoticeService().deleteReply(rno);
 		
-		System.out.println(content + " , " + rno);
-		
-		Reply r = new Reply();
-		r.setReplyId(rno);
-		r.setReplyContent(content);
-		
-		int result = new ClassNoticeService().updateReply(r);
-		
+		// ajax 통신 성공 부분에 매개변수 전달 위해 선언
 		PrintWriter out = response.getWriter();
 		
 		if(result > 0) {

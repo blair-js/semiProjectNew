@@ -162,6 +162,66 @@ public class ClassNoticeService {
 		}else {
 			rollback(conn);
 		}
+		
+		close(conn);
+		return result;
+	}
+
+	public int deleteReply(int rno) {
+		// 댓글 삭제 메소드
+		Connection conn = getConnection();
+		
+		int result = new ClassNoticeDao().deleteReply(conn, rno);
+		
+		if(result > 0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		close(conn);
+		return result;
+	}
+
+	public int deleteNotice(int nno) {
+		// 게시물 삭제할 경우 썸네일, 댓글, 게시글 모두 지워야 함 (썸네일은 무조건 있으므로 댓글만 있는지 없는지 여부 확인)
+		Connection conn = getConnection();
+		
+		// 게시글번호를 통해서 게시글 삭제처리
+		int result1 = new ClassNoticeDao().deleteNotice(conn, nno);
+		
+		// 댓글 있는지 없는지 조회 게시물에 댓글은 여러개가 있을수도 있으니까 리스트로 조회
+		ArrayList<Reply> rList = new ClassNoticeDao().selectRList(conn, nno);
+		// 댓글은 0개일수도있고 여러개가 있을수도 있기때문에 1로 우선 값 선언
+		int result2 = 1;
+
+		// 조회 해서 온 댓글목록이 1개 이상이라면
+		if(rList.size() > 0) {
+			// 게시물에 등록 되어 있는 모든 댓글 삭제하기 위해 새로운 메소드 필요
+			result2 = new ClassNoticeDao().deleteListReply(conn, nno);
+		}
+		
+		// 잘 수행 되어서 결과 값들의 곱이 0보다 크면
+		if(result1 * result2 > 0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		close(conn);
+		
+		return result1 * result2;
+	}
+
+	public int deleteAttachment(int nno) {
+		Connection conn = getConnection();
+		
+		int result = new ClassNoticeDao().deleteAttachment(conn, nno);
+		
+		if(result > 0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		close(conn);
 		return result;
 	}
 

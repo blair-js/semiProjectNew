@@ -13,6 +13,7 @@ public class ClassNotice {
 	private Date createDate; // 작성일
 	private String status; // 상태값 (기본값 'Y' , 'N' 되면 조회 X)
 	private int count; // 조회수
+	private int replyCount; // 댓글개수
 	
 	private String titleImg; // 게시글 썸네일 이미지 (체인지네임)
 	
@@ -113,6 +114,15 @@ public class ClassNotice {
 
 	public void setTitleImg(String titleImg) {
 		this.titleImg = titleImg;
+	}
+	
+	
+	public int getReplyCount() {
+		return replyCount;
+	}
+
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
 	}
 
 	@Override

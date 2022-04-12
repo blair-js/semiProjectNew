@@ -68,7 +68,13 @@ button:hover {
 							</div>
 							<div class="card-body">
 								<p class="card-text text-dark">
-									<%=n.getClassNoticeTitle()%><br><%=n.getNoticeWriter()%>
+									<%=n.getClassNoticeTitle()%>
+									<%-- 댓글이 있을경우에만 댓글의 개수 화면에 출력하도록 구현 --%>
+									<%if(n.getReplyCount() != 0) { %>
+									<small class="text-warning">[<%= n.getReplyCount() %>]</small>
+									<% } %>
+									
+									<br><%=n.getNoticeWriter()%>
 								</p>
 								<div class="d-flex justify-content-between align-items-center">
 									<small class="text-muted"><span class="date"><%=n.getCreateDate()%></span>
@@ -82,7 +88,7 @@ button:hover {
 			</div>
 			<!-- 로그인한 회원 중 관리자만 글쓰기 버튼이 보이도록 설정 -->
 			<div class="col-lg-12 col-sm-12 text-lg-end text-center">
-			<% if(loginUser.getUserNo() == 1 || loginUser.getUserNo() == 2 || loginUser.getUserNo() == 3){ %>
+			<% if(loginUser.getAdminChecked().equals("Y")){ %>
 				<button style="background-color: white;" class="mt-3"
 					onclick="location.href='/classNoticeEnrollForm.do?classname=<%=classname %>'">글쓰기</button>
 			<% } %>

@@ -2,9 +2,9 @@
 	pageEncoding="UTF-8"
 	import="java.util.ArrayList, com.semi.class_notice.model.dto.*, com.semi.common.dto.*, com.semi.user.model.dto.*"%>
 <%
-PageInfo pi = (PageInfo) request.getAttribute("pi");
-Attachment at = (Attachment)request.getAttribute("at");
-ClassNotice cNotice = (ClassNotice)request.getAttribute("cn");
+	PageInfo pi = (PageInfo) request.getAttribute("pi");
+	Attachment at = (Attachment)request.getAttribute("at");
+	ClassNotice cNotice = (ClassNotice)request.getAttribute("cn");
 %>
 <!DOCTYPE html>
 <html>
@@ -43,7 +43,7 @@ tr {
 			</div>
 			<div class="col-lg-12 col-sm-12 text-lg-end text-center">
 				<button class="btn btn-secondary" onclick="goList();">목록으로</button>
-			<% if(loginUser.getUserNo() == 1 || loginUser.getUserNo() == 2 || loginUser.getUserNo() == 3){ %>
+			<% if(loginUser.getAdminChecked().equals("Y")){ %>
 				<button class="btn btn-secondary" onclick="goUpdate();">수정</button>
 				<button class="btn btn-secondary" onclick="goDelete();">삭제</button>
 			<% } %>
@@ -58,8 +58,18 @@ tr {
 					$("#postForm").submit();
 				}
 				function goDelete(){
-					$("#postForm").attr("action", "/classNoticeDelete.do");
-					$("#postForm").submit();
+					var ans = confirm("게시물을 삭제하시겠습니까?");
+					// 취소 입력시 false 반환 함수 종료
+					if(!ans) return false;
+					
+					// 확인 버튼 클릭시 비밀번호 입력, 현재 로그인한 관리자의 비밀번호와 일치할경우
+					// delete 서블릿으로 전환
+					var pwd = prompt("비밀번호를 입력하세요.");
+					
+					if(pwd == '<%= loginUser.getUserPwd()%>'){
+						$("#postForm").attr("action", "/classNoticeDelete.do");
+						$("#postForm").submit();
+					}
 				}
 				function goList(){
 					location.href = "classNoticeList.do?classname=<%= cNotice.getClassName()%>";
@@ -72,14 +82,16 @@ tr {
 			<hr class="line">
 			<div class="comment-txt">
 			
-				<textarea cols="120" rows="3" id="replyCnt" style="resize: none;"
+				<textarea cols="110" rows="3" id="replyCnt" style="resize: none;"
 					placeholder="댓글을 남겨보세요."></textarea>
 				<button id="addreply-btn" class="btn btn-dark btn-lg mb-6 pl-3 " style="height: 4.5rem">등록하기</button>
-			<%-- 댓글 기능 구현 어렵다... --%>
+			
+			<%-- 댓글 기능 스크립트 시작 --%>
 			<script>
 				$(function(){
 					selectReplyList(); // 댓글이 달려 있는경우 조회해서 뿌려주기
 					$("#addreply-btn").click(function(){
+						// 댓글 등록 textarea에 담겨있는 값과, 참조게시글번호 변수에 담아준다.
 						var content = $("#replyCnt").val();
 						var nno = <%=cNotice.getClassNoticeNo() %>;
 						
@@ -123,14 +135,14 @@ tr {
 							if(rUserId == obj.replyWriter){ // 현재 로그인한 회원과 작성자 회원 아이디가 같을경우 수정 | 삭제 보이게
 								value += '<tr style="border-top: 10px solid #fff;">' +
 										 '<td style="text-align:left; border:none;">' + obj.replyWriter+ ' | ' + obj.createDate + '</td>'+
-										 '<td style="text-align:right; border:none;"><input class="btn btn-secondary" type="button" onclick="updateBtn('+ obj.replyId +');" value="수정"> <input class="btn btn-secondary" type="button" onclick="deleteBtn('+ obj.replyId + ');" value="삭제"> </td>' +
+										 '<td style="text-align:right; border:none;"><input class="btn btn-secondary" type="button" onclick="updateBtn('+ obj.replyId +');" value="수정"> <input class="btn btn-secondary" type="button" onclick="deleteReply('+ obj.replyId + ');" value="삭제"> </td>' +
 										 '</tr>' +
 										 '<tr>' +
 										 '<td style="text-align:left;" colspan="2">' + obj.replyContent + '</td>' +
 										 '<!-- <td></td> -->' +
 										 '</tr>' + 
 										 '<tr id="update'+obj.replyId +'" style="display:none;">' +
-										 '<td style="text-align:left;"><input id="input'+obj.replyId+'" style="width:800px;" type="text" value="' + obj.replyContent + '"></td>' +
+										 '<td style="text-align:left;"><textarea id="textarea'+obj.replyId+'" style="resize:none;" cols="90" rows="2">' + obj.replyContent + '</textarea></td>' +
 										 '<td>&nbsp<input type="button" onclick="updateReply('+obj.replyId +');" class="btn btn-secondary" value="수정완료"> <input type="button" class="btn btn-secondary" onclick="closeR('+obj.replyId +');" value="취소"></td>'+
 										 '</tr>';
 							}else{ // 현재 로그인한 아이디와 작성자 아이디가 같지 않을경우
@@ -169,8 +181,8 @@ tr {
 				
 				// 댓글 수정 함수 댓글번호를 매개변수로 받음
 				function updateReply(rno){
-					var inputId = "input" + rno;
-					var content = $('#' + inputId).val();
+					var textareaId = "textarea" + rno;
+					var content = $('#' + textareaId).val();
 					// 변수로 id값 생성 (input 박스에 아이디값을 input + 댓글번호로 설정)
 					// 수정할 내용을 그 아이디값의 val()로 담아준다.
 					$.ajax({
@@ -193,7 +205,25 @@ tr {
 				}
 				// 댓글 삭제 함수
 				function deleteReply(rno){
-					
+					var ans = confirm("선택하신 댓글을 삭제하시겠습니까?");
+					if(!ans) return false;
+					// 확인을 눌렀을경우 ajax 실행
+					$.ajax({
+						url:"rdelete.do",
+						type:"post",
+						data:{
+							rno:rno
+						},
+						success:function(status){
+							if(status == "success"){
+								selectReplyList();
+								alert("댓글이 삭제되었습니다.");
+							}
+						},
+						error : function(){
+							alert("댓글 삭제에 실패하였습니다.")
+						}
+					});
 				}
 			</script>
 			</div>
