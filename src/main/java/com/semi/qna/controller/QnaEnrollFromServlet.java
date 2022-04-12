@@ -26,7 +26,7 @@ public class QnaEnrollFromServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("QnA list 성공~!");
+		//단순 페이지 이동
 		request.getRequestDispatcher("views/qna/qnaEnrollForm.jsp").forward(request, response);
 	}
 

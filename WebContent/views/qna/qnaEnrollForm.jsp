@@ -22,6 +22,13 @@
 	
 	.table-condensed>tfoot>tr>td { padding: 15px;}
 </style>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script> 
+
+<!-- summernote 사용을 위한 import -->
+<link rel="stylesheet" href="./resources/summernote/css/summernote-lite.css">
+<script src="./resources/summernote/js/summernote-lite.js"></script>
+<script src="./resources/summernote/lang/summernote-ko.KR.js"></script>
 </head>
 <body>
 	<%@ include file="../common/menubar.jsp" %>
@@ -31,9 +38,27 @@
 	<div class="container">
 	
 		<hr class="bor">
+		<!-- summernote를 사용하기 위해 선언, 호출 -> textarea or div 두 가지의 방법이 있다. -->
+		<form id="enrollForm" action="<%= contextPath %>/insertQna.do" method="post">
+			<textarea name="editordata"" id="summernote"></textarea>
+		</form>
 		
+		<script>
+			//summernote 웹 에디터 로딩
+			$(document).ready(function() {
+				$('#summernote').summernote({
+					height: 300,		//에디터 높이
+					minHeight: null,	//최소 높이
+					maxHeight: null,	//최대 높이
+					focus: true,		//에디터 로딩 후 포커스를 맞출지 여부
+					lang: "ko-KR",		//한글 설정
+					placeholder: '내용을 입력하세요.'
+				});
+			});
+			
+		</script>
 		<!-- 글 작성하기 -->
-		<form id="enrollForm" action="<%= contextPath %>/insertQna.do" method="post" enctype="multipart/form-data">
+		<!-- <form id="enrollForm" action="<%= contextPath %>/insertQna.do" method="post" enctype="multipart/form-data">
 			<div class="form-group">
 				<table class="table table-condensed table-borded pd-1">	
 					<tbody>
@@ -84,7 +109,7 @@
 					<input class="btn btn-secondary m-1" type="submit" value="등록">
 				</div>
 			</div>			
-		</form>			
+		</form>	 -->		
 	</div>
 		
 	<%@ include file="../common/footer.jsp" %>

@@ -12,8 +12,9 @@ public class Qna {
 	private int count;				//조회수
 	private Date createDate;		//작성일
 	private String status;			//상태값(Y/N)
-	private int qnaPwd;
-	private String qnaSecret;
+	private int qnaPwd;				//비밀글 비밀번호
+	private String qnaSecret;		//비밀글 여부
+	private String answer;			//답변 여부
 	private int rowNo;				//list에서 rownum으로 게시판 번호를 주기 위함
 	
 	//검색을 위한 field
@@ -24,13 +25,16 @@ public class Qna {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Qna(int qnaNo, String qnaTitle, String qnaWriter, int count, Date createDate, int rowNo) {
+	public Qna(int qnaNo, String qnaTitle, String answer, String qnaWriter, int count, Date createDate, int qnaPwd, String qnaSecret, int rowNo) {
 		super();
 		this.qnaNo = qnaNo;
 		this.qnaTitle = qnaTitle;
+		this.answer = answer;
 		this.qnaWriter = qnaWriter;	
 		this.count = count;
 		this.createDate = createDate;
+		this.qnaPwd = qnaPwd;
+		this.qnaSecret = qnaSecret;
 		this.rowNo = rowNo;
 	}
 
@@ -122,6 +126,30 @@ public class Qna {
 		this.rowNo = rowNo;
 	}
 
+	public String getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(String answer) {
+		this.answer = answer;
+	}
+
+	public int getQnaPwd() {
+		return qnaPwd;
+	}
+
+	public void setQnaPwd(int qnaPwd) {
+		this.qnaPwd = qnaPwd;
+	}
+
+	public String getQnaSecret() {
+		return qnaSecret;
+	}
+
+	public void setQnaSecret(String qnaSecret) {
+		this.qnaSecret = qnaSecret;
+	}
+
 	public String getKeyword() {
 		return keyword;
 	}
@@ -142,7 +170,8 @@ public class Qna {
 	public String toString() {
 		return "Qna [qnaNo=" + qnaNo + ", qnaWriter=" + qnaWriter + ", category=" + category + ", qnaTitle=" + qnaTitle
 				+ ", qnaContent=" + qnaContent + ", count=" + count + ", createDate=" + createDate + ", status="
-				+ status + ", rowNo=" + rowNo + ", keyword=" + keyword + ", searchKey=" + searchKey + "]";
+				+ status + ", qnaPwd=" + qnaPwd + ", qnaSecret=" + qnaSecret + ", answer=" + answer + ", rowNo=" + rowNo
+				+ ", keyword=" + keyword + ", searchKey=" + searchKey + "]";
 	}
 	
 }
