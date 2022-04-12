@@ -139,4 +139,30 @@ public class ClassNoticeService {
 		return result;
 	}
 
+	public ArrayList<Reply> selectRList(int nno) {
+		// 참조게시글 번호로 댓글 목록 뿌려줄 메소드
+		Connection conn = getConnection();
+		
+		ArrayList<Reply> list = new ClassNoticeDao().selectRList(conn, nno);
+		
+		close(conn);
+		
+		return list;
+	}
+
+	public int updateReply(Reply r) {
+		// 댓글 수정 메소드
+		
+		Connection conn = getConnection();
+		
+		int result = new ClassNoticeDao().updateReply(conn, r);
+		
+		if(result > 0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		return result;
+	}
+
 }

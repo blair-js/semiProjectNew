@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"
-	import="java.util.ArrayList, com.semi.class_notice.model.dto.*, com.semi.common.dto.*"%>
+	import="java.util.ArrayList, com.semi.class_notice.model.dto.*, com.semi.common.dto.*, com.semi.user.model.dto.*"%>
 <%
 PageInfo pi = (PageInfo) request.getAttribute("pi");
 Attachment at = (Attachment)request.getAttribute("at");
@@ -19,6 +19,13 @@ ClassNotice cNotice = (ClassNotice)request.getAttribute("cn");
 .fullCnt {
 	width: 65%;
 	margin: auto;
+}
+
+.replyList>tr>td{
+	margin:auto;
+}
+tr {
+  border-bottom: 10px solid #fff;
 }
 </style>
 </head>
@@ -67,90 +74,136 @@ ClassNotice cNotice = (ClassNotice)request.getAttribute("cn");
 			
 				<textarea cols="120" rows="3" id="replyCnt" style="resize: none;"
 					placeholder="댓글을 남겨보세요."></textarea>
-				<button onclick="replySave()" id="addreply-btn" class="btn btn-dark btn-lg mb-6 pl-3 " style="height: 4.5rem">등록하기</button>
-			
+				<button id="addreply-btn" class="btn btn-dark btn-lg mb-6 pl-3 " style="height: 4.5rem">등록하기</button>
 			<%-- 댓글 기능 구현 어렵다... --%>
 			<script>
-				function replySave(){
-					var content = $("#replyCnt").val();
-					var nno = <%=cNotice.getClassNoticeNo() %>;
-					
+				$(function(){
+					selectReplyList(); // 댓글이 달려 있는경우 조회해서 뿌려주기
+					$("#addreply-btn").click(function(){
+						var content = $("#replyCnt").val();
+						var nno = <%=cNotice.getClassNoticeNo() %>;
+						
+						$.ajax({
+							url: "rinsert.do",
+							type:"post",
+							data:{
+								content:content,
+								nno:nno
+							},
+							success:function(status){
+								if(status == "success"){
+									selectReplyList();
+									alert("댓글 등록 완료");
+									$("#replyCnt").val("");
+								}
+							},
+							error:function(){
+								console.log("ajax 통신 실패 - 댓글 등록");
+							}
+						})
+					})
+				})
+				// 댓글 조회 함수
+				function selectReplyList(){
+					$("#replyList").empty();
+					// 현재 로그인된 회원의 아이디
+					var rUserId = "<%= loginUser.getUserId() %>";
+					console.log(rUserId);
 					$.ajax({
+						url:"rlist.do",
+						data:{nno:<%=cNotice.getClassNoticeNo()%>},
+						type:"get",
+						success:function(list){
+							// 댓글 목록 조회해서 매개변수로 받아온다.
+							console.log(list);
+							
+							var value = "";
+							$.each(list, function(index, obj){
+								// 서블릿으로 생성한 댓글 객체로 화면에 뿌려주어야함
+							if(rUserId == obj.replyWriter){ // 현재 로그인한 회원과 작성자 회원 아이디가 같을경우 수정 | 삭제 보이게
+								value += '<tr style="border-top: 10px solid #fff;">' +
+										 '<td style="text-align:left; border:none;">' + obj.replyWriter+ ' | ' + obj.createDate + '</td>'+
+										 '<td style="text-align:right; border:none;"><input class="btn btn-secondary" type="button" onclick="updateBtn('+ obj.replyId +');" value="수정"> <input class="btn btn-secondary" type="button" onclick="deleteBtn('+ obj.replyId + ');" value="삭제"> </td>' +
+										 '</tr>' +
+										 '<tr>' +
+										 '<td style="text-align:left;" colspan="2">' + obj.replyContent + '</td>' +
+										 '<!-- <td></td> -->' +
+										 '</tr>' + 
+										 '<tr id="update'+obj.replyId +'" style="display:none;">' +
+										 '<td style="text-align:left;"><input id="input'+obj.replyId+'" style="width:800px;" type="text" value="' + obj.replyContent + '"></td>' +
+										 '<td>&nbsp<input type="button" onclick="updateReply('+obj.replyId +');" class="btn btn-secondary" value="수정완료"> <input type="button" class="btn btn-secondary" onclick="closeR('+obj.replyId +');" value="취소"></td>'+
+										 '</tr>';
+							}else{ // 현재 로그인한 아이디와 작성자 아이디가 같지 않을경우
+								value += '<tr style="border-top: 10px solid #fff;">' +
+								 '<td style="text-align:left; border:none;">' + obj.replyWriter+ ' | ' + obj.createDate + '</td>'+
+								 '<!-- <td></td> -->' +
+								 '</tr>' +
+								 '<tr>' +
+								 '<td style="text-align:left; colspan="2">' + obj.replyContent + '</td>' +
+								 '<!-- <td></td> -->' +
+								 '</tr>';
+							}
+							})
+							$("#replyList").html(value);
+						},
+						error:function(){
+							console.log("ajax 통신 실패 - 댓글조회")
+						}
+					})
+				}
+				// 수정 취소 함수 취소버튼 클릭시 input박스 다시 숨김처리
+				function closeR(rno){
+					var id = "update" + rno;
+					$('#' + id).css('display', 'none');
+				}
+				// 댓글 수정 버튼 클릭했을때 수정 input 숨기기 해제
+				function updateBtn(rno){
+					// 수정하는데 필요한 정보들 변수에 저장
+					var id = "update"+rno;
+					console.log(id);
+					
+					var an = $('#'+id).css('display');
+					
+					$('#' + id).css('display', 'block');
+				}
+				
+				// 댓글 수정 함수 댓글번호를 매개변수로 받음
+				function updateReply(rno){
+					var inputId = "input" + rno;
+					var content = $('#' + inputId).val();
+					// 변수로 id값 생성 (input 박스에 아이디값을 input + 댓글번호로 설정)
+					// 수정할 내용을 그 아이디값의 val()로 담아준다.
+					$.ajax({
+						url:"rupdate.do",
 						type:"post",
-						url: "rinsert.do",
 						data:{
-							content:content,
-							nno:nno
+							rno:rno,
+							content:content
 						},
 						success:function(status){
 							if(status == "success"){
-								//selectReplyList();
-								console.log("통신 성공");
+								selectReplyList();
+								alert("댓글 수정 성공");
 							}
 						},
 						error:function(){
-							console.log("ajax 통신 실패 - 댓글 등록");
+							alert("댓글 수정 실패");
 						}
 					})
+				}
+				// 댓글 삭제 함수
+				function deleteReply(rno){
+					
 				}
 			</script>
 			</div>
 		</div>
 		<div class="container">
 			<div class="row">
-				<table class="table table-striped" id="replyList"
+			<div class="bg-secondary text-white text-center">댓글</div>
+				<table class="replyList" id="replyList"
 					style="text-align: center; border: 1px solid #dddddd">
-					<tbody>
-						<tr>
-							<td align="left" bgcolor="beige">댓글</td>
-						</tr>
-						<tr>
-							<%--
-					CommentDAO commentDAO = new CommentDAO();
-					ArrayList<Comment> list = commentDAO.getList(boardID, bbsID);
-					for(int i=0; i<list.size(); i++){
-				--%>
-							<div class="container">
-								<div class="row">
-									<table class="table table-striped"
-										style="text-align: center; border: 1px solid #dddddd">
-										<tbody>
-											<tr>
-												<td align="left">
-													<%-- list.get(i).getUserID() %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= list.get(i).getCommentDate().substring(0,11) + list.get(i).getCommentDate().substring(11,13) + "시" + list.get(i).getCommentDate().substring(14,16) + "분" --%>
-												</td>
-												<td colspan="2"></td>
-												<td align="right">
-													<%--
-												if(list.get(i).getUserID() != null && list.get(i).getUserID().equals(userID)){   //댓글 쓴사람과 지금 유저가 같을 때 수정과 삭제를 가능하게 함
-												%>
-													<form name = "p_search">
-														<a type="button" onclick="nwindow(<%=boardID%>,<%=bbsID %>,<%=list.get(i).getCommentID()%>)" class="btn-primary">수정</a>
-													</form>	
-														<a onclick="return confirm('정말로 삭제하시겠습니까?')" href = "commentDeleteAction.jsp?commentID=<%= list.get(i).getCommentID() %>" class="btn-primary">삭제</a>																	
-												<%
-												}
-												--%>
-												</td>
-											</tr>
-											<tr>
-												<td colspan="5" align="left">
-													<%--= list.get(i).getCommentText() --%> <%-- 	
-												String commentReal = "C:\\Users\\j8171\\Desktop\\studyhard\\JSP\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\BBS\\commentUpload";
-												File commentFile = new File(commentReal+"\\"+bbsID+"사진"+list.get(i).getCommentID()+".jpg");
-												if(commentFile.exists()){           //해당 댓글에 대응되는 사진이 있을 경우 사진도 보여준다.
-											%>	
-											<br><br><img src = "commentUpload/<%=bbsID%>사진<%=list.get(i).getCommentID() %>.jpg" border="300px" width="300px" height="300px"><br><br></td>
-											<%} %> --%>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-							<%--
-							}
-						--%>
-						</tr>
+						<%-- 댓글 목록 넣어지는 공간 --%>
 				</table>
 			</div>
 		</div>
