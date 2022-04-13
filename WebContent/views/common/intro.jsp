@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>둥글개 둥글개</title>
-
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1f128e742d430fd5e25a6b3a23b533bd"></script>
 <style>
 #center {
 	text-align: center;
@@ -153,22 +153,60 @@
 			<h1 class="display-5 fw-bold tag">Location</h1>
 		</div>
 
-		<div class="col-8 mb-7" id="center">
-			<!-- col 사진의 길이 영역 조절 / mb = footer와의 간격 조절 -->
-
-			<img class="w-100" src="assets/img/gallery/intro_location.JPG" width="100px" height="500px" />
-
-		</div>
-
-
+		
+		<!-- 지도를 표시할 div -->
+		<div class="mb-8" id="map" style="width:100%; height:600px;"></div>
+		
 	</div>
+	
+
+
 	
 	<!-- footer -->
 	<%@ include file="/views/common/footer.jsp"%>
 	
 	<script type="text/javascript">
+	
 		function goSchoolbus() {
 			location.href="<%= contextPath%>/schoolbusForm.do;"
+		}
+		
+		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+	    mapOption = { 
+	        center: new kakao.maps.LatLng(37.49901442259218, 127.03285217285156), // 지도의 중심좌표 => kh 홈페이지에서 가져옴
+	        level: 3 // 지도의 확대 레벨
+	    };
+
+		// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+		var map = new kakao.maps.Map(mapContainer, mapOption); 
+		
+		//아래부터는 지도 부가적인 기능
+		
+		// 일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤을 생성합니다
+		var mapTypeControl = new kakao.maps.MapTypeControl();
+
+		// 지도에 컨트롤을 추가해야 지도위에 표시됩니다
+		// kakao.maps.ControlPosition은 컨트롤이 표시될 위치를 정의하는데 TOPRIGHT는 오른쪽 위를 의미합니다
+		map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+
+		// 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
+		var zoomControl = new kakao.maps.ZoomControl();
+		map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+		
+		var marker = new kakao.maps.Marker();
+
+		// 타일 로드가 완료되면 지도 중심에 마커를 표시합니다
+		kakao.maps.event.addListener(map, 'tilesloaded', displayMarker);
+
+		function displayMarker() {
+		    
+		    // 마커의 위치를 지도중심으로 설정합니다 
+		    marker.setPosition(map.getCenter()); 
+		    marker.setMap(map); 
+	
+		    // 아래 코드는 최초 한번만 타일로드 이벤트가 발생했을 때 어떤 처리를 하고 
+		    // 지도에 등록된 타일로드 이벤트를 제거하는 코드입니다 
+		    // kakao.maps.event.removeListener(map, 'tilesloaded', displayMarker);
 		}
 	</script>
 
