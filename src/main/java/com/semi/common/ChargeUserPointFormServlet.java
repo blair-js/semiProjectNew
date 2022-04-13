@@ -18,9 +18,23 @@ public class ChargeUserPointFormServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		/*User loginUser = (User)request.getSession().getAttribute("loginUser");
+		
+		if(loginUser != null) {
+			
+			request.setAttribute("loginUser", loginUser);
+			request.getRequestDispatcher("views/common/charge.jsp").forward(request, response);
+			
+		}else {
+			
+			request.setAttribute("loginUser", null);
+			request.getRequestDispatcher("views/common/charge.jsp").forward(request, response);
+		}*/
+		
 		request.getRequestDispatcher("views/common/charge.jsp").forward(request, response);
 		
 	}
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}

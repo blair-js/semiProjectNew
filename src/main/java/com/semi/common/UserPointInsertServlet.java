@@ -24,7 +24,7 @@ public class UserPointInsertServlet extends HttpServlet {
 		String userId = request.getParameter("userId"); //회원아이디
 		int updatePoint = Integer.parseInt(request.getParameter("point")); //충전금액(포인트)
 		System.out.println("point 확인 : " + updatePoint);
-		System.out.println("userNo 확인 : " + userId);
+		System.out.println("userId 확인 : " + userId);
 		
 		
 		if(updatePoint != 0 && userId != null) { //회원아이디가 있고 충전포인트가 0이 아닐때
@@ -42,7 +42,8 @@ public class UserPointInsertServlet extends HttpServlet {
 			if(result > 0) { //포인트 업데이트 성공시
 				
 				//간식페이지를 뿌려주는 서블릿으로
-				request.getRequestDispatcher("snack.do").forward(request, response);
+				//request.getRequestDispatcher("snack.do").forward(request, response);
+				response.sendRedirect("snack.do");
 				
 			}else { //실패시 
 				
