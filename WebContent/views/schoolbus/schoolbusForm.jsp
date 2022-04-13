@@ -1,8 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="java.util.ArrayList, com.semi.schoolbus.model.dto.*"%>
 <%
-	// 현재 세션에 있는 회원의 정보로 로그인 안되어 있으면 빈 값을 담고, 로그인이 되어있으면 회원 아이디를 담아준다.
-	String userId = (User)request.getSession().getAttribute("loginUser") != null ? ((User)request.getSession().getAttribute("loginUser")).getUserId() : "";
+	// 현재 세션에 있는 회원의 정보로 로그인 안되어 있으면 0을 담고, 로그인이 되어있으면 회원 번호를 담아준다.
+	int userNo = (User)request.getSession().getAttribute("loginUser") != null ? ((User)request.getSession().getAttribute("loginUser")).getUserNo() : 0;
+	ArrayList<Schoolbus> list = (ArrayList<Schoolbus>)request.getAttribute("list");
+	ArrayList<UserReservation> rList = (ArrayList<UserReservation>)request.getAttribute("rList");
 %>
 <!DOCTYPE html>
 <html>
@@ -11,77 +13,123 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a3a36dd4e535bb8999adf903f3ebd469"></script>
 <script src="https://kit.fontawesome.com/96b0e9ec8b.js" crossorigin="anonymous"></script>
 <style>
+	#container{
+		margin:auto;
+		text-align:center;
+	}
 	.sc-table{
 		max-width:80%;
 		margin:auto;
-		border: 1px solid;
+	}
+	#schedule{
+		background-color:white;
+		border: 1px solid black;
 	}
 </style>
 <title>둥글개 둥글개</title>
 </head>
 <body>
 	<%@ include file="../common/menubar.jsp" %>
-  		<div class="container">
+  		<div class="container" id="container">
   			<span><h1 class="text-center"><i class="fa-solid fa-bus"></i> 통학버스 운행표</h1></span>
   			<div id="schoolmap" style="width:70%;height:400px; margin:0 auto;"></div>
-  			<table class="sc-table table table-bordered text-center mt-5 mb-5" style="border:solid 1px #808080;">
+  			<table class="sc-table table table-bordered mt-5 mb-5" style="border:solid 1px #808080;">
   				<thead class="bg-secondary" style="color:white;">
   					<tr>
-  						<th>출발시간</th>
   						<th>승차장소</th>
   					</tr>
   				</thead>
   				<tbody>
   					<tr>
-  						<td>8시 00분</td>
   						<td>일원동 주민센터 앞</td>
   					</tr>
   					<tr>
-  						<td>8시 00분</td>
   						<td>개포동역 4번 출구</td>
   					</tr>
   					<tr>
-  						<td>8시 00분</td>
   						<td>도곡역 1번 출구</td>
   					</tr>
   					<tr>
-  						<td>8시 00분</td>
   						<td>양재역 4번 출구</td>
   					</tr>
   					<tr>
-  						<td>8시 00분</td>
   						<td>서울 남부터미널역</td>
   					</tr>
   					<tr>
-  						<td>8시 00분</td>
   						<td>사당역 11번 출구</td>
   					</tr>
   					<tr>
-  						<td>8시 00분</td>
   						<td>내방역 내방동물병원</td>
   					</tr>
   					<tr>
-  						<td>8시 00분</td>
   						<td>교대역 9번 출구</td>
   					</tr>
   				</tbody>
   			</table>
-  			<div class="applydiv text-center">
-  				<button id="apply-btn" class="btn bg-warning btn-lg mb-5" style="color:white;" disabled onclick="goBus();"><b>통학버스 신청하기<b></b></button>
-			</div>
+  			<div class="bus-title mb-5">
+  				<h2 class="text-warning">버스 이용 안내</h2>
+  				<h4>둥글개 둥글개 통학버스는 매시간별 버스가 운영됩니다.<br> 원하시는 시간의 버스를 예약하여 이용 바랍니다.</h4>
+  				(통학버스는 무상서비스입니다. 다른 회원들을 위해 회원마다 하루에 한 번만 이용이 가능합니다.)<br><br>
+  			<span><i class="fa-solid fa-bus"></i>운행지역 <br>
+  				  일원동 주민센터 <i class="fa-solid fa-arrows-left-right"></i> 둥글개 둥글개 본원<br>
+  				  <i class="fa-solid fa-clock-rotate-left"></i>&nbsp;운행시간 <br>
+  				  평일 AM 08:00 ~ PM 03:00<br>
+  				  <i class="fa-solid fa-hourglass-empty"></i>&nbsp;배차간격 : 1시간 간격<br>
+  				  <i class="fa-solid fa-sign-hanging"></i> 경유지<br>
+  				  일원동 주민센터 앞 - 개포동역 4번 출구 - 도곡역 1번 출구<br>
+  				  양재역 4번 출구 - 서울 남부터미널역 - 사당역 11번 출구 <br>
+  				  내방역 내방동물병원 - 교대역 9번 출구
+  			</span>
+  			</div>
+  			<span id="ment" class="m-3"><b>※원하시는 시간의 버스를 예약해주세요.</b></span>
+			<span id="userService"><b>※ 회원 전용</b> 서비스입니다. <a class="text-primary" href="/loginForm.do">로그인</a> 후 이용해주세요.</span>
+			<br><span id="checkNo"><b>※ 이미 예약을 하셨습니다. 잘못 예약 하신경우 관리자에게 문의 바랍니다.</b></span>
+  			<form id="busForm" action="/schoolbusInsert.do?userNo=<%=userNo %>" method="post">
+	  			<div class="input-group mb-5 p-1" style="margin:auto; width:50%;">
+	  				<span class="mt-2">시간 선택 :&nbsp;&nbsp;</span>
+	  				<select id="schedule" name="scheduleNo" class="form-select border-1 rounded-1">
+	  					<% for(Schoolbus sb : list){ %>
+	  						<% if(sb.getSeatCount() == 0) { %>
+	  							<option disabled value="<%=sb.getBusDallyNo() %>"><%= sb.getBusContent() %> (잔여좌석 수: <%=sb.getSeatCount() %>)</option>
+	  						<% }else{ %>
+		  						<option value="<%=sb.getBusDallyNo() %>"><%= sb.getBusContent() %> (잔여좌석 수: <%=sb.getSeatCount() %>)</option>
+	  						<% } %>
+	  					<% } %>
+	  				</select>
+	  			</div>
+	  			<div class="applydiv">
+	  				<button id="apply-btn" class="btn bg-warning btn-lg mb-5" style="color:white;" disabled><b>통학버스 신청하기<b></b></button>
+				</div>
+			</form>
 		</div>
   		<script>
-  			// 로그인한 회원만 입학신청이 가능, 로그인 안 했을 경우에는 버튼 비활성화 처리
-  			var id = '<%= userId %>';
-  			if(id == ""){
+  			// 로그인한 회원만 입학신청이 가능, 로그인 안 했을 경우에는 버튼 비활성화 처리, 로그인 후 이용하라는것도 숨기기
+  			var userNo = '<%= userNo %>';
+  			if(userNo == 0){
   				$("#apply-btn").prop("disabled", true);
+  				$("#ment").hide();
+  				$("#checkNo").hide();
   			}else{
   				$("#apply-btn").prop("disabled", false);
+  				$("#userService").hide();
+  				$("#checkNo").hide();
+  				$("#ment").show();
+  			}	
+  			// 예약을 한 회원의 경우 중복 예약 불가 예약 테이블에서 회원 아이디 조회
+  			// 중복 예약 불가능하다고 멘트 보여주고 버튼 비활성화
+  			// 예약한 회원이 없을 수도 있으니 rList가 비어있지 않을경우에만 실행하도록 if문 설정
+  			if(userNo != 0 && <%= !(rList.isEmpty()) %>){
+	  			<% for(int i=0; i<rList.size(); i++) { %>
+	  				var rno = '<%= rList.get(i).getResUserNo() %>';
+	  				if(rno == '<%= userNo %>'){
+	  					$("#checkNo").show();
+	  					$("#ment").hide();
+	  					$("#apply-btn").prop("disabled", true);
+	  				}
+	  			<% } %>
   			}
-  		// 통학버스 신청하기 버튼 눌렀을때
-  			function goBus(){
-  				console.log("안녕");
-  			}
+  			
+  			
 			var mapContainer = document.getElementById('schoolmap'), // 지도를 표시할 div 
 			    mapOption = { 
 			        center: new kakao.maps.LatLng(37.49895813632953, 127.03294537573757), // 지도의 중심좌표

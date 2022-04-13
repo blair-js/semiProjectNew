@@ -85,7 +85,10 @@
 	<br>
 
 	<br>
-
+	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
+		id="center" onclick="goReForm();">
+		통학 버스 이용 회원 내역
+	</button>
 
 	<!--  		
 	<button  class="btn btn-outline-warning btn-lg" style="width: 20%" id="center" onclick="goUserList()">
@@ -118,6 +121,10 @@
 			
 			function goSnackInsert(){ //새로운 간식 추가하기위한 서블릿
 				location.href="<%=request.getContextPath()%>/snackInsertForm.do"
+			}
+			function goReForm(){
+				console.log("실행 확인");
+				location.href="/reservationForm.do"
 			}
 			
 	</script>
