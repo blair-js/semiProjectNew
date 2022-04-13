@@ -18,6 +18,7 @@
 	
 
 	int userPoint = (Integer)request.getAttribute("up");
+
 	
 %>
 
@@ -66,6 +67,8 @@
 .blink {
 	animation: blink-effect 1s step-end infinite;
 }
+
+
 </style>
 
 </head>
@@ -83,7 +86,7 @@
 		<div class="px-3 py-3 my-4">
 			<!-- 초기 설정 4 5 5 -->
 
-			<h1>나만 먹을개</h1>
+			<h1>나만 먹을개</h1> 		
 
 
 			<hr style="height: 7px; color: #FDC800" ;  id="center">
@@ -93,12 +96,13 @@
 
 
 			<h4>
-				<img src="assets/img/gallery/point.jpg" alt="" height="40">&nbsp
+				<% if ( userNo != 0 ) { %>
+				<img src="assets/img/gallery/point.jpg" alt="" height="40" >&nbsp
 				<!-- 비회원일떄는 안보이게 if문 걸기 -->
 			
 				보유중인 뼈다귀 &nbsp:&nbsp <%=userPoint%>
 			
-				
+				<% } %>
 			</h4>
 			<!--  style="float:left" -->
 
@@ -124,14 +128,23 @@
 
 
 		<div>
-
+			
+			<%if (loginUser != null && loginUser.getUserId().contains("admin1")) {%> <!-- 관리자는 구매 버튼이아닌 간식추가 버튼이 보여지도록 설정 -->
+				
+			<button class="btn btn-outline-warning btn-lg" style="width: 20%"
+			id="center" onclick="goSnackInsert()"> 간식 추가</button>
+			
+			<% } %>
+			
+			
+			<% if ( userNo != 0 && userNo != 27) { %> <!-- 관리자 번호는 구매 버튼이 보이지않도록 설정 -->
 			<button class="btn btn-outline-warning btn-lg" style="width: 20%"
 				id="center" onclick="goSnackResult()">
 
 				<b>구매</b>
 
 			</button>
-
+				<% } %>
 
 			<p></p>
 
@@ -157,10 +170,12 @@
 			
 			<form id="snackOrder"
 				action="<%=request.getContextPath()%>/snackResult.do" method="post">
-				
+				<% if ( userNo != 0 ) { %>
 				<input type="hidden" id="userNo" name="userNo"
 					value="<%=userNo%>">
-			
+				
+				<% } %>
+				
 				<%
 				for (Snack s : list) {
 				%>
@@ -188,9 +203,10 @@
 									<%=s.getSanckName()%>
 									<br> <br> 뼈다귀 :
 									<%=s.getPrice()%>
+									<% if ( userNo != 0 ) { %>
 									&nbsp<input type="checkbox" id= "snackNo" name="snackNo"
 										value="<%=s.getSanckNo()%>">
-								
+										<% } %>
 										
 
 								</p>
@@ -240,28 +256,25 @@
 
 
 
+	<br><br>
+
 	<br>
-	<br>
-
-
-
 	<!-- 회원 및 관리자 구분하여주기 -->
+	<% if ( userNo != 0 && userNo != 27) { %> <!-- 관리자 번호는 회원 마이페이지가 보이지않도록 설정 -->
 	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
 		id="center" onclick="goUsermypage()">(회원) 마이페이지 바로가기</button>
-
+		<% } %>
 	<br>
-
+		
 	<!-- 회원 및 관리자 구분하여주기 -->
+	
+	<%if (loginUser != null && loginUser.getUserId().contains("admin1")) {%> <!-- 관리자는 관리자의 마이페이지가 보이도록 설정 -->
 	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
 		id="center" onclick="goAdminmypage()">(관리자) 마이페이지 바로가기</button>
-
+		<% } %>
 	<br>
 
-	<!-- 관리자의 간식 추가, 수정, 삭제의 대한 편의성을 높이고자 마이페이지 및 간식페이지 2 경로에서 이동 가능하며, 회원은 해당 버튼을 볼 수 없어야 함 -->
-	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
-		id="center" onclick="goSnackInsert()">(관리자) 간식 추가</button>
 
-	<br>
 
 
 

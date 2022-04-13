@@ -42,7 +42,7 @@
 		<form action="<%=request.getContextPath()%>" method="post">
 
 			<pre>
-			<h3 id=center style="float: left">관리자 admin님의 마이페이지입니다.</h3>
+			<h3 id=center style="float: left">관리자 <b style="color:#0099FF"><%=loginUser.getUserId() %></b>&nbsp님의 마이페이지입니다.</h3>
 		</pre>
 
 			<hr style="height: 7px; color: #FDC800" ;  id="center">
@@ -58,11 +58,11 @@
 
 				<div class="col-sm row gx-10" style="float: right">
 
-					<h4 id="center">이름 : 임현빈</h4>
+					<h4 id="center">이름 :&nbsp<b style="color:#0099FF"><%=loginUser.getUserName() %></b></h4>
 
 					<br> <br>
 
-					<h4 id="center">아이디 : admin</h4>
+					<h4 id="center">아이디 : <b style="color:#0099FF"><%=loginUser.getUserId() %></b></h4>
 
 				</div>
 			</div>
