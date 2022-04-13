@@ -5,7 +5,6 @@ import static com.semi.common.JDBCTemplate.*;
 import java.sql.Connection;
 import java.util.ArrayList;
 
-import com.semi.common.dto.Attachment;
 import com.semi.common.dto.PageInfo;
 import com.semi.qna.model.dao.QnaDao;
 import com.semi.qna.model.dto.Qna;
@@ -41,31 +40,6 @@ public class QnaService {
 		
 		close(conn);
 		return list;
-	}
-
-	public int insertQna(Qna q, ArrayList<Attachment> fileList) {
-		Connection conn = getConnection();
-		
-		int noticeWriter = Integer.parseInt(q.getQnaWriter());
-		
-		int result1 = new QnaDao().insertQna(conn, q);
-		
-		//첨부파일 없는 경우
-		int result2 = 1;
-		if(!fileList.isEmpty()) {
-			//for(int i = 0; i < fileList.size(); i++) {
-				result2 = new QnaDao().insertAttachment(conn, noticeWriter, fileList);
-			//}
-		}
-		
-		if(result1 * result2 > 0) {
-			commit(conn);
-		}else {
-			rollback(conn);
-		}
-		
-		close(conn);
-		return result1 * result2;
 	}
 
 }

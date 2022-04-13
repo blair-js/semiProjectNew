@@ -73,7 +73,7 @@
 						<!-- 검색어 입력 -->		
 						<input type="text" class="form-control" id="searchKey" name="searchKey" placeholder="검색어를 입력하세요." value="${param.searchKey }">	
 						<!-- 검색 버튼 --> 
-						<input type="submit" class="btn btn-secondary" id="searchBtn" value="검색">							
+						<a href="#" class="btn btn-secondary" role="button" id="searchBtn">검색</a>							
 					</div>	
 				</form>	
 			</div>
