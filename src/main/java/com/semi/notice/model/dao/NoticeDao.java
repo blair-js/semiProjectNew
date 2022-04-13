@@ -84,6 +84,9 @@ public class NoticeDao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
 		}
 		
 		return listCount;
@@ -313,12 +316,6 @@ public class NoticeDao {
 			
 			result = pstmt.executeUpdate();
 			
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			pstmt = conn.prepareStatement(sql);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import com.semi.common.dto.Attachment;
 import com.semi.common.dto.PageInfo;
 import com.semi.notice.model.dao.NoticeDao;
 import com.semi.qna.model.dto.Qna;
@@ -84,6 +85,9 @@ public class QnaDao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
 		}
 		
 		return listCount;
@@ -178,6 +182,64 @@ public class QnaDao {
 		}
 		
 		return list;
+	}
+
+	public int insertQna(Connection conn, Qna q) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		//insertQna=INSERT INTO QA VALUES (SEQ_QNO.NEXTVAL, ?, DEFAULT, ?, ?, DEFAULT, SYSDATE, DEFAULT, ?, ?, DEFAULT)
+		String sql = prop.getProperty("insertQna");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, Integer.parseInt(q.getQnaWriter()));
+			pstmt.setString(2, q.getQnaTitle());
+			pstmt.setString(3, q.getQnaContent());
+			pstmt.setInt(4, q.getQnaPwd());
+			pstmt.setString(5, q.getQnaSecret());
+
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public int insertAttachment(Connection conn, int noticeWriter, ArrayList<Attachment> fileList) {
+		Attachment at = new Attachment();
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		//insertAttachment=INSERT INTO ATTACHMENT VALUES(SEQ_FNO.NEXTVAL, ?, SEQ_QNO.CURRVAL, 4, ?, ?, ?, SYSDATE, DEFAULT)
+		String sql = prop.getProperty("insertAttachment");
+		
+		try {
+			for(int i = 0; i < fileList.size(); i++) {
+				at = fileList.get(i);
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, noticeWriter);
+				pstmt.setString(2, at.getOriginName());
+				pstmt.setString(3, at.getChangeName());
+				pstmt.setString(4, at.getFilePath());
+				
+				result += pstmt.executeUpdate();
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
 	}
 
 }
