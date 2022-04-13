@@ -144,7 +144,7 @@ td{
             	}
 	            function goSnack(){
 	        		<% if(loginUser == null){ %>
-	        			location.href ="/snack.do";
+	        			location.href ="/snack.do?userNo=0";
 	        		<% }else{ %>
 	        			location.href ="/snack.do?userNo=<%=loginUser.getUserNo()%>";
 	        		<% } %>

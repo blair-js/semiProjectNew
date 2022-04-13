@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 
 import com.semi.common.dto.Attachment;
+import com.semi.common.dto.PageInfo;
 import com.semi.snack.model.dao.SnackDao;
 import com.semi.snack.model.dto.Snack;
 import com.semi.snack.model.dto.SnackOrder;
@@ -202,6 +203,28 @@ public class SnackService {
 		return snack;
 		
 	}
+
+	public ArrayList<SnackOrder> selectSnackOrderList(PageInfo pi) {
+		
+		Connection conn = getConnection();
+		
+		ArrayList<SnackOrder> list = new SnackDao().selectSnackOrderList(conn, pi);
+		System.out.println("서비스 list" + list);
+		close(conn);
+		
+		return list;
+	}
+
+	public int getListCount() { 
+		
+		Connection conn = getConnection();
+		
+		int listCount = new SnackDao().getListCount(conn);
+		
+		close(conn);
+		return listCount;
+	}
+
 
 
 			
