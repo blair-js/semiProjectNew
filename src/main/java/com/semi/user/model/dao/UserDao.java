@@ -517,7 +517,7 @@ public class UserDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//selectClassName=SELECT CLASS_NAME FROM R_SCHOOL WHERE WEIGHT=?
+		//selectClassName=SELECT CLASS_NAME FROM SCHOOL WHERE WEIGHT=? AND TOTAL_COUNT != CURRENT_COUNT
 		String sql = prop.getProperty("selectClassName");
 		
 		try {

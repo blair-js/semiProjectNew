@@ -33,13 +33,19 @@ button b {
 	<%@ include file="../common/menubar.jsp"%>
 	
 	<div class="text-center mt-7">
-		<h2 class="mb-1"><span><%=dog.getDogName() %></span>의 입학을 환영합니다.</h2>
-		<span><b><%=dog.getClassName() %></b> 친구들이 기다리고 있어요!</span>
+	<!-- 배정된 반이 대기중이 아닌 경우 -->
+	<%if(!(dog.getClassName().equals("대기중"))) {%>
+			<h2 class="mb-1"><span><%=dog.getDogName() %></span>의 입학을 환영합니다.</h2>
+			<span><b><%=dog.getClassName() %></b> 친구들이 기다리고 있어요!</span>
+	<%} else{%>
+			<h2 class="mb-1"><span><%=dog.getDogName() %></span>(이)가 대기명단에 추가되었습니다.</h2>
+			<span><b>조금만 기다려주세요!</b></span>
+	<%} %>
 	</div>
 	<!-- 환영하는 강아지 이미지 -->
-	<div>
-		<img class="d-block mx-auto mb-2" src="assets/img/gallery/dogs.png" alt="환영하는강아지들" width="800">
-	</div>
+		<div>
+			<img class="d-block mx-auto mb-2" src="assets/img/gallery/dogs.png" alt="환영하는강아지들" width="800">
+		</div>
 	
 	<!-- 버튼 -->
 	<div class="col-md-12 pb-5 text-center">

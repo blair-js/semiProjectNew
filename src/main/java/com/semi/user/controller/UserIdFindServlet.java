@@ -22,9 +22,6 @@ public class UserIdFindServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		//인코딩
-		request.setCharacterEncoding("UTF-8");
-		
 		//findIdForm.jsp에서 넘어오는 파라미터를 받아주고
 		String userName = request.getParameter("userName");
 		String userEmail = request.getParameter("userEmail");

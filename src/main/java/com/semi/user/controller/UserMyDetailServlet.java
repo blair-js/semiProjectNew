@@ -14,6 +14,7 @@ import com.semi.user.model.dto.Dog;
 import com.semi.user.model.dto.User;
 import com.semi.user.model.service.UserService;
 
+//회원의 마이페이지를 뿌려주기 위한 서블릿
 @WebServlet("/userMyDetail.do")
 public class UserMyDetailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -24,8 +25,6 @@ public class UserMyDetailServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		//회원에 대한 정보를 조회해와서 jsp에 뿌려주기 
-		
 		//request 객체에 담긴 세션을 얻어온 후, 얻어온 세션에서 loginUser 속성명으로 값을 얻어오기.
 		//LoginServlet에서 세션에 해당 속성명으로 값을 담아주었었음.
 		
@@ -42,7 +41,7 @@ public class UserMyDetailServlet extends HttpServlet {
 		
 		////////////////////////////////////////////////////////////////////////////////
 		
-		//전환할 객체
+		//전환할 화면의 경로를 담을 객체
 		RequestDispatcher view = null;
 		
 		if(user != null) { //회원이 제대로 조회가 되어 null이 아닌 경우
@@ -57,12 +56,12 @@ public class UserMyDetailServlet extends HttpServlet {
 			//Dog 객체만 담을 수 있는 list로 반환 받기
 			ArrayList<Dog> dogList = new UserService().selectDogList(user.getUserNo());
 
-			//현재 로그인 유저의 보유 강아지 리스트까지 set 해주기
+			//현재 로그인 유저의 보유 강아지 리스트까지 set 해주기(보유 강아지가 없으면 null이 넘어갈 것)
 			request.setAttribute("dogList", dogList);
 			
 			view = request.getRequestDispatcher("views/user/userDetailMyPage.jsp"); //마이페이지로 이동
 			
-		}else { //조회된 회원이 없는경우(null인 경우)
+		}else { //조회된 회원이 없는경우(null인 경우) 
 			
 			request.setAttribute("msg", "조회실패하였습니다.");
 			view = request.getRequestDispatcher("views/common/errorPage.jsp"); //에러페이지로 이동

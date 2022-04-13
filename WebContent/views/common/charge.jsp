@@ -90,7 +90,8 @@
       	<input type="hidden" id="userName" value="<%=loginUser.getUserName()%>">
       	<input type="hidden" id="userId" value="<%=loginUser.getUserId()%>">
       <%}else{ %>
-      	<div class="loginCkPay" id="loginCkPay">*로그인 후 결제가 가능합니다. 
+      	<!-- 로그인한 회원이 없는 경우 -->
+      	<div class="loginCkPay mb-1" id="loginCkPay">*로그인 후 결제가 가능합니다. 
       		<a class="goLog" href="<%= contextPath %>/loginForm.do" >로그인</a>
       	</div>
       	<!-- 가짜버튼(클릭불가) -->
@@ -105,10 +106,13 @@
       $(".btn_payment").click(function() {
       //class가 btn_payment인 태그를 선택했을 때 작동한다.
     	
-      //결제창에서 추가로 뿌려주기 위한 값들
+      //결제창에서 추가로 뿌려주기 위한 값들(결제 내역을 받을 이메일, 이름, 아이디)
+      //위에서 input hidden으로 값을 모두 담아놓았음(단, 로그인된 회원이 있을 경우에만!) 
       var userEmail = document.getElementById('userEmail').value;
       var userName = document.getElementById('userName').value;
       var userId = document.getElementById('userId').value;
+      
+      //확인
       console.log(userEmail, userName, userId)
       
       //선택된 요소
@@ -117,10 +121,11 @@
       //선택된 요소의 값(충전 금액)
       var point = target.options[target.selectedIndex].value;
       console.log("point확인 : " + point);
-          
       
+       //IMP 객체를 초기화 하는 함수 init에 아임포트에서 받은 가맹점식별코드를 인자로 넣기
        IMP.init('imp61171514');
-       //결제시 전달되는 정보
+       
+       //결제시 전달되는 필요한 정보를 담아 결제 요청을 하는 과정 => PG사의 결제 페이지가 열린다
        IMP.request_pay({
                  pg : 'inicis', 
                  pay_method : 'card',
@@ -128,11 +133,12 @@
                  name : '뼈다귀'/*상품명*/,
                  amount : point /*상품 가격*/,
                  buyer_email : userEmail /*구매자 이메일*/,
-                 buyer_name : userName
+                 buyer_name : userName /*구매자 이름*/
                  //buyer_tel : '010-1234-5678'/*구매자 연락처*/,
                  //buyer_addr : '서울특별시 강남구 삼성동'/*구매자 주소*/,
                  //buyer_postcode : '123-456'/*구매자 우편번호*/
              }, 
+             //callback : 결제가 완료되면 반환되는 응답 객체 rsp의 결제 성공여부에 따라 실행되는 처리 로직 작성 
              function(rsp) {
                 var result = '';
                  if ( rsp.success ) {
@@ -148,7 +154,9 @@
                      msg += '에러내용 : ' + rsp.error_msg;
                      result ='1';
                  }
-                 //결제 성공시 이동하는 페이지/
+                 //결제 성공시 이동하는 페이지
+                 //우리 프로그램에서 결제 성공시 DB에 포인트가 충전되어야 하므로
+                 //실행할 쿼리에 필요한 회원아이디와 충전금액을 파라미터로 보내준다. => UserPointInsertServlet으로 전달
                  if(result == '0') {
                      location.href="<%=contextPath%>/userPointInsert.do?userId="+userId+"&point="+rsp.paid_amount;
                  }

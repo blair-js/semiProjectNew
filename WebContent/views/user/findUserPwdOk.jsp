@@ -114,8 +114,8 @@ main form{
 	</main>
 	<!-- 아래 div 끝 -->
 
-	<!-- 아이디찾기 버튼 클릭시 UserIdFindServlet 로 이동 -->
 	<script type="text/javascript">
+		//로그인으로
 		function goLogin() {
 			location.href="<%= contextPath %>/loginForm.do?userId=<%=userId%>";	
 		}

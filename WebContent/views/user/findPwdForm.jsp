@@ -116,6 +116,7 @@ main form button b{
 
 	<!-- 아이디찾기 버튼 클릭시 UserPwdFindServlet 로 이동 -->
 	<script type="text/javascript">
+		//form 안의 데이터를 모두 입력했는지 확인하는 함수
 		function findPwdValidate() {
 			//아이디 입력 여부 확인
 			if($('#userName').val() == null){

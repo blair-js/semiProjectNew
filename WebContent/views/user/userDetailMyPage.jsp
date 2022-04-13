@@ -18,6 +18,7 @@
 	String status = u.getStatus();
 	//String smschecked = u.getSmsChecked();
 	
+	//sms체크여부에 따라 라디오 버튼 check해주기 위해 변수 선언
 	String smsCheckYes = "";
 	String smsCheckNo = "";
 	
@@ -136,6 +137,7 @@ main .sm{
 						</li>
 					
 					<%} else{%>
+						<!-- 향상된 for문을 사용하여 강아지 리스트 뽑아주기 -->
 						<%for(Dog d : dogList) {%>
 							<li class="list-group-item d-flex justify-content-between lh-sm">
 								<div>
@@ -291,18 +293,19 @@ main .sm{
 			var originPwd = $('#userPwd').val(); //위 form안에서 hidden으로 숨기고있는 요소에서 현재 user의 비밀번호를 가져온다. 
 			
 			if(inputPwd != null){
-				if(inputPwd === originPwd){ //같다면
+				if(inputPwd === originPwd){ //회원의 기존 비밀번호와 프롬프트창에 입력한 비밀번호가 같다면
 					return true;
 				}else{ //다르다면
 					alert('비밀번호가 일치하지 않습니다.')
 					return false;
 				}
-			}else{
+			}else{ //비밀번호를 입력하지 않았을시
 				alert('현재 비밀번호를 입력하세요.')
 				return false;
 			}	
 		}	
 	
+		//회원탈퇴 함수
 		function deleteUser() {
 			
 			//비밀번호를 입력받을 프롬프트 창 열기
@@ -325,6 +328,7 @@ main .sm{
 					}else{ //아니오 클릭시
 						alert('회원 탈퇴를 취소하였습니다.');
 					}//if~else
+						
 				}else if(inputPwd != originPwd){
 					alert('비밀번호가 일치하지 않습니다. 다시 입력해주세요.');
 				}
@@ -333,11 +337,14 @@ main .sm{
 			}
 				
 		}
+		
+		//강아지 정보 상세보기 함수
 		function goDetailDog() {
 			
 			var userNo = $('#userNo').val();
-			//강아지 상세보기 페이지로 이동(이동시 해당 로그인유저의 id를 쿼리스트링으로 전달~)
+			//강아지 상세보기 페이지로 이동(이동시 해당 로그인유저의 회원번호를 쿼리스트링으로 전달~)
 			location.href="<%= request.getContextPath()%>/detailDogPage.do?userNo="+userNo;
+			
 		}
 	</script>
 
