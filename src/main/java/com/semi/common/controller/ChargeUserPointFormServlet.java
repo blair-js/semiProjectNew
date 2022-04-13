@@ -1,4 +1,4 @@
-package com.semi.common;
+package com.semi.common.controller;
 
 import java.io.IOException;
 import javax.servlet.ServletException;

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-	//UserIdFindServlet에서 request 객체에 담은 userId get
+	//UserIdFindServlet에서 request 객체에 담은 userId, userName get
 	String userId = (String)request.getAttribute("userId");
 	String userName = (String)request.getAttribute("userName");
 %>
@@ -119,8 +119,8 @@ main form{
 	</main>
 	<!-- 아래 div 끝 -->
 	
-	<!-- 아이디찾기 버튼 클릭시 UserIdFindServlet 로 이동 -->
 	<script type="text/javascript">
+		//로그인으로
 		function goLogin() {
 			location.href="<%= contextPath %>/loginForm.do?userId=<%=userId%>";	
 		}

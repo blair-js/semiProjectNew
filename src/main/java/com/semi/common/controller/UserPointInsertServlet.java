@@ -1,4 +1,4 @@
-package com.semi.common;
+package com.semi.common.controller;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -29,12 +29,14 @@ public class UserPointInsertServlet extends HttpServlet {
 		
 		if(updatePoint != 0 && userId != null) { //회원아이디가 있고 충전포인트가 0이 아닐때
 			
-			//위에서 얻은 회원아이디를 기준으로 현재 보유 포인트를 얻어온다.
+			//파라미터로 받은 회원아이디를 기준으로 DB에서 현재 보유 포인트를 얻어온다.
 			int originPoint = new UserService().selectUserPoint(userId);
 			
 			//해당회원이 기존에 갖고있던 보유포인트에 결제한 충전금액을 누적시켜야 한다.
+			//최종 포인트 = 기존 보유 포인트 + 새로 충전한 포인트
 			updatePoint += originPoint;
 			
+			//최종 포인트를 기준으로 해당 회원의 포인트를 업데이트 해줄 함수 호출.
 			int result = new UserService().updateUserPoint(userId, updatePoint);
 			
 			///////////////////////////////////////////////////////////////
@@ -49,10 +51,11 @@ public class UserPointInsertServlet extends HttpServlet {
 				
 				//다시 충전페이지로
 				request.getRequestDispatcher("views/common/charge.jsp").forward(request, response);
-			}
+			}//if~else
 			
-		}else { //둘 중 하나라도 값이 없다면
+		}else { //둘 중 하나라도 값이 없다면(회원아이디나 충전포인트 중 하나라도 없을 떄)
 			
+			//다시 충전페이지로
 			request.getRequestDispatcher("views/common/charge.jsp").forward(request, response);
 			
 		}//if~else

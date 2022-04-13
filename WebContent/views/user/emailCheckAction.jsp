@@ -61,15 +61,17 @@ div .warn b{
 	<!-- 주의사항 div 끝 -->
 
 	<script type="text/javascript">
-	
+		
+	//페이지 로드시
 		$(function() {
 			alert('이메일 인증이 완료되었습니다. 로그인 후 서비스를 이용해주세요.')
 		})
 		
-		//로그인 함수
+		//로그인 버튼 클릭시 실행되는 함수
 		function goLogin() {
 			location.href="<%= request.getContextPath()%>/loginForm.do;"
 		}
+		
 	</script>
 	
 	<!-- footer -->

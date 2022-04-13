@@ -69,7 +69,7 @@ div h5 a{
 </head>
 <body>
 	<!-- UserEnrollFormServlet에서 여기로 옴 -->
-	<!-- UserInsertServlet으로 데이터를 보낼 것 -->
+	<!-- UserInsertServlet으로 작성된 데이터를 보낼 것 -->
 
 	<!-- menubar -->
 	<%@ include file="../common/menubar.jsp"%>
@@ -175,20 +175,20 @@ div h5 a{
 		<!-- 큰 컨테이너 끝 -->
 
 	<script>
-		//아이디 중복확인
+		//아이디 중복확인(ajax 통신으로 확인)
 		function checkId() {
 			//아이디가 enrollForm인 것의 자식 중 input에서 name이 userId인 요소 선택(**값이 들어간 것이 아님에 주의**)
 			//값은 여기서 담지 않고 아래의 if문을 통과한 후 
-			//ajax 내의 데이터 넣어줄 것 
+			//ajax 내의 data에서 val()함수를 통해 값을 넣어줄 것 
 			var userId = $("#enrollForm input[name=userId]");
 			
-			//만약 아이디를 입력하지 않고 중복확인 버튼을 누르면 안되므로 
+			//만약 아이디를 입력하지 않고 빈값("")인채로 중복확인 버튼을 누르면 안되므로 
 			if(userId.val() == ""){
 				alert('아이디를 입력해주세요.')
 				return false;
 			}
 			
-			//위의 if 조건문을 통과했다면
+			//위의 if 조건문을 통과했다면(아이디를 입력했다면)
 			$.ajax({
 				
 				url: "idCheck.do",
@@ -208,10 +208,10 @@ div h5 a{
 						//fail이 아닌경우
 						if(confirm('사용이 가능한 아이디입니다. 사용하시겠습니까?')){
 						//예 선택시 
-						userId.attr("readonly", "true"); //readonly 속성 추가
-						$('#joinBtn').removeAttr("disabled"); //disabled 속성을 지운다
-						}else{ //confirm창엥서 아니오 선택시
-							userId.focus(); //다시 아이디 입력창에 focus
+						userId.attr("readonly", "true"); //해당 변수가 갖고있는 요소에 readonly 속성 추가
+						$('#joinBtn').removeAttr("disabled"); //회원가입 버튼의 disabled 속성을 지운다
+						}else{ //confirm창에서 아니오 선택시
+							userId.focus(); //다시 아이디 입력창에 focus 되도록
 						}
 					}//if~else
 				},
@@ -221,7 +221,7 @@ div h5 a{
 				}
 				
 			})
-	}
+		}
 	
 		//회원가입 양식 유효성검사(아이디는 대소문자숫자로만, 이름은 한글로 두자리이상만)
 		function enrollValidate() {
@@ -245,7 +245,8 @@ div h5 a{
 				 $("#enrollForm input[name=userName]").focus();
 		        return false;
 			}
-			//위의 조건을 모두 통과했다면 true 반환
+			
+			//위의 3가지 조건을 모두 통과했다면 true 반환
 			return true;
 		}
  		

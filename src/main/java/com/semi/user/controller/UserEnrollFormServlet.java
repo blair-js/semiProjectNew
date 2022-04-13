@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
+//회원가입 form을 뿌려주는 서블릿
 @WebServlet("/userEnrollForm.do")
 public class UserEnrollFormServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -19,12 +19,11 @@ public class UserEnrollFormServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 	
-		
 		//회원가입 작성 폼을 띄워줄 jsp 화면 뿌려주기
 		RequestDispatcher view = request.getRequestDispatcher("views/user/userEnrollForm.jsp");
 		view.forward(request, response);
+		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

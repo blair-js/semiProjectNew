@@ -25,10 +25,7 @@ public class UserUpdateServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		//인코딩
-		request.setCharacterEncoding("UTF-8");
 		System.out.println("회원정보 수정하기 서블릿 도착!");
-		
 		
 		//파라미터 잘 넘어오는지 확인!
 		/*System.out.println(request.getParameter("userNo")); //hidden으로 넘어오는 파라미터
@@ -47,13 +44,13 @@ public class UserUpdateServlet extends HttpServlet {
 		user.setSmsChecked(request.getParameter("smsCheck"));
 		user.setGender(request.getParameter("gender"));
 		
-		//업데이트된 회원을 조회해오기 위해 필요한 userId
+		//업데이트된 회원의 정보를 다시 조회해오기 위해 필요한 userId
 		String userId = request.getParameter("userId");
 		
 		//위에서 필드 값 셋팅해준 user 객체를 인자로 전달 
 		int result = new UserService().updateUser(user);
 		
-		//49행에서 조회해온 
+		//48행에서 변수에 담아놓은 userId를 기준으로 새 정보 조회해오기
 		User loginUser = new UserService().selectUser(userId);
 		
 		//////////////////////////////////////////////////////////////

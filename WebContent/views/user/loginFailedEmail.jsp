@@ -81,8 +81,11 @@ main form button b{
 				</div>
 				<!-- 로그으로 돌아가기 버튼 -->
 				<div class="btnDiv">
-					<button type="button" class="w-50 btn btns btn-lg mb-4 bg-primary" onclick="goSendEmail()">
+					<button type="button" class="w-50 btn btns btn-lg mb-2 bg-primary" onclick="goSendEmail()">
 						<b>인증메일 다시받기</b>
+					</button>
+					<button type="button" class="w-50 btn btns btn-lg mb-4 bg-primary" onclick="goLoginForm()">
+						<b>다시 로그인하기</b>
 					</button>
 				</div>
 				
@@ -96,6 +99,9 @@ main form button b{
 		function goSendEmail() {
 			var userId = $('#userId').val();
 			location.href="<%= contextPath %>/sendEmail.do?userId="+userId;
+		}
+		function goLoginForm() {
+			location.href="<%= contextPath %>/loginForm.do?";
 		}
 	</script>
 
