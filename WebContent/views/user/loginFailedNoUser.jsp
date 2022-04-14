@@ -82,8 +82,11 @@ main form button b{
 					<button type="button" class="w-50 btn btns btn-lg mb-2 bg-primary" onclick="goFindId()">
 						<b>아이디 찾기</b>
 					</button>
-					<button type="button" class="w-50 btn btns btn-lg mb-4 bg-primary" onclick="goFindPwd()">
+					<button type="button" class="w-50 btn btns btn-lg mb-2 bg-primary" onclick="goFindPwd()">
 						<b>비밀번호 찾기</b>
+					</button>
+					<button type="button" class="w-50 btn btns btn-lg mb-4 bg-primary" onclick="goEnrollForm()">
+						<b>회원가입</b>
 					</button>
 				</div>
 				
@@ -100,6 +103,9 @@ main form button b{
 		}
 		function goFindPwd() {
 			location.href="<%= contextPath %>/findPwdForm.do;"
+		}
+		function goEnrollForm() {
+			location.href="<%= contextPath %>/userEnrollForm.do;"
 		}
 	</script>
 

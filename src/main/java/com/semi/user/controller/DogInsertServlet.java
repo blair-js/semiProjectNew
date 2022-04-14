@@ -64,6 +64,7 @@ public class DogInsertServlet extends HttpServlet {
 			System.out.println(dogClass);
 			System.out.println(wating);
 			System.out.println("dogImgName : " + dogImgName);*/
+			System.out.println("wating 확인" + wating);
 			
 			//String dogImgName = multiRequest.getOriginalFileName("file");
 			

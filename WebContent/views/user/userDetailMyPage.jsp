@@ -18,6 +18,7 @@
 	String status = u.getStatus();
 	//String smschecked = u.getSmsChecked();
 	
+	//sms체크여부에 따라 라디오 버튼 check해주기 위해 변수 선언
 	String smsCheckYes = "";
 	String smsCheckNo = "";
 	
@@ -136,6 +137,7 @@ main .sm{
 						</li>
 					
 					<%} else{%>
+						<!-- 향상된 for문을 사용하여 강아지 리스트 뽑아주기 -->
 						<%for(Dog d : dogList) {%>
 							<li class="list-group-item d-flex justify-content-between lh-sm">
 								<div>
@@ -161,10 +163,82 @@ main .sm{
 					<button type="button" class="w-100 btn btn-secondary btn-lg" onclick="goDetailDog()">
 						<b>강아지 정보 상세보기</b>
 					</button>
+					
+					<!-- 간식구매내역 추가 0414 시작 -->
+					<hr>
+					<h4 class="d-flex justify-content-between align-items-center mb-3">
+						<span class="text-primary">Your Order History</span> 
+						<span class="badge bg-primary rounded-pill">개수표시</span>
+					</h4>
+					<button type="button" class="w-100 btn btn-secondary btn-lg" onclick="goUserSnackOrder()">
+						<b>나의 간식 구매내역 확인</b>
+					</button>
+					<!-- 간식구매내역 추가 0414 끝 -->
+
+					<!-- 통학버스 예약 정보 -->
+					<h4 class="d-flex justify-content-between align-items-center mb-3">
+						<span class="text-primary">Your Reservation</span>
+					</h4>
+					<!-- 회원 예약 내역 보여줄 부분 -->
+					<div id="resBus">
+					</div>
+
 				</div>
 				<!-- 우측 강아지의 간략한 정보 끝 -->
-				<!--  -->	
-					
+				<!--  -->
+				
+				<script>
+				selectResUser();	
+				// 회원의 버스 예약정보 조회 함수
+					function selectResUser(){
+						if($("#resBus").empty()){
+							$("#resBus").html("통학버스 예약 내역이 존재하지 않습니다.");
+						}
+						
+						$.ajax({
+							url:"userRes.do",
+							data:{uNo : <%= u.getUserNo() %>},
+							type:"get",
+							success:function(userRe){
+								console.log(userRe);
+								var value = "";
+								// 버스를 예약하지 않은 회원의 경우
+								if(userRe.busNo == 0){
+									value='예약된 버스 내역이 존재하지 않습니다.'									
+								}else{
+									value='<span>예약번호 : ' + userRe.busNo
+										  + '<hr style="color:black;">예약차량 : ' + userRe.busDailyNo
+										  + '&nbsp;<input type="button" class="btn btn-secondary btn-sm" onclick="deleteRe(\''+userRe.busNo+'\',\''+userRe.busDailyNo+'\');" value="예약취소">'
+								}
+								$("#resBus").html(value);
+							}
+						})
+					}
+				// 회원 예약 취소 함수
+				function deleteRe(bNo, content){
+					var ans = confirm("예약을 취소하시겠습니까?");
+					if(!ans) return false;
+					// 확인을 눌렀을경우 ajax 실행
+					$.ajax({
+						url:"deleteUserRes.do",
+						type:"post",
+						data:{
+							bNo:bNo,
+							content:content
+						},
+						success:function(status){
+							if(status == "success"){
+								// 예약 취소된 화면전환위해 조회 함수 실행
+								selectResUser();
+								alert("예약이 취소 되었습니다.");
+							}
+						},
+						error : function(){
+							alert("예약 취소 실패. ajax-통신 에러");
+						}
+					});
+				}
+				</script>	
 					
 					
 				<!-- 강아지 로고가 있는 위쪽과 정보를 뿌려주는 아래쪽과의 구분선 -->	
@@ -291,18 +365,19 @@ main .sm{
 			var originPwd = $('#userPwd').val(); //위 form안에서 hidden으로 숨기고있는 요소에서 현재 user의 비밀번호를 가져온다. 
 			
 			if(inputPwd != null){
-				if(inputPwd === originPwd){ //같다면
+				if(inputPwd === originPwd){ //회원의 기존 비밀번호와 프롬프트창에 입력한 비밀번호가 같다면
 					return true;
 				}else{ //다르다면
 					alert('비밀번호가 일치하지 않습니다.')
 					return false;
 				}
-			}else{
+			}else{ //비밀번호를 입력하지 않았을시
 				alert('현재 비밀번호를 입력하세요.')
 				return false;
 			}	
 		}	
 	
+		//회원탈퇴 함수
 		function deleteUser() {
 			
 			//비밀번호를 입력받을 프롬프트 창 열기
@@ -325,6 +400,7 @@ main .sm{
 					}else{ //아니오 클릭시
 						alert('회원 탈퇴를 취소하였습니다.');
 					}//if~else
+						
 				}else if(inputPwd != originPwd){
 					alert('비밀번호가 일치하지 않습니다. 다시 입력해주세요.');
 				}
@@ -333,12 +409,20 @@ main .sm{
 			}
 				
 		}
+		
+		//강아지 정보 상세보기 함수
 		function goDetailDog() {
-			
 			var userNo = $('#userNo').val();
-			//강아지 상세보기 페이지로 이동(이동시 해당 로그인유저의 id를 쿼리스트링으로 전달~)
-			location.href="<%= request.getContextPath()%>/detailDogPage.do?userNo="+userNo;
+			//강아지 상세보기 페이지로 이동(이동시 해당 로그인유저의 회원번호를 쿼리스트링으로 전달~)
+			location.href="<%= contextPath%>/detailDogPage.do?userNo="+userNo;
 		}
+		
+		//회원의 간식구매내역 확인 함수
+	 	function goUserSnackOrder(){ 
+	 		var userNo = $('#userNo').val();
+            location.href="<%=contextPath%>/userOrderListForm.do?userNo="+userNo;
+        }
+		
 	</script>
 
 	<!-- footer -->

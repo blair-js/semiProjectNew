@@ -3,8 +3,25 @@
 	import="java.util.ArrayList, com.semi.snack.model.dto.*"%>
 
 <%
-ArrayList<Snack> list = (ArrayList<Snack>) request.getAttribute("list");
+	ArrayList<Snack> list = (ArrayList<Snack>) request.getAttribute("list");
+	//String userId = ((User)request.getSession().getAttribute("loginUser")).getUserId() != null ? ((User)request.getSession().getAttribute("loginUser")).getUserId() : "";
+	 User user = (User)request.getSession().getAttribute("loginUser");
+	
+	 
+	int userNo = 0;
+
+	if(user != null){
+		userNo = user.getUserNo();
+	}else{
+		userNo = 0;
+	} 
+	
+
+	int userPoint = (Integer)request.getAttribute("up");
+
+	
 %>
+
 
 <!DOCTYPE html>
 <html>
@@ -42,8 +59,7 @@ ArrayList<Snack> list = (ArrayList<Snack>) request.getAttribute("list");
 	margin: auto;
 }
 
-@
-keyframes blink-effect { 90% {
+@keyframes blink-effect { 90% {
 	opacity: 0;
 }
 
@@ -51,6 +67,8 @@ keyframes blink-effect { 90% {
 .blink {
 	animation: blink-effect 1s step-end infinite;
 }
+
+
 </style>
 
 </head>
@@ -68,7 +86,7 @@ keyframes blink-effect { 90% {
 		<div class="px-3 py-3 my-4">
 			<!-- 초기 설정 4 5 5 -->
 
-			<h1>나만 먹을개</h1>
+			<h1>나만 먹을개</h1> 		
 
 
 			<hr style="height: 7px; color: #FDC800" ;  id="center">
@@ -78,8 +96,13 @@ keyframes blink-effect { 90% {
 
 
 			<h4>
-				<img src="assets/img/gallery/point.jpg" alt="" height="40">&nbsp
-				보유중인 뼈다귀 &nbsp:&nbsp 5
+				<% if ( userNo != 0 ) { %>
+				<img src="assets/img/gallery/point.jpg" alt="" height="40" >&nbsp
+				<!-- 비회원일떄는 안보이게 if문 걸기 -->
+			
+				보유중인 뼈다귀 &nbsp:&nbsp <%=userPoint%>
+			
+				<% } %>
 			</h4>
 			<!--  style="float:left" -->
 
@@ -105,14 +128,23 @@ keyframes blink-effect { 90% {
 
 
 		<div>
-
+			
+			<%if (loginUser != null && loginUser.getUserId().contains("admin1")) {%> <!-- 관리자는 구매 버튼이아닌 간식추가 버튼이 보여지도록 설정 -->
+				
+			<button class="btn btn-outline-warning btn-lg" style="width: 20%"
+			id="center" onclick="goSnackInsert()"> 간식 추가</button>
+			
+			<% } %>
+			
+			
+			<% if ( userNo != 0 && userNo != 27) { %> <!-- 관리자 번호는 구매 버튼이 보이지않도록 설정 -->
 			<button class="btn btn-outline-warning btn-lg" style="width: 20%"
 				id="center" onclick="goSnackResult()">
 
 				<b>구매</b>
 
 			</button>
-
+				<% } %>
 
 			<p></p>
 
@@ -130,12 +162,20 @@ keyframes blink-effect { 90% {
 			<%
 			} else {
 			%>
-
+				
+			
+			
+			
+				
+			
 			<form id="snackOrder"
 				action="<%=request.getContextPath()%>/snackResult.do" method="post">
+				<% if ( userNo != 0 ) { %>
 				<input type="hidden" id="userNo" name="userNo"
-					value="<%=loginUser.getUserNo()%>">
-
+					value="<%=userNo%>">
+				
+				<% } %>
+				
 				<%
 				for (Snack s : list) {
 				%>
@@ -149,7 +189,7 @@ keyframes blink-effect { 90% {
 
 				<div class="thumbnail" align="center">
 					<input type="hidden" name="sno" value="<%=s.getSanckNo()%>">
-
+	
 					<div class="container-md">
 						<div class="row">
 							<div class="col-sm row gx-0">
@@ -163,8 +203,11 @@ keyframes blink-effect { 90% {
 									<%=s.getSanckName()%>
 									<br> <br> 뼈다귀 :
 									<%=s.getPrice()%>
-									&nbsp<input type="checkbox" id="snackArray" name="snackArray"
+									<% if ( userNo != 0 ) { %>
+									&nbsp<input type="checkbox" id= "snackNo" name="snackNo"
 										value="<%=s.getSanckNo()%>">
+										<% } %>
+										
 
 								</p>
 								<pre class="blink" id="center"
@@ -180,8 +223,11 @@ keyframes blink-effect { 90% {
 				<%
 				}
 				%>
-
+				
+			
 			</form>
+			
+			
 			<br> <br>
 			<div align="center">
 
@@ -212,28 +258,25 @@ keyframes blink-effect { 90% {
 
 
 
+	<br><br>
+
 	<br>
-	<br>
-
-
-
 	<!-- 회원 및 관리자 구분하여주기 -->
+	<% if ( userNo != 0 && userNo != 27) { %> <!-- 관리자 번호는 회원 마이페이지가 보이지않도록 설정 -->
 	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
 		id="center" onclick="goUsermypage()">(회원) 마이페이지 바로가기</button>
-
+		<% } %>
 	<br>
-
+		
 	<!-- 회원 및 관리자 구분하여주기 -->
+	
+	<%if (loginUser != null && loginUser.getUserId().contains("admin1")) {%> <!-- 관리자는 관리자의 마이페이지가 보이도록 설정 -->
 	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
 		id="center" onclick="goAdminmypage()">(관리자) 마이페이지 바로가기</button>
-
+		<% } %>
 	<br>
 
-	<!-- 관리자의 간식 추가, 수정, 삭제의 대한 편의성을 높이고자 마이페이지 및 간식페이지 2 경로에서 이동 가능하며, 회원은 해당 버튼을 볼 수 없어야 함 -->
-	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
-		id="center" onclick="goSnackInsert()">(관리자) 간식 추가</button>
 
-	<br>
 
 
 
@@ -247,16 +290,15 @@ keyframes blink-effect { 90% {
 	<!-- 컨테이너 끝 div -->
 
 	<script>
-			
-	 //간식 번호를 가지고 디테일로 이동 관리자만
-	<%if (loginUser != null && loginUser.getUserId().contains("admin1")) {%>
+	
+	<%if (loginUser != null && loginUser.getUserId().contains("admin1")) {%> //간식 번호를 가지고 디테일로 이동 관리자만
 	$(function(){
 		$(".thumbnail").click(function(){
 			var sno = $(this).children().eq(0).val();
 			location.href="<%=contextPath%>/snackDetail.do?sno=" + sno;
-	});
-});
-<%}%>
+			});
+		});
+		<%}%>
 	
 		//서블릿 잘 다녀오는지 테스트차 만들어봄
 			function goSnackResult() { //간식 구매 완료 후 이동 되는 서블릿

@@ -22,9 +22,6 @@ public class UserPwdFindServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		//인코딩
-		request.setCharacterEncoding("UTF-8");
-		
 		//findPwdform.jsp에서 넘어오는 파라미터(이름, 아이디, 이메일)를 받아주고
 		String userName = request.getParameter("userName");
 		String userId = request.getParameter("userId");
@@ -37,8 +34,7 @@ public class UserPwdFindServlet extends HttpServlet {
 		
 		/////////////////////////////////////////////////////////////////////////////
 		
-		if(userPwd != null) {
-			
+		if(userPwd != null) { //받아온 비밀번호가 있다면
 		
 			//request 객체에 패스워드로 속성값 설정, 이름도 보내줄 것(받아주는 화면에서 필요)
 			request.setAttribute("userPwd", userPwd);
@@ -48,7 +44,7 @@ public class UserPwdFindServlet extends HttpServlet {
 			//비밀번호 찾기 완료 페이지로 이동
 			request.getRequestDispatcher("views/user/findUserPwdOk.jsp").forward(request, response);
 
-		}else {
+		}else { //없다면
 			
 			//비밀번호 찾기 실패 메세지
 			request.getSession().setAttribute("msg", "비밀번호 찾기에 실패하였습니다.");
@@ -59,7 +55,6 @@ public class UserPwdFindServlet extends HttpServlet {
 			
 		}//if~else
 		
-	
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -56,7 +56,7 @@
   background: #0099FF;
   margin-bottom: 7px;
   border: none;
-  border-radius: 0;
+  border-radius: 5px;
   color: white;
   display: inline-block;
   padding: 10px;
@@ -97,7 +97,7 @@ div .bDog{
 	<!-- menubar -->
 	<%@ include file="../common/menubar.jsp"%>
 	
-	<%if(loginUser != null) {%>
+	
 		<div class="py-3 text-center mb-3 mt-3">
 			<img class="d-block mx-auto mb-4" src="assets/img/gallery/paw.png" alt="강아지로고" width="72" height="57">
 			<h2>입학 신청서</h2>
@@ -165,12 +165,13 @@ div .bDog{
 			<!-- 대기여부 -->
 			<div class="field-row">
 				<label class="form-label">대기여부</label> 
-					<input type="radio" id="radioBtn" name="wating" value="Y" disabled> 예
-					<input type="radio" id="radioBtn" name="wating" value="N"checked> 아니오
+					<input type="radio" id="radioBtnYes" name="wating" value="Y"> 예
+					<input type="radio" id="radioBtnNo" name="wating" value="N"> 아니오
 			</div>
 			<!-- 입학신청서 제출 버튼 -->
-			<div class="field-row btnWrapper">
-				<button type="submit" class="form-button">입학신청서 제출</button>
+			<div class="field-row btnWrapper mt-5">
+				<button type="submit" id="enrollBtn" class="form-button">입학신청서 제출</button>&nbsp;
+				<button type="submit" id="watingBtn" class="form-button">대기신청서 제출</button>
 			</div>
 			
 			<!-- 숨겨져있는 파일영역 -->
@@ -179,14 +180,7 @@ div .bDog{
 		    </div>
 	</form>
 	<!-- 신청서 form 끝 -->
-		<%} else{ %>
-			
-			<h2 id="goLogin" class="mt-5"><b class="enrolls">입학신청</b> 서비스는 로그인 후 이용이 가능합니다.</h2>
-			<div id="goLogin" class="mb-5">
-	    		<button type="button" class="form-button btns" onclick="goLogin()">로그인으로 이동</button>
-		    </div>
-		
-		<%} %>
+	
 
 	<script>
 		$(function(){
@@ -241,8 +235,26 @@ div .bDog{
 				//성공시
 				success: function(className) {
 					console.log("Ajax 통신성공")
-					$('#dogClass').val(className)
-					alert('입학이 가능합니다. 확인을 누르시면 반이 배정됩니다.')
+					
+					//결과값으로 들어온 className이 null이 아닌 경우(servlet에서 null값이 절대 안넘어오게 처리함)
+					if($.trim(className) != null){
+						if($.trim(className) != "대기"){ //className 값이 "대기"가 아니라면 
+							alert('입학이 가능합니다. 확인을 누르시면 반이 배정됩니다.')
+							$('#dogClass').val(className)
+							$('#radioBtnNo').attr('checked', true)
+							$('#radioBtnYes').attr('disabled', true)
+							$('#watingBtn').attr('disabled', true)
+							$('#watingBtn').css('background-color', 'gray')
+							
+						}else{ //className 값이 "대기"라면
+							alert('정원초과로 입학이 불가능합니다. 대기를 부탁드립니다.')
+							$('#dogClass').val('대기중')
+							$('#radioBtnYes').attr('checked', true)
+							$('#radioBtnNo').attr('disabled', true)
+							$('#enrollBtn').css('background-color', 'gray')
+							$('#enrollBtn').attr('disabled', true)
+						}
+					}
 				},
 				
 				//실패시

@@ -1,11 +1,15 @@
 package com.semi.qna.controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.semi.qna.model.dto.Qna;
+import com.semi.qna.model.service.QnaService;
 
 /**
  * Servlet implementation class QnaDeleteServlet
@@ -26,8 +30,20 @@ public class QnaDetailServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("QnA detail 성공~!");
-		request.getRequestDispatcher("views/qna/qnaDetailView.jsp").forward(request, response);
+		//넘겨진 번호를 파라미터로 받는다.
+		int qno = Integer.parseInt(request.getParameter("qno"));
+		
+		//글 내용을 조회해와서 가져온다.
+		Qna q = new QnaService().selectQna(qno);
+		
+		if(q != null) {
+			request.setAttribute("q", q);
+			request.getRequestDispatcher("views/qna/qnaDetailView.jsp").forward(request, response);
+		}else {
+			request.setAttribute("msg", "게시글 상세조회에 실패하였습니다.");
+			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+		}
+		
 	}
 
 	/**

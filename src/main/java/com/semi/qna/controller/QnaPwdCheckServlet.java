@@ -1,11 +1,16 @@
 package com.semi.qna.controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.semi.qna.model.dto.Qna;
+import com.semi.qna.model.service.QnaService;
+import com.semi.user.model.dto.User;
 
 /**
  * Servlet implementation class QnaPwdCheckServlet
@@ -26,11 +31,22 @@ public class QnaPwdCheckServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//받아온 nno와 가져온 nno가 일치하고, 받아온 pwd와 가져온 pwd가 일치하면 detailList로 간다.
-		request.getRequestDispatcher("views/qna/qnaDetailView.jsp").forward(request, response);
-		//틀리면 error페이지 -> msg로 비밀번호가 틀렸습니다. 다시 입력해주세요
-		//request.setAttribute("msg", "비밀번호가 틀렸습니다. 다시 입력해주세요."
-		//request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+		//받아온 qno와 가져온 qno가 일치하고, 받아온 pwd와 가져온 pwd가 일치하면 detailList로 간다.
+		//넘어온 qno, pwd 받아준다.
+		int qno = Integer.parseInt(request.getParameter("qno"));
+		String pwd = request.getParameter("pwd");
+		int userNo = ((User)request.getSession().getAttribute("loginUser")).getUserNo();
+	
+		Qna q = new QnaService().selectPwdCheck(qno, userNo);
+					
+		if(q.getQnaPwd().equals(pwd) && Integer.valueOf(q.getQnaWriter()) == userNo) { //가져온 pwd와 사용자가 입력한 pwd가 같다면
+			//비밀번호가 맞으면 detailView로
+			response.sendRedirect("detailQna.do?qno="+qno);
+		} else {
+			//틀리면 error페이지 -> msg로 비밀번호가 틀렸습니다. 다시 입력해주세요
+			request.getSession().setAttribute("msg", "비밀번호가 일치하지 않습니다.");
+			response.sendRedirect("listQna.do");
+		}
 	}
 
 	/**

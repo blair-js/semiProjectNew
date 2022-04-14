@@ -9,9 +9,12 @@ import java.sql.Connection;
 import java.util.ArrayList;
 
 import com.semi.common.dto.Attachment;
+import com.semi.common.dto.PageInfo;
 import com.semi.snack.model.dao.SnackDao;
 import com.semi.snack.model.dto.Snack;
+import com.semi.snack.model.dto.SnackOrder;
 import com.semi.snack.model.dto.UserPoint;
+import com.semi.user.model.dto.User;
 
 
 public class SnackService {
@@ -151,7 +154,129 @@ public class SnackService {
 		return userPoint;
 	}
 
+	public int OrderEnd(UserPoint up) {
+		
+		Connection conn = getConnection();
+		
+		int result = new SnackDao().OrderEnd(conn, up);
+		
+		if ( result > 0 ) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		close(conn);
+		
+		return result;
+	}
+
+	public int insertOrder(String snackNo, int uno) {
+		
+		Connection conn = getConnection();
+		
+		int result2 = new SnackDao().insertOrder(conn, snackNo, uno);
+		
+		if ( result2 > 0 ) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		close(conn);
+		
+		
+		return result2;
+	}
+
+	public Snack selectPrice(String snackNo) {
+		
+		Connection conn = getConnection();
+
+		Snack snack = new SnackDao().selectSnack(conn, snackNo);
+		
+		if(snack != null) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		
+		close(conn);
+		
+		return snack;
+		
+	}
 
 
-			
+	public int getUserListCount(int uno) {
+		
+		Connection conn = getConnection();
+		
+		int listCount = new SnackDao().getUserListCount(conn, uno);
+		
+		close(conn);
+		return listCount;
+	}
+
+	public ArrayList<SnackOrder> userSnackOrderList(PageInfo pi, int uno) {
+		
+		Connection conn = getConnection();
+		
+		ArrayList<SnackOrder> list = new SnackDao().userSnackOrderList(conn, pi, uno);
+    
+    close(conn);
+		
+		return list;
+	}
+
+	public ArrayList<SnackOrder> selectSnackOrderList(PageInfo pi) {
+		
+		Connection conn = getConnection();
+		
+		ArrayList<SnackOrder> list = new SnackDao().selectSnackOrderList(conn, pi);
+	
+		close(conn);
+		
+		return list;
+	}
+
+	public int getListCount() { 
+		
+		Connection conn = getConnection();
+		
+		int listCount = new SnackDao().getListCount(conn);
+		
+		close(conn);
+		return listCount;
+	}
+
+	public int getUserListCount(int uno) {
+		
+		Connection conn = getConnection();
+		
+		int listCount = new SnackDao().getUserListCount(conn, uno);
+		
+		close(conn);
+		return listCount;
+	}
+
+	public ArrayList<SnackOrder> userSnackOrderList(PageInfo pi, int uno) {
+		
+		Connection conn = getConnection();
+		
+		ArrayList<SnackOrder> list = new SnackDao().userSnackOrderList(conn, pi, uno);
+
+		close(conn);
+		
+		return list;
+	}
+
+	public ArrayList<User> userSearch(int uno) {
+		
+		Connection conn = getConnection();
+		
+		ArrayList<User> list = new SnackDao().userSearch(conn, uno);
+		
+		return list;
+	}
+
+
 }

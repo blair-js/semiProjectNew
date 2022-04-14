@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -70,7 +71,8 @@
               <p class="fs-7 fw-bold fs-xl-7 mb-1 my-0">Hello</p>
               <p class="fs-7 fw-bold fs-xl-7 mb-4 my-0">Dogg World</p>
               <a class="btn btn-info me-2" href="<%= contextPath %>/dogEnrollForm.do" role="button"><b>입학신청</b></a>
-              <a class="btn btn-success" href="<%= contextPath %>/schoolbusForm.do" role="button"><b>통학버스</b></a>
+              <a class="btn btn-success" href="<%= contextPath %>/schoolbusForm.do" role="button"><b>통학버스신청</b></a>
+              </div>
             </div>
           </div>
         </div>

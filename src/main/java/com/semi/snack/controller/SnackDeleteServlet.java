@@ -39,6 +39,8 @@ public class SnackDeleteServlet extends HttpServlet {
 		
 		int sno = Integer.parseInt(request.getParameter("sno")); 
 		
+		int userNo = Integer.parseInt(request.getParameter("userNo"));
+		
 		int result = new SnackService().deleteSnack(sno);
 		
 		ArrayList<Snack> list = new SnackService().selectList(); 
@@ -47,7 +49,7 @@ public class SnackDeleteServlet extends HttpServlet {
 			request.getSession().setAttribute("msg", "간식 삭제 성공");
 			request.setAttribute("list", list);
 			//response.sendRedirect("views/snack/snack.jsp");
-			request.getRequestDispatcher("views/snack/snack.jsp").forward(request, response);
+			request.getRequestDispatcher("snack.do?userNo=" + userNo).forward(request, response);
 		}else {
 			request.setAttribute("msg", "간식 삭제 실패 "); 
 			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response); //에러페이지로 화면전환

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.semi.user.model.dto.User;
 import com.semi.user.model.service.UserService;
 
-
+//loginForm.jsp에서 구글로그인시 여기로 옴
 @WebServlet("/googleLogin.do")
 public class GoogleLoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;

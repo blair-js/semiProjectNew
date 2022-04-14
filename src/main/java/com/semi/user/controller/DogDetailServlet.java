@@ -15,7 +15,7 @@ import com.semi.user.model.dto.Dog;
 import com.semi.user.model.dto.User;
 import com.semi.user.model.service.UserService;
 
-//userDetailMyPage.jsp에서 강아지 상세보기 버튼시 여기로 옴ㄴ
+//userDetailMyPage.jsp에서 강아지 상세보기 버튼시 여기로 옴
 @WebServlet("/detailDogPage.do")
 public class DogDetailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -38,9 +38,6 @@ public class DogDetailServlet extends HttpServlet {
 		
 		System.out.println("dogList 확인 " + dogList.size());
 		
-		//나중에 첨부파일 불러오는 메소드도 추가할 예정_0406
-		//
-		//
 		
 		if(dogList.isEmpty()) { //보유한 강아지가 없다면
 			
@@ -67,15 +64,20 @@ public class DogDetailServlet extends HttpServlet {
 			//회원의 번호를 기준으로 해당 회원의 모든 강아지의 사진들을 가져와야함.
 			ArrayList<Attachment> dogImgList = new UserService().selectDogImgList(userNo);
 			
-			if(dogImgList.isEmpty()) {
+			if(dogImgList.isEmpty()) { //강아지 사진리스트가 비어있다면
 				
-			}else {
+				request.setAttribute("msg", "강아지의 사진이 없습니다.");
+				RequestDispatcher view = request.getRequestDispatcher("views/user/DogDetailPage.jsp");
+				view.forward(request, response);
+				
+			}else { //비어있지 않다면
 				
 				request.setAttribute("dogImgList", dogImgList);
 				
 				//강아지 상세정보페이지로 이동
 				RequestDispatcher view = request.getRequestDispatcher("views/user/DogDetailPage.jsp");
 				view.forward(request, response);
+				
 			}//if~else
 			
 		}//if~else

@@ -22,8 +22,6 @@ public class UserDeleteServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		request.setCharacterEncoding("UTF-8");
-		
 		System.out.println("삭제 서블릿 도착! ");
 
 		//userDetailMyPage.jsp의 form에서 많은 데이터를 넘겨주긴 하지만
@@ -42,11 +40,11 @@ public class UserDeleteServlet extends HttpServlet {
 			HttpSession session = request.getSession();
 			
 			//세션 삭제
-			//invalidate() 써도 되지만특정 속성만 지우는 방법으로 세션을 삭제해도 됨
+			//invalidate() 써도 되지만, 특정 속성만 지우는 방법으로 세션을 삭제해도 됨
 			session.removeAttribute("loginUser"); 
 			session.setAttribute("msg", "회원탈퇴가 완료 되었습니다.");
 			
-			response.sendRedirect("index.jsp"); //메인페이지로 단순 화면 전환(데이터 노 필요)
+			response.sendRedirect("index.jsp"); //메인페이지로 단순 화면 전환(데이터가 필요하지 않기때문에 redirect 사용)
 			
 		}else {
 			
@@ -54,6 +52,7 @@ public class UserDeleteServlet extends HttpServlet {
 			
 			//에러페이지로 이동
 			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+			
 		}//if-else
 		
 	}

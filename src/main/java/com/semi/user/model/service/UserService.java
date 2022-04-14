@@ -32,7 +32,7 @@ public class UserService {
 		//커넥션 생성
 		Connection conn = getConnection();
 		
-		//커넥션 객체와 아이디, 비번 인자로 전달
+		//커넥션 객체와 이름, 이메일 인자로 전달
 		String userId = new UserDao().findUserId(conn, userName, userEmail);
 		
 		//커넥션 닫기
@@ -216,7 +216,7 @@ public class UserService {
 		//커넥션 닫기
 		close(conn);
 		
-		//조회해온 반이름 반환
+		//조회해온 강아지사진리스트 반환
 		return dogImgList;
 		
 	}
@@ -244,6 +244,12 @@ public class UserService {
 		
 		//커넥션 객체와 User 객체를 인자로 전달
 		int result = new UserDao().insertUser(conn, user);
+		
+		if(result > 0) { //등록 성공시
+			commit(conn);
+		}else { //등록 실패시
+			rollback(conn);
+		}
 		
 		//커넥션 닫기
 		close(conn);
@@ -290,6 +296,12 @@ public class UserService {
 		//커넥션 객체와 userId를 인자로 전달
 		int result = new UserDao().updateEmailChecked(conn, userId);
 		
+		if(result > 0) { //업데이트 성공시
+			commit(conn);
+		}else { //업데이트 실패시
+			rollback(conn);
+		}
+		
 		//커넥션 닫기
 		close(conn);
 		
@@ -305,6 +317,12 @@ public class UserService {
 		
 		//커넥션 객체와 userId를 인자로 전달
 		int result = new UserDao().updateCookieChecked(conn, userId);
+		
+		if(result > 0) { //업데이트 성공시
+			commit(conn);
+		}else { //업데이트 실패시
+			rollback(conn);
+		}
 		
 		//커넥션 닫기
 		close(conn);
@@ -329,5 +347,28 @@ public class UserService {
 		return loginUser;
 		
 	}
+
+	public int updateUserPoint(String userId, int updatePoint) {
+
+		//커넥션 생성
+		Connection conn = getConnection();
+		
+		//커넥션 객체와 회원아이디, 업데이트할 포인트 전달
+		int result = new UserDao().updateUserPoint(conn, userId, updatePoint);
+		
+		if(result > 0) { //업데이트 성공시
+			commit(conn);
+		}else { //업데이트 실패시
+			rollback(conn);
+		}
+		
+		//커넥션 닫기
+		close(conn);
+		
+		//결과 반환 
+		return result;
+	}
+
+	
 
 }

@@ -1,13 +1,18 @@
 package com.semi.qna.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.semi.common.dto.PageInfo;
 import com.semi.notice.model.service.NoticeService;
+import com.semi.qna.model.dto.Qna;
+import com.semi.qna.model.service.QnaService;
 
 /**
  * Servlet implementation class QnaListServlet
@@ -54,11 +59,46 @@ public class QnaListServlet extends HttpServlet {
 		if(testSearchKey != null && !testSearchKey.equals("")) {
 			searchKey = testSearchKey;
 		}
+		System.out.println("keyword: " +  keyword);
+		System.out.println("searchKey: " +  searchKey);
 		
 		//총 게시글 개수
-		listCount = new NoticeService().getListCount(searchKey, keyword);
-		System.out.println(listCount);
+		listCount = new QnaService().getListCount(searchKey, keyword);
 		
+		//현재 페이지
+		currentPage = 1;
+		if(request.getParameter("currentPage") != null && !request.getParameter("currentPage").equals("")) {
+			currentPage = Integer.parseInt(request.getParameter("currentPage"));
+		}
+		
+		//페이지 최대 개수
+		pageLimit = 10;
+		
+		//한 페이지 당 게시글 최대 개수
+		boardLimit = 10;
+		
+		//총 페이지 수
+		maxPage = (int)Math.ceil((double)listCount/boardLimit);
+		
+		//현재 페이지에 보여지는 페이징 바의 시작 수 
+		startPage = (currentPage - 1) / pageLimit * pageLimit + 1;
+		
+		//현재 페이지에 보여지는 페이징 바의 끝 수 
+		endPage = startPage + pageLimit - 1;
+		
+		if(maxPage < endPage) {
+			endPage = maxPage;
+		}
+		
+		//페이지 정보를 담아주는 객체 생성
+		PageInfo pi = new PageInfo(listCount, currentPage, startPage, endPage, maxPage, pageLimit, boardLimit);
+		
+		ArrayList<Qna> list = new QnaService().selectList(pi, keyword, searchKey);
+		
+		//값이 담겨져 있는 list를 setAttribute해서 담아서 넘긴다.
+		request.setAttribute("list", list);
+		//페이징 바를 위해서 페이지 정보가 담겨져 있는 pi를 넘긴다.
+		request.setAttribute("pi", pi);
 		
 		request.getRequestDispatcher("views/qna/qnaListView.jsp").forward(request, response);
 	}

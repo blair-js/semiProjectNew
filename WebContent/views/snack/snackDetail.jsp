@@ -163,6 +163,7 @@
 
 	<form action="" id="postForm" method="post"> <!-- updateform 서블릿으로 sno를 가지고 간다. -->
 			<input type="hidden" name="sno" value="<%= snack.getSanckNo() %>">
+			<input type="hidden" id="userNo" name="userNo" value="<%= loginUser.getUserNo() %>">
 		</form>
 
 	</div>
@@ -201,7 +202,7 @@
 	}	
 	
 	function goSnack(){  
-		location.href="<%=request.getContextPath()%>/snack.do" 	
+		location.href ="/snack.do?userNo=<%=loginUser.getUserNo()%>";
 	}	
 
 	</script>

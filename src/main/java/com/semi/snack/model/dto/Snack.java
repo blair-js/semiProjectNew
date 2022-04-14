@@ -59,6 +59,11 @@ public class Snack {
 		this.price = price;
 	}
 
+	public Snack(int price) {
+		super();
+		this.price = price;
+	}
+	
 	public int getUserNo() {
 		return userNo;
 	}

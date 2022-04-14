@@ -19,7 +19,6 @@ public class UserPwdFindFormServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		
 		//비밀번호 찾기 폼을 띄워줄 jsp 화면 뿌려주기
 		RequestDispatcher view = request.getRequestDispatcher("views/user/findPwdForm.jsp");
 		view.forward(request, response);

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.semi.common.dto.Attachment;
 import com.semi.snack.model.dto.Snack;
+import com.semi.snack.model.dto.UserPoint;
 import com.semi.snack.model.service.SnackService;
 
 /**
@@ -37,8 +38,25 @@ public class SnackServlet extends HttpServlet {
 		
 		ArrayList<Snack> list = new SnackService().selectList();
 		
-		request.setAttribute("list", list);
+		int userno = Integer.parseInt(request.getParameter("userNo"));
 		
+		request.setAttribute("up", 0);
+		
+		if(userno != 0) {
+		int userNo = Integer.parseInt(request.getParameter("userNo"));
+		UserPoint up = new UserPoint();		
+		up.setUserNo(userNo);
+		
+		UserPoint userPoint = new SnackService().selectUserPoint(up); //유저 포인트 조회를 위한 메서드
+		System.out.println(userNo);
+
+		System.out.println(userPoint.getUserPoint() + "가져온값");
+		
+		request.setAttribute("up", userPoint.getUserPoint());
+		}
+		
+		
+		request.setAttribute("list", list);
 		RequestDispatcher view = request.getRequestDispatcher("views/snack/snack.jsp");
 		view.forward(request, response);
 	}

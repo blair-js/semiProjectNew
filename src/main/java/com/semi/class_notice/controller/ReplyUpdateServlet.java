@@ -33,6 +33,7 @@ public class ReplyUpdateServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String content = request.getParameter("content");
 		int rno = Integer.parseInt(request.getParameter("rno"));
+		content.replace("\r\n", "<br>");
 		
 		System.out.println(content + " , " + rno);
 		

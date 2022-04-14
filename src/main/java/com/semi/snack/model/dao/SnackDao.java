@@ -9,12 +9,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
 
 import com.semi.common.dto.Attachment;
+import com.semi.common.dto.PageInfo;
 import com.semi.snack.model.dto.Snack;
+import com.semi.snack.model.dto.SnackOrder;
 import com.semi.snack.model.dto.UserPoint;
+import com.semi.user.model.dto.User;
 
 public class SnackDao {
 	
@@ -62,7 +66,7 @@ public class SnackDao {
 
 
 
-	public int insertAttachment(Connection conn, Attachment at, int userNo) {
+	public int insertAttachment(Connection conn, Attachment at, int userNo) { //간식 (첨부파일 추가 메서드)
 		//insertAttachmentSnack=INSERT INTO ATTACHMENT VALUES(SEQ_FNO.NEXTVAL, ?, SEQ_SNO.CURRVAL, 2, ?, ?, ?, SYSDATE, DEFAULT)
 		
 		int result = 0;
@@ -93,7 +97,7 @@ public class SnackDao {
 
 
 
-	public ArrayList<Snack> selectList(Connection conn) {
+	public ArrayList<Snack> selectList(Connection conn) { //간식에 대한 정보를 화면에 뿌려줄 메서드
 		
 		ArrayList<Snack> list = new ArrayList<>();
 		PreparedStatement pstmt = null;
@@ -136,7 +140,7 @@ public class SnackDao {
 
 
 
-	public Snack selectSnack(Connection conn, int sno) {
+	public Snack selectSnack(Connection conn, int sno) { //첨부파일 없이 필요한 간식 정보만 조회하는 메서드
 		
 		Snack snack = null;
 		
@@ -152,17 +156,10 @@ public class SnackDao {
 			rset = pstmt.executeQuery();
 			System.out.println(rset + "찍어보자");
 			
-			if(rset.next()) {
-			
-				
-				
+			if(rset.next()) {		
 			snack = new Snack(rset.getInt("SNACK_NO"),
 							  rset.getString("SNACK_NAME"),
 							  rset.getInt("PRICE")
-							  
-							  
-							  
-
 							  		);
 		}
 							
@@ -180,7 +177,7 @@ public class SnackDao {
 
 
 
-	public Attachment selectAttachment(Connection conn, int sno) {
+	public Attachment selectAttachment(Connection conn, int sno) { //첨부파일 조회하는 메서드
 		
 		Attachment at = null;
 		PreparedStatement pstmt = null;
@@ -216,7 +213,7 @@ public class SnackDao {
 
 
 
-	public int updateSnack(Connection conn, Snack snack) {
+	public int updateSnack(Connection conn, Snack snack) { //간식 수정 메서드
 		
 		int result = 0;
 		PreparedStatement pstmt = null;
@@ -244,7 +241,7 @@ public class SnackDao {
 
 
 
-	public int updateAttachment(Connection conn, Attachment at) {
+	public int updateAttachment(Connection conn, Attachment at) { //간식 첨부파일 수정 메서드
 		
 		int result = 0;
 		PreparedStatement pstmt = null;
@@ -272,7 +269,7 @@ public class SnackDao {
 
 
 
-	public int insertNewAttachment(Connection conn, Attachment at) {
+	public int insertNewAttachment(Connection conn, Attachment at) { //간식 수정 새로운 첨부파일 메서드
 		
 		int result = 0;
 		PreparedStatement pstmt = null;
@@ -300,7 +297,7 @@ public class SnackDao {
 
 
 
-	public int deleteSnack(Connection conn, int sno) {
+	public int deleteSnack(Connection conn, int sno) { //간식 삭제 메서드
 		
 		int result = 0;
 		PreparedStatement pstmt = null;
@@ -324,7 +321,7 @@ public class SnackDao {
 
 
 
-	public int deleteAttachment(Connection conn, int sno) {
+	public int deleteAttachment(Connection conn, int sno) { //간식 첨부파일 삭제 메서드
 		
 		int result = 0;
 		PreparedStatement pstmt = null;
@@ -365,7 +362,7 @@ public class SnackDao {
 			
 			if(rset.next()) {
 				
-				userPoint = new UserPoint(rset.getInt("USER_NO"),
+				userPoint = new UserPoint(rset.getInt("USER_NO"),  
 										  rset.getInt("POINT"));
 			}
 			
@@ -379,6 +376,296 @@ public class SnackDao {
 		
 		return userPoint;
 	}
+
+
+	public int OrderEnd(Connection conn, UserPoint up) {
+		
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("orderEnd");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, up.getPoint());
+			pstmt.setInt(2, up.getUserNo());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+
+	public int insertOrder(Connection conn, String snackNo, int uno) { //간식구매한 정보를 insert해줄 메서드
+		
+		int result2 = 0;
+		
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("insertOrder");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, snackNo);
+			pstmt.setInt(2, uno);
+			
+			result2 = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		
+		
+		return result2;
+	}
+
+
+	public Snack selectSnack(Connection conn, String snackNo) { //간식 가격을 알기위한 메서드
+		
+		Snack snack = null;
+		
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("selectPrice");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, snackNo);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+			
+			snack = new Snack(rset.getInt("PRICE"));
+			
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return snack;
+	}
+
+	public int getUserListCount(Connection conn, int uno) {
+		int listCount = 0;
+		
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("getUserListCount");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, uno);
+			
+			rset = pstmt.executeQuery(sql);
+			
+			
+			if(rset.next()) {//( 카운트, 썸, 에버리지 = 하나만 값이 나오기에 if문 사용 )
+				listCount = rset.getInt(1); //딱 하나만 나오기에 한 행만 나오기에 1번째 컬럼만 가져오겠다는 뜻 //COUNT(*) 집계함수 숫자하나만 나옴  
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return listCount;
+	}
+
+
+
+	public ArrayList<SnackOrder> selectSnackOrderList(Connection conn, PageInfo pi) {
+		//SELECT A.ORDER_NO, A.ORDER_DATE, C.USER_ID, B.SNACK_NAME FROM SNACK_ORDER A JOIN SNACK B ON A.SNACK_NO = B.SNACK_NO JOIN R_USER C ON A.USER_NO = C.USER_NO
+		ArrayList<SnackOrder> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+
+		String sql = prop.getProperty("selectSnackOrderList");
+		
+		int startRow = (pi.getCurrentPage()-1) * pi.getBoardLimit() + 1; //물음표에 값을 넣어주기 위해 구해준다 pi에서 다 받아온거에서 가져오는거임 담겨있는걸 쓰는거임
+		int endRow = startRow + pi.getBoardLimit() -1;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+<
+			pstmt.setInt(1, uno);
+			pstmt.setInt(2, startRow);
+			pstmt.setInt(3, endRow);
+			
+			rset = pstmt.executeQuery();
+
+			while(rset.next()) {
+				SnackOrder so = new SnackOrder();
+				so.setOrderNo(rset.getInt("ORDER_NO"));
+				so.setOrderDate(rset.getDate("ORDER_DATE"));
+				so.setUserId(rset.getString("USER_ID"));
+				so.setSnackName(rset.getString("SNACK_NAME"));
+				
+				list.add(so);
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return list;
+	}
+
+
+	public int getListCount(Connection conn) { //총 게시글 갯수를 구하는 메서드
+		
+		int listCount = 0;
+		
+		Statement stmt = null; 
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("getListCount");
+		
+		try {
+			stmt = conn.createStatement(); 
+			rset = stmt.executeQuery(sql);
+			
+			if(rset.next()) {//( 카운트, 썸, 에버리지 = 하나만 값이 나오기에 if문 사용 )
+				listCount = rset.getInt(1); //딱 하나만 나오기에 한 행만 나오기에 1번째 컬럼만 가져오겠다는 뜻 //COUNT(*) 집계함수 숫자하나만 나옴  
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(stmt);
+		}
+		return listCount;
+		
+	}
+
+
+	public int getUserListCount(Connection conn, int uno) {
+		int listCount = 0;
+		
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("getUserListCount");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, uno);
+			
+			rset = pstmt.executeQuery(sql);
+			
+			
+			if(rset.next()) {//( 카운트, 썸, 에버리지 = 하나만 값이 나오기에 if문 사용 )
+				listCount = rset.getInt(1); //딱 하나만 나오기에 한 행만 나오기에 1번째 컬럼만 가져오겠다는 뜻 //COUNT(*) 집계함수 숫자하나만 나옴  
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return listCount;
+	}
+
+
+	public ArrayList<SnackOrder> userSnackOrderList(Connection conn, PageInfo pi, int uno) {
+		
+		//SELECT * FROM (SELECT ROWNUM RNUM, A.* FROM (SELECT B.ORDER_NO, B.ORDER_DATE, C.USER_ID, D.SNACK_NAME FROM SNACK_ORDER B JOIN R_USER C ON B.USER_NO = C.USER_NO JOIN SNACK D ON B.SNACK_NO = D.SNACK_NO WHERE C.USER_NO = ? ORDER BY B.ORDER_NO) A) WHERE RNUM BETWEEN ? AND ?
+		
+		ArrayList<SnackOrder> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("userSnackOrderList");
+		int startRow = (pi.getCurrentPage()-1) * pi.getBoardLimit() + 1; //물음표에 값을 넣어주기 위해 구해준다 pi에서 다 받아온거에서 가져오는거임 담겨있는걸 쓰는거임
+		int endRow = startRow + pi.getBoardLimit() -1;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, uno);
+			pstmt.setInt(2, startRow);
+			pstmt.setInt(3, endRow);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				SnackOrder so = new SnackOrder();
+				so.setOrderNo(rset.getInt("ORDER_NO"));
+				so.setOrderDate(rset.getDate("ORDER_DATE"));
+				so.setUserId(rset.getString("USER_ID"));
+				so.setSnackName(rset.getString("SNACK_NAME"));
+				
+				list.add(so);
+			}
+			
+			System.out.println("dao list에 담은 값" + list);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		return list;
+	}
+
+
+	public ArrayList<User> userSearch(Connection conn, int uno) {
+				
+		ArrayList<User> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("userSearch");
+		//쿼리문 짜고 snackOrder에 생성자 만들고 멤버 변수도 만들어줘야함 
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, uno);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				User u = new User();
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+
 
 
 

@@ -76,7 +76,8 @@ public class ClassNoticeDao {
 		// 반 별 게시판 목록 다르게 보여주어야 하니까 앞에서 매개변수로 받아주어야함 우선 여기서 담아준다
 
 //			selectList=(SELECT ROWNUM RNUM, A.* FROM \
-//					(SELECT CLASS_NOTICE_NO, CLASS_NOTICE_TITLE,CHANGE_NAME, USER_ID, COUNT, CREATE_DATE \
+//					(SELECT CLASS_NOTICE_NO, CLASS_NOTICE_TITLE,CHANGE_NAME, USER_ID, COUNT, CREATE_DATE, \
+//					(SELECT COUNT(*) FROM CLASS_REPLY WHERE REF_NO=CLASS_NOTICE_NO)CNT \
 //					FROM CLASS_NOTICE B JOIN R_USER C ON (NOTICE_WRITER=USER_NO) \
 //                    LEFT JOIN ATTACHMENT D ON (C.USER_NO = D.USER_NO) \
 //					WHERE CLASS_NAME= ? AND B.STATUS='Y' AND B.CLASS_NOTICE_NO = D.REF_NO \
@@ -100,6 +101,7 @@ public class ClassNoticeDao {
 				c.setCreateDate(rset.getDate("CREATE_DATE"));
 				c.setCount(rset.getInt("COUNT"));
 				c.setTitleImg(rset.getString("CHANGE_NAME"));
+				c.setReplyCount(rset.getInt("CNT"));
 				
 				list.add(c);
 			}
@@ -394,6 +396,94 @@ public class ClassNoticeDao {
 		}
 		
 		
+		return result;
+	}
+	public int deleteReply(Connection conn, int rno) {
+		// 댓글 삭제 메소드 (한개)
+		
+		int result = 0;
+		PreparedStatement pstmt = null;
+//		deleteReply=UPDATE CLASS_REPLY SET STATUS='N' WHERE REPLY_NO=?
+		String sql = prop.getProperty("deleteReply");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, rno);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+	public int deleteNotice(Connection conn, int nno) {
+		// 게시글 삭제 메소드
+		int result = 0;
+		PreparedStatement pstmt = null;
+//		deleteNotice=UPDATE CLASS_NOTICE SET STATUS='N' WHERE CLASS_NOTICE_NO=?
+		String sql = prop.getProperty("deleteNotice");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, nno);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+	
+	public int deleteListReply(Connection conn, int nno) {
+		// 게시글 삭제시 댓글 목록 삭제 메소드
+		int result = 0;
+		PreparedStatement pstmt = null;
+//		deleteListReply=UPDATE CLASS_REPLY SET STATUS='N' WHERE REF_NO=?
+		String sql = prop.getProperty("deleteListReply");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, nno);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(conn);
+		}
+		
+		return result;
+	}
+	public int deleteAttachment(Connection conn, int nno) {
+		// 게시글 삭제시 타이틀 이미지 삭제 메소드
+		int result = 0;
+		PreparedStatement pstmt = null;
+//		deleteAttachment=UPDATE ATTACHMENT SET STATUS='N' WHERE REF_NO=? AND CATEGORY=5
+		String sql = prop.getProperty("deleteAttachment");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, nno);
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
 		return result;
 	}
 
