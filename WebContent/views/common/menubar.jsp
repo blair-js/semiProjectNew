@@ -68,9 +68,7 @@
 .linav{
 	font-size: 16px;
 }
-td{
-	text-align: center;
-}
+
 .spname{
 	color: #FDC800;
 	color: #0099FF;

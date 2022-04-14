@@ -1,16 +1,21 @@
 package com.semi.qna.controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.semi.qna.model.dto.Qna;
+import com.semi.qna.model.service.QnaService;
+import com.semi.user.model.dto.User;
+
 /**
  * Servlet implementation class QnaPwdCheckFormServlet
  */
-@WebServlet("/PwdCheckQna.do")
+@WebServlet("/pwdCheckFormQna.do")
 public class QnaPwdCheckFormServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -26,9 +31,13 @@ public class QnaPwdCheckFormServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int nno = Integer.parseInt(request.getParameter("nno"));
-		request.setAttribute("nno", nno);
+		//넘어온 qno 받아준다.
+		int qno = Integer.parseInt(request.getParameter("qno"));
+		
+		//qno를 request에 담아 checkform에 보낸다.
+		request.setAttribute("qno", qno);
 		request.getRequestDispatcher("views/qna/qnaPwdCheckForm.jsp").forward(request, response);
+		
 	}
 
 	/**
