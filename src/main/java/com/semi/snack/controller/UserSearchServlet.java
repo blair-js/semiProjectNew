@@ -1,6 +1,7 @@
 package com.semi.snack.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,17 +10,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.semi.snack.model.service.SnackService;
+import com.semi.user.model.dto.User;
+
 /**
- * Servlet implementation class SnackOrderListServlet
+ * Servlet implementation class UserSearchServlet
  */
-@WebServlet("/snackOrderList.do")
-public class SnackOrderListServlet extends HttpServlet {
+@WebServlet("/userSearchForm.do")
+public class UserSearchServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SnackOrderListServlet() {
+    public UserSearchServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -28,10 +32,16 @@ public class SnackOrderListServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-			System.out.println("간식 구매내역 조회를 하는 서블릿");
-			request.setAttribute("msg", "조회 성공");
-			RequestDispatcher view = request.getRequestDispatcher("views/snack/snackOrderList.jsp");
-			view.forward(request, response);
+		System.out.println("회원조회를 하기위한 서블릿");
+		
+		int uno = Integer.parseInt(request.getParameter("userNo"));
+		
+		
+		ArrayList<User> list = new SnackService().userSearch(uno);
+		
+		request.setAttribute("msg", "조회 성공");
+		RequestDispatcher view = request.getRequestDispatcher("views/admin/userSearch.jsp");
+		view.forward(request, response);
 	}
 
 	/**

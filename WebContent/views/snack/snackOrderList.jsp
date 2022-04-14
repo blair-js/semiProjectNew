@@ -35,7 +35,7 @@
 
 .tftable th {
 	font-size: 12px;
-	background-color: #b8b8b8;
+	background-color: #FDC800;
 	border-width: 1px;
 	padding: 8px;
 	border-style: solid;

@@ -14,6 +14,7 @@ import com.semi.snack.model.dao.SnackDao;
 import com.semi.snack.model.dto.Snack;
 import com.semi.snack.model.dto.SnackOrder;
 import com.semi.snack.model.dto.UserPoint;
+import com.semi.user.model.dto.User;
 
 
 public class SnackService {
@@ -231,7 +232,7 @@ public class SnackService {
 		Connection conn = getConnection();
 		
 		ArrayList<SnackOrder> list = new SnackDao().selectSnackOrderList(conn, pi);
-		System.out.println("서비스 list" + list);
+	
 		close(conn);
 		
 		return list;
@@ -245,6 +246,36 @@ public class SnackService {
 		
 		close(conn);
 		return listCount;
+	}
+
+	public int getUserListCount(int uno) {
+		
+		Connection conn = getConnection();
+		
+		int listCount = new SnackDao().getUserListCount(conn, uno);
+		
+		close(conn);
+		return listCount;
+	}
+
+	public ArrayList<SnackOrder> userSnackOrderList(PageInfo pi, int uno) {
+		
+		Connection conn = getConnection();
+		
+		ArrayList<SnackOrder> list = new SnackDao().userSnackOrderList(conn, pi, uno);
+
+		close(conn);
+		
+		return list;
+	}
+
+	public ArrayList<User> userSearch(int uno) {
+		
+		Connection conn = getConnection();
+		
+		ArrayList<User> list = new SnackDao().userSearch(conn, uno);
+		
+		return list;
 	}
 
 
