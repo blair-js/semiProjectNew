@@ -67,8 +67,7 @@ public class NoticeDao {
 		int listCount = 0;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
-		
-		//String sql = prop.getProperty("getSearchListCount");
+
 		String sql = "SELECT COUNT(*) FROM NOTICE WHERE STATUS='Y' AND "+keyword+" LIKE ?";
 		
 		try {
@@ -84,6 +83,9 @@ public class NoticeDao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
 		}
 		
 		return listCount;

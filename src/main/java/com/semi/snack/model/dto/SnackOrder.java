@@ -78,6 +78,6 @@ public class SnackOrder {
       return "SnackOrder [orderNo=" + orderNo + ", snackNo=" + snackNo + ", userId=" + userId + ", snackName="
             + snackName + ", snackOrderUserId=" + snackOrderUserId + ", orderDate=" + orderDate + "]";
    }
-
    
 }
+

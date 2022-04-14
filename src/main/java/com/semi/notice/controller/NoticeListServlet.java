@@ -61,7 +61,6 @@ public class NoticeListServlet extends HttpServlet {
 		
 		//총 게시글 개수
 		listCount = new NoticeService().getListCount(searchKey, keyword);
-		System.out.println(listCount);
 		
 		//현재 페이지
 		currentPage = 1;
