@@ -68,7 +68,7 @@
   			</table>
   			<div class="bus-title mb-5">
   				<h2 class="text-warning">버스 이용 안내</h2>
-  				<h4>둥글개 둥글개 통학버스는 매시간별 버스가 운영됩니다.<br> 원하시는 시간의 버스를 예약하여 이용 바랍니다.</h4>
+  				<h4>둥글개 둥글개 통학버스는 한시간마다 버스가 운영됩니다.<br> 원하시는 시간의 버스를 예약하여 이용 바랍니다.</h4>
   				(통학버스는 무상서비스입니다. 다른 회원들을 위해 회원마다 하루에 한 번만 이용이 가능합니다.)<br><br>
   			<span><i class="fa-solid fa-bus"></i>운행지역 <br>
   				  일원동 주민센터 <i class="fa-solid fa-arrows-left-right"></i> 둥글개 둥글개 본원<br>
@@ -83,7 +83,7 @@
   			</div>
   			<span id="ment" class="m-3"><b>※원하시는 시간의 버스를 예약해주세요.</b></span>
 			<span id="userService"><b>※ 회원 전용</b> 서비스입니다. <a class="text-primary" href="/loginForm.do">로그인</a> 후 이용해주세요.</span>
-			<br><span id="checkNo"><b>※ 이미 예약을 하셨습니다. 잘못 예약 하신경우 관리자에게 문의 바랍니다.</b></span>
+			<br><span id="checkNo"><b>※ 이미 예약을 하셨습니다. 잘못 예약 하신경우 마이페이지에서 예약 취소 후 이용 바랍니다.</b></span>
   			<form id="busForm" action="/schoolbusInsert.do?userNo=<%=userNo %>" method="post">
 	  			<div class="input-group mb-5 p-1" style="margin:auto; width:50%;">
 	  				<span class="mt-2">시간 선택 :&nbsp;&nbsp;</span>

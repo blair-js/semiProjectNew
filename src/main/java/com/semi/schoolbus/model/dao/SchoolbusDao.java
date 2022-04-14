@@ -189,4 +189,81 @@ public class SchoolbusDao {
 		return result;
 	}
 
+	public int seatCountPlus(Connection conn, String content) {
+		// 좌석 수 1 증가 메서드
+		int result = 0;
+		PreparedStatement pstmt = null;
+//		seatCountPlus=UPDATE SCHOOLBUS SET SEAT_COUNT=SEAT_COUNT+1 WHERE BUS_CONTENT=?
+		String sql = prop.getProperty("seatCountPlus");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, content);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		return result;
+	}
+
+	public int deleteOneSchoolbus(Connection conn, int bno) {
+		// 예약 내역 개별 삭제 메서드
+		
+		int result = 0;
+		PreparedStatement pstmt = null;
+//		deleteOneSchoolbus=UPDATE USER_RESERVATION SET STATUS='N' WHERE BUS_NO=?
+		String sql = prop.getProperty("deleteOneSchoolbus");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bno);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		return result;
+	}
+
+	public UserReservation selectResOne(Connection conn, int uNo) {
+		// 회원 마이페이지 예약버스 내역 조회 메소드
+		
+		UserReservation re = new UserReservation();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+//		selectResOne=SELECT A.BUS_NO, A.RES_USER_NO , B.BUS_CONTENT, C.USER_ID, C.USER_NAME, C.PHONE
+//	            FROM USER_RESERVATION A JOIN SCHOOLBUS B ON (A.BUS_DAILY_NO = B.BUS_DAILY_NO)
+//	            JOIN R_USER C ON (A.RES_USER_NO = C.USER_NO) WHERE A.STATUS = 'Y' AND RES_USER_NO=?
+		String sql = prop.getProperty("selectResOne");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, uNo);
+			
+			rset = pstmt.executeQuery();
+			
+			// 조회해서 버스 예약번호와 버스 일정내용을 받아온다.
+			if(rset.next()) {
+				re.setBusNo(rset.getInt("BUS_NO"));
+				re.setBusDailyNo(rset.getString("BUS_CONTENT"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		return re;
+	}
+
 }
