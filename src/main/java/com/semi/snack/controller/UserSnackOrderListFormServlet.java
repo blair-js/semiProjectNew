@@ -1,0 +1,107 @@
+package com.semi.snack.controller;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.semi.common.dto.PageInfo;
+import com.semi.snack.model.dto.SnackOrder;
+import com.semi.snack.model.service.SnackService;
+
+/**
+ * Servlet implementation class UserSnackOrderListFormServlet
+ */
+@WebServlet("/userOrderListForm.do")
+public class UserSnackOrderListFormServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public UserSnackOrderListFormServlet() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("회원이 조회 가능한 간식 내역");
+		
+		request.setCharacterEncoding("UTF-8");
+		
+		int uno = Integer.parseInt(request.getParameter("userNo"));
+		
+		System.out.println(uno);
+		// 페이징처리
+
+		int listCount; // 총게시글 갯수
+		int currentPage; // 현재페이지 (요청한 페이지)
+		int startPage; // 현재 페이지 하단에 보여지는 페이징 바의 시작수
+		int endPage; // 현재 페이지 하단에 보여지는 페이징 바의 끝수
+
+		int maxPage; // 전체 페이지의 가장 마지막 페이지
+		int pageLimit; // 한페이지 하단에 보여질 페이지 최대갯수
+		int boardLimit; // 한페이지에 보여질 게시글 최대갯수
+
+		// 총게시글 갯수
+		listCount = new SnackService().getUserListCount(uno);
+		System.out.println("listCount : " + listCount);
+
+		// 현재페이지
+		currentPage = 1; // 게시판 눌렀을때 처음 보여지는 화면이 1페이지를 담아놔야 컴퓨터가 알아야기 때문에 다른 화면에서 눌러도 1페이지인걸 알게된다.
+
+		// 페이지 전환시 전달받은 페이지가 있을경우 전달받은 페이지를 currentPage에 담기
+		if (request.getParameter("currentPage") != null) { // null이 아니면 값이 담아져있다는거니 해당하는값을 다시 담아준다
+			currentPage = Integer.parseInt(request.getParameter("currentPage")); // 스트링 타입으로 넘어오기에 형변환
+		}
+
+		// 페이지 최대갯수
+		pageLimit = 10; // 페이징바가 몇까지인지
+
+		// 게시글 최대갯수
+		boardLimit = 10; // 게시글 리스트
+
+		maxPage = (int)Math.ceil((double)listCount/boardLimit); // ceil = 올림
+
+		startPage = (currentPage - 1) / pageLimit * pageLimit + 1;
+
+		// * endPage : 현재 페이지에 보여지는 페이징 바의 끝 수
+		// startPage : 1 => endPage : 10
+		// startPage : 11 => endPage : 20
+
+		endPage = startPage + pageLimit - 1;
+
+		if (maxPage < endPage) { // 끝페이지를 무분별하게 만들어놓지 않기위해서
+			endPage = maxPage;
+		}
+
+		PageInfo pi = new PageInfo(listCount, currentPage, startPage, endPage, maxPage, pageLimit, boardLimit);
+		
+		ArrayList<SnackOrder> list = new SnackService().userSnackOrderList(pi, uno); // 간식을 구매한 사용자 간식 내역을 조회해오는 메서드
+		
+		System.out.println("pi체크" + pi);
+		
+		System.out.println("list에 담은 값" + list);
+		
+		request.setAttribute("list", list);
+		request.setAttribute("pi", pi);
+		request.getRequestDispatcher("views/snack/userSnackOrderList.jsp").forward(request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
+}

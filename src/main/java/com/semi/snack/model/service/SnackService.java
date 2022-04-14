@@ -204,6 +204,28 @@ public class SnackService {
 		
 	}
 
+
+	public int getUserListCount(int uno) {
+		
+		Connection conn = getConnection();
+		
+		int listCount = new SnackDao().getUserListCount(conn, uno);
+		
+		close(conn);
+		return listCount;
+	}
+
+	public ArrayList<SnackOrder> userSnackOrderList(PageInfo pi, int uno) {
+		
+		Connection conn = getConnection();
+		
+		ArrayList<SnackOrder> list = new SnackDao().userSnackOrderList(conn, pi, uno);
+    
+    close(conn);
+		
+		return list;
+	}
+
 	public ArrayList<SnackOrder> selectSnackOrderList(PageInfo pi) {
 		
 		Connection conn = getConnection();
@@ -226,6 +248,4 @@ public class SnackService {
 	}
 
 
-
-			
 }
