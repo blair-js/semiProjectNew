@@ -46,7 +46,7 @@ public class NoticeDetailServlet extends HttpServlet {
 			request.setAttribute("at", at);
 			request.getRequestDispatcher("views/notice/noticeDetailView.jsp").forward(request, response);
 		}else {
-			request.setAttribute("msg", "게시글 상세조회에 실패하였습니다.");
+			request.getSession().setAttribute("msg", "게시글 상세조회에 실패하였습니다.");
 			request.getRequestDispatcher("views/notice/noticeListView.jsp").forward(request, response);
 		}
 		

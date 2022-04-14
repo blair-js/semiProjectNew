@@ -1,6 +1,7 @@
 package com.semi.user.controller;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.mail.Session;
 import javax.servlet.RequestDispatcher;
@@ -39,6 +40,10 @@ public class LoginServlet extends HttpServlet {
 		String input_check = request.getParameter("input_check");
 		System.out.println("input_check 파라미터 확인" + input_check);
 		
+		if(input_check == null) {
+			input_check = "N";
+		}
+		
 		//파라미터로 받은 아이디와 비번을 
 		//UserService의 loginUser()메소드의 인자로 전달하여 결과 반환받기. => 결과는 User 객체로!
 		User loginUser = new UserService().loginUser(userId, userPwd);
@@ -58,9 +63,8 @@ public class LoginServlet extends HttpServlet {
 				session.setAttribute("loginUser", loginUser);
 
 				//위에서 세션에 모든 정보를 담고
-				//아까 받아두었던 자동로그인여부에 대한 파라미터 값이 "Y"라면 if문 진입
-				//아니라면 그냥 pass
-				/*if(input_check.equals("Y")) {
+				//아까 받아두었던 아이디저장하기에 대한 파라미터 값이 "Y"라면 if문 진입, 아니라면 그냥 pass
+				if(input_check.equals("Y") && input_check != null) {
 					
 					//1.회원의 아이디로 쿠키를 생성한다.
 					//쿠키 생성(회원의 아이디로 생성)
@@ -71,7 +75,6 @@ public class LoginServlet extends HttpServlet {
 					response.addCookie(cookie); 
 					
 					//2.그다음 DB에서 쿠키여부를 Y로 바꿔준다.(회원가입시 DEFAULT로 N으로 들어가기 때문)
-					
 					int result = new UserService().updateCookieChecked(userId);
 
 					/////////////////////////////////////////////////////
@@ -80,7 +83,7 @@ public class LoginServlet extends HttpServlet {
 						loginUser.setCookieChecked("Y");
 					}
 					
-				}//if*/
+				}//if
 				
 				//로그인이 완료되면 홈 화면으로 돌아가기
 				RequestDispatcher view = request.getRequestDispatcher("index.jsp");

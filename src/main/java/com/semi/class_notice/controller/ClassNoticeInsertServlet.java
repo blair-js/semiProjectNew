@@ -80,7 +80,7 @@ public class ClassNoticeInsertServlet extends HttpServlet {
 			if (result > 0) {
 				// 게시글 등록 성공할경우 다시 리스트 목록으로 전환
 				request.getRequestDispatcher("classNoticeList.do?classname=" + className).forward(request, response);
-			
+//				response.sendRedirect("classNoticeList.do?classname=" + className);
 			} else {
 				request.setAttribute("msg", "게시물 등록 실패");
 				request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);

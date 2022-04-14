@@ -32,11 +32,9 @@
     font-weight: normal;
     font-style: normal;
 	}
-
 	h1, h2, h3, h4, h5, h6, p, b {
 	    font-family: 'GmarketSansBold';
 	}
-
 	.nav-item {
 	    font-family: 'GmarketSansBold';
 		font-size: 1.2rem;
@@ -45,7 +43,6 @@
 	*{
 		font-family: 'GmarketSansMedium';		
 	}
-
 	nav.navbar {
    		background-color : rgba( 255, 255, 255, 0.5 );
    }
@@ -63,7 +60,6 @@
     margin-top: 0;
     width: 50%;
 	}
-
 .dropdown:hover .dropdown-menu {
 	display: block;
 	margin-top: 0;
@@ -72,9 +68,7 @@
 .linav{
 	font-size: 16px;
 }
-td{
-	text-align: center;
-}
+
 .spname{
 	color: #FDC800;
 	color: #0099FF;
@@ -144,7 +138,7 @@ td{
             	}
 	            function goSnack(){
 	        		<% if(loginUser == null){ %>
-	        			location.href ="/snack.do";
+	        			location.href ="/snack.do?userNo=0";
 	        		<% }else{ %>
 	        			location.href ="/snack.do?userNo=<%=loginUser.getUserNo()%>";
 	        		<% } %>

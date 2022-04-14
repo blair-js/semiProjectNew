@@ -1,5 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"
+	import="java.util.ArrayList, com.semi.snack.model.dto.*"%>
+	<%@ page import="java.util.ArrayList, com.semi.common.dto.*" %>
+	
+	<% 
+	ArrayList<SnackOrder> list = (ArrayList<SnackOrder>) request.getAttribute("list"); 
+	PageInfo pi = (PageInfo)request.getAttribute("pi");
+	
+	int listCount = pi.getListCount();
+	int currentPage = pi.getCurrentPage();
+	int maxPage = pi.getMaxPage();
+	int startPage = pi.getStartPage();
+	int endPage = pi.getEndPage();
+	
+	%>
+	
+	
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,7 +35,7 @@
 
 .tftable th {
 	font-size: 12px;
-	background-color: #b8b8b8;
+	background-color: #FDC800;
 	border-width: 1px;
 	padding: 8px;
 	border-style: solid;
@@ -59,6 +75,7 @@ td {
 	<div class="container">
 		<!-- 컨테이너 시작 div -->
 
+		<img class="d-block mx-auto mt-7 mb-4" src="assets/img/gallery/adminDogFood.png" alt="강아지로고" width="72" height="65">
 		<h1 class="magin" id="center" style="margin: 40px">간식 구매내역</h1>
 
 		<hr style="height: 7px; color: #FDC800;">
@@ -68,8 +85,8 @@ td {
 			<!-- br 적용 시 체크박스 2, 3이 같이 내려오기에 중간에 여백을 위한 div  줄 바꿈 -->
 			<p class="display-5 fw-bold"></p>
 
-			<form id="snackOrderList" action="<%=request.getContextPath() %>/snackOrderList.do" method="post">
-			
+			<form id="snackOrderList" action="<%=request.getContextPath() %>/snackOrderListForm.do" method="post">
+
 			<table class="tftable" border="1">
 				<tr>
 					<th style="" width=200px">주문번호</th>
@@ -77,104 +94,69 @@ td {
 					<th style="" width=200px">회원 아이디</th>
 					<th style="" width=700px">구매목록</th>
 				</tr>
+		
+				<%for(SnackOrder so : list) { %>
 				<tr>
-					<td>2055482</td>
-					<td>2022-00-00</td>
-					<td>user123</td>
-					<td>프로바이오틱스 비스켓 연어 100g, 오 나의 치즈 망고 7p(닭가슴살 치즈스틱), 유기농 스킨앤코트 살몬 1kg 가수분해 연어 순살</td>
+					<td><%=so.getOrderNo() %></td>
+					<td><%=so.getOrderDate() %></td>
+					<td><%=so.getUserId() %></td>
+					<td><%=so.getSnackName() %></td>
 				</tr>
-				<tr>
-					<td>5418247</td>
-					<td>2022-00-00</td>
-					<td>user456</td>
-					<td>오 나의 치즈 망고 7p(닭가슴살 치즈스틱),유기농 프레쉬 비프 5kg 가수분해 소고기</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
+			<% } %>
 			</table>
-			
-		</form>
-
+				
+		
+	</form>
 
 		</div>
 
 	</div>
+	<!-- 페이징바 만들기 -->
+		<div class="pagingArea" align="center">
+			<!-- 맨 처음으로 (<<) -->
+			<button style="color : #FFFFFF; background-color: #FDC800" onclick="location.href='<%=contextPath%>/snackOrderListForm.do?currentPage=1'"> &lt;&lt; </button>
+		
+			<!-- 이전페이지로(<) -->
+			<%if(currentPage == 1){ %>
+			<button style="color : #FFFFFF; background-color: #FDC800" disabled> &lt; </button>
+			<%}else{ %>
+			<button style="color : #FFFFFF; background-color: #FDC800" onclick="location.href='<%= contextPath %>/snackOrderListForm.do?currentPage=<%= currentPage-1 %>'"> &lt; </button>
+			<%} %>
+			
+			<!-- 페이지 목록 -->
+			<%for(int p=startPage; p<=endPage; p++){ %>
+				
+				<%if(p == currentPage){ %>
+				<button style="color : #FFFFFF; background-color: #FDC800" disabled> <%= p %> </button>
+				<%}else{ %>
+				<button style="color : #FFFFFF; background-color: #FDC800" onclick="location.href='<%=contextPath %>/snackOrderListForm.do?currentPage=<%= p %>'"> <%= p %> </button>
+				<%} %>
+				
+			<%} %>
+			
+			<!-- 다음페이지로(>) -->
+			<%if(currentPage == maxPage){ %>
+			<button style="color : #FFFFFF; background-color: #FDC800" disabled> &gt; </button>
+			<%}else { %>
+			<button style="color : #FFFFFF; background-color: #FDC800" onclick="location.href='<%= contextPath %>/snackOrderListForm.do?currentPage=<%= currentPage+1 %>'"> &gt; </button>
+			<%} %>
+		
+			<!-- 맨 끝으로 (>>) -->
+			<button style="color : #FFFFFF; background-color: #FDC800" onclick="location.href='<%=contextPath%>/snackOrderListForm.do?currentPage=<%=maxPage%>'"> &gt;&gt; </button>
+		</div> 
 	<!-- 컨테이너 끝 div -->
 
 
 	<div class="px-4 py-1 my-5 text-center">
 		<p class="display-5 fw-bold"></p>
 	</div>
+	
+	<script>
+	function gosnackOrderList() { //간식 구매 완료 후 이동 되는 서블릿
+		document.getElementById("snackOrderList").submit();		
+		}	
+	
+	</script>
 	
 
 	<%@ include file="../common/footer.jsp"%>

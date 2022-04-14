@@ -212,8 +212,9 @@ public class ClassNoticeService {
 	}
 
 	public int deleteAttachment(int nno) {
+		// 썸네일 이미지 삭제 메소드
 		Connection conn = getConnection();
-		
+		// 첨부파일이 반드시 있기때문에 바로 result에 삭제한 뒤 수행결과 담아준다
 		int result = new ClassNoticeDao().deleteAttachment(conn, nno);
 		
 		if(result > 0) {

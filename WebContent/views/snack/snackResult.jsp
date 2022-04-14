@@ -45,7 +45,7 @@
 
 				<h4>
 					<img src="assets/img/gallery/point.jpg" alt="" height="40">&nbsp
-					<input type='text' name='userPoint' value='<%=userPoint.getUserPoint()%>'>	
+					보유중인 뼈다귀 &nbsp:&nbsp<%=userPoint.getUserPoint()%>	
 					
 				</h4>
 
@@ -86,9 +86,9 @@
 
 			<br> <br>
 			<button type="button" class="btn btn-outline-warning btn-lg"
-				style="width: 20%" id="center" onclick="goMypage()">
+				style="width: 20%" id="center" onclick="goSnack()">
 
-				<b>마이페이지 바로가기</b>
+				<b>간식 목록 바로가기</b>
 
 			</button>
 
@@ -103,8 +103,8 @@
 			<script>
 	
 			
-		function goMypage(){//간식 삭제를 하기위해 form으로 페이지 전환
-			location.href="<%=request.getContextPath()%>/userMyDetail.do"
+		function goSnack(){//간식 삭제를 하기위해 form으로 페이지 전환
+			location.href ="/snack.do?userNo=<%=loginUser.getUserNo()%>";
 		}
 		
 		</script>
