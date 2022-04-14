@@ -163,6 +163,18 @@ main .sm{
 					<button type="button" class="w-100 btn btn-secondary btn-lg" onclick="goDetailDog()">
 						<b>강아지 정보 상세보기</b>
 					</button>
+					
+					<!-- 간식구매내역 추가 0414 시작 -->
+					<hr>
+					<h4 class="d-flex justify-content-between align-items-center mb-3">
+						<span class="text-primary">Your Order History</span> 
+						<span class="badge bg-primary rounded-pill">개수표시</span>
+					</h4>
+					<button type="button" class="w-100 btn btn-secondary btn-lg" onclick="goUserSnackOrder()">
+						<b>나의 간식 구매내역 확인</b>
+					</button>
+					<!-- 간식구매내역 추가 0414 끝 -->
+					
 				</div>
 				<!-- 우측 강아지의 간략한 정보 끝 -->
 				<!--  -->	
@@ -340,12 +352,17 @@ main .sm{
 		
 		//강아지 정보 상세보기 함수
 		function goDetailDog() {
-			
 			var userNo = $('#userNo').val();
 			//강아지 상세보기 페이지로 이동(이동시 해당 로그인유저의 회원번호를 쿼리스트링으로 전달~)
-			location.href="<%= request.getContextPath()%>/detailDogPage.do?userNo="+userNo;
-			
+			location.href="<%= contextPath%>/detailDogPage.do?userNo="+userNo;
 		}
+		
+		//회원의 간식구매내역 확인 함수
+	 	function goUserSnackOrder(){ 
+	 		var userNo = $('#userNo').val();
+            location.href="<%=contextPath%>/userOrderListForm.do?userNo="+userNo;
+        }
+		
 	</script>
 
 	<!-- footer -->

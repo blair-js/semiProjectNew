@@ -13,7 +13,9 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import com.semi.common.dto.Attachment;
+import com.semi.common.dto.PageInfo;
 import com.semi.snack.model.dto.Snack;
+import com.semi.snack.model.dto.SnackOrder;
 import com.semi.snack.model.dto.UserPoint;
 
 public class SnackDao {
@@ -466,6 +468,76 @@ public class SnackDao {
 		return snack;
 	}
 
+	public int getUserListCount(Connection conn, int uno) {
+		int listCount = 0;
+		
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("getUserListCount");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, uno);
+			
+			rset = pstmt.executeQuery(sql);
+			
+			
+			if(rset.next()) {//( 카운트, 썸, 에버리지 = 하나만 값이 나오기에 if문 사용 )
+				listCount = rset.getInt(1); //딱 하나만 나오기에 한 행만 나오기에 1번째 컬럼만 가져오겠다는 뜻 //COUNT(*) 집계함수 숫자하나만 나옴  
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return listCount;
+	}
 
+
+	public ArrayList<SnackOrder> userSnackOrderList(Connection conn, PageInfo pi, int uno) {
+		
+		//SELECT * FROM (SELECT ROWNUM RNUM, A.* FROM (SELECT B.ORDER_NO, B.ORDER_DATE, C.USER_ID, D.SNACK_NAME FROM SNACK_ORDER B JOIN R_USER C ON B.USER_NO = C.USER_NO JOIN SNACK D ON B.SNACK_NO = D.SNACK_NO WHERE C.USER_NO = ? ORDER BY B.ORDER_NO) A) WHERE RNUM BETWEEN ? AND ?
+		
+		ArrayList<SnackOrder> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("userSnackOrderList");
+		int startRow = (pi.getCurrentPage()-1) * pi.getBoardLimit() + 1; //물음표에 값을 넣어주기 위해 구해준다 pi에서 다 받아온거에서 가져오는거임 담겨있는걸 쓰는거임
+		int endRow = startRow + pi.getBoardLimit() -1;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, uno);
+			pstmt.setInt(2, startRow);
+			pstmt.setInt(3, endRow);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				SnackOrder so = new SnackOrder();
+				so.setOrderNo(rset.getInt("ORDER_NO"));
+				so.setOrderDate(rset.getDate("ORDER_DATE"));
+				so.setUserId(rset.getString("USER_ID"));
+				so.setSnackName(rset.getString("SNACK_NAME"));
+				
+				list.add(so);
+			}
+			
+			System.out.println("dao list에 담은 값" + list);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		return list;
+	}
 
 }
