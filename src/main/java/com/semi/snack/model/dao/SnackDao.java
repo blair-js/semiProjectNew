@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -409,7 +410,7 @@ public class SnackDao {
 	}
 
 
-	public int insertOrder(Connection conn, String snackNo, int uno) {
+	public int insertOrder(Connection conn, String snackNo, int uno) { //간식구매한 정보를 insert해줄 메서드
 		
 		int result2 = 0;
 		
@@ -498,26 +499,28 @@ public class SnackDao {
 	}
 
 
-	public ArrayList<SnackOrder> userSnackOrderList(Connection conn, PageInfo pi, int uno) {
-		
-		//SELECT * FROM (SELECT ROWNUM RNUM, A.* FROM (SELECT B.ORDER_NO, B.ORDER_DATE, C.USER_ID, D.SNACK_NAME FROM SNACK_ORDER B JOIN R_USER C ON B.USER_NO = C.USER_NO JOIN SNACK D ON B.SNACK_NO = D.SNACK_NO WHERE C.USER_NO = ? ORDER BY B.ORDER_NO) A) WHERE RNUM BETWEEN ? AND ?
-		
+
+	public ArrayList<SnackOrder> selectSnackOrderList(Connection conn, PageInfo pi) {
+		//SELECT A.ORDER_NO, A.ORDER_DATE, C.USER_ID, B.SNACK_NAME FROM SNACK_ORDER A JOIN SNACK B ON A.SNACK_NO = B.SNACK_NO JOIN R_USER C ON A.USER_NO = C.USER_NO
 		ArrayList<SnackOrder> list = new ArrayList<>();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		String sql = prop.getProperty("userSnackOrderList");
+
+		String sql = prop.getProperty("selectSnackOrderList");
+		
 		int startRow = (pi.getCurrentPage()-1) * pi.getBoardLimit() + 1; //물음표에 값을 넣어주기 위해 구해준다 pi에서 다 받아온거에서 가져오는거임 담겨있는걸 쓰는거임
 		int endRow = startRow + pi.getBoardLimit() -1;
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
+<
 			pstmt.setInt(1, uno);
 			pstmt.setInt(2, startRow);
 			pstmt.setInt(3, endRow);
 			
 			rset = pstmt.executeQuery();
-			
+
 			while(rset.next()) {
 				SnackOrder so = new SnackOrder();
 				so.setOrderNo(rset.getInt("ORDER_NO"));
@@ -528,7 +531,6 @@ public class SnackDao {
 				list.add(so);
 			}
 			
-			System.out.println("dao list에 담은 값" + list);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -537,7 +539,37 @@ public class SnackDao {
 			close(rset);
 			close(pstmt);
 		}
+		
 		return list;
 	}
+
+
+	public int getListCount(Connection conn) { //총 게시글 갯수를 구하는 메서드
+		
+		int listCount = 0;
+		
+		Statement stmt = null; 
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("getListCount");
+		
+		try {
+			stmt = conn.createStatement(); 
+			rset = stmt.executeQuery(sql);
+			
+			if(rset.next()) {//( 카운트, 썸, 에버리지 = 하나만 값이 나오기에 if문 사용 )
+				listCount = rset.getInt(1); //딱 하나만 나오기에 한 행만 나오기에 1번째 컬럼만 가져오겠다는 뜻 //COUNT(*) 집계함수 숫자하나만 나옴  
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(stmt);
+		}
+		return listCount;
+		
+	}
+
 
 }

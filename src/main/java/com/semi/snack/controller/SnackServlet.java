@@ -38,8 +38,11 @@ public class SnackServlet extends HttpServlet {
 		
 		ArrayList<Snack> list = new SnackService().selectList();
 		
+		int userno = Integer.parseInt(request.getParameter("userNo"));
 		
-		if(Integer.parseInt(request.getParameter("userNo")) != 0) {
+		request.setAttribute("up", 0);
+		
+		if(userno != 0) {
 		int userNo = Integer.parseInt(request.getParameter("userNo"));
 		UserPoint up = new UserPoint();		
 		up.setUserNo(userNo);
@@ -51,6 +54,7 @@ public class SnackServlet extends HttpServlet {
 		
 		request.setAttribute("up", userPoint.getUserPoint());
 		}
+		
 		
 		request.setAttribute("list", list);
 		RequestDispatcher view = request.getRequestDispatcher("views/snack/snack.jsp");

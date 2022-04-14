@@ -83,13 +83,17 @@ public class SnackInsertServlet extends HttpServlet {
 				at.setOriginName(originName);
 				at.setChangeName(changeName);
 				}
-
+				
+				 
+				
+				
 			int result = new SnackService().insertSnack(snack, at);
 
 			if (result > 0) {
 				request.getSession().setAttribute("msg", "간식 등록 성공");
+				request.getRequestDispatcher("snack.do?userNo=" + userNo).forward(request, response);
 				System.out.println(result);
-				response.sendRedirect("snack.do");
+				
 
 			} else { // 등록실패
 				if (at != null) {

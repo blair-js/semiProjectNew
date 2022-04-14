@@ -42,7 +42,7 @@
 		<form action="<%=request.getContextPath()%>" method="post">
 
 			<pre>
-			<h3 id=center style="float: left">관리자 admin님의 마이페이지입니다.</h3>
+			<h3 id=center style="float: left">관리자 <b style="color:#0099FF"><%=loginUser.getUserId() %></b>&nbsp님의 마이페이지입니다.</h3>
 		</pre>
 
 			<hr style="height: 7px; color: #FDC800" ;  id="center">
@@ -58,11 +58,11 @@
 
 				<div class="col-sm row gx-10" style="float: right">
 
-					<h4 id="center">이름 : 임현빈</h4>
+					<h4 id="center">이름 :&nbsp<b style="color:#0099FF"><%=loginUser.getUserName() %></b></h4>
 
 					<br> <br>
 
-					<h4 id="center">아이디 : admin</h4>
+					<h4 id="center">아이디 : <b style="color:#0099FF"><%=loginUser.getUserId() %></b></h4>
 
 				</div>
 			</div>
@@ -85,7 +85,10 @@
 	<br>
 
 	<br>
-
+	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
+		id="center" onclick="goReForm();">
+		통학 버스 이용 회원 내역
+	</button>
 
 	<!--  		
 	<button  class="btn btn-outline-warning btn-lg" style="width: 20%" id="center" onclick="goUserList()">
@@ -118,6 +121,10 @@
 			
 			function goSnackInsert(){ //새로운 간식 추가하기위한 서블릿
 				location.href="<%=request.getContextPath()%>/snackInsertForm.do"
+			}
+			function goReForm(){
+				console.log("실행 확인");
+				location.href="/reservationList.do"
 			}
 			
 	</script>
