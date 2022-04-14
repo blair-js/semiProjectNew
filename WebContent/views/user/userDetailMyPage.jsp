@@ -201,6 +201,7 @@ main .sm{
 									<input type="text" class="form-control" id="userId" name="userId" placeholder="" value="<%=userId %>" readonly required>
 								</div>
 							</div>
+							
 							<!-- 세번째 행 3 : 이메일 -->
 							<div class="col-12">
 								<label for="email" class="form-label">Email</label> 
