@@ -89,11 +89,26 @@
 
 	<br>
 
+
 	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
 		id="center" onclick="goUserSearch()">회원 정보 조회</button>
 	<br>
 	
 	
+
+	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
+		id="center" onclick="goReForm();">
+		통학 버스 이용 회원 내역
+	</button>
+
+	<!--  		
+	<button  class="btn btn-outline-warning btn-lg" style="width: 20%" id="center" onclick="goUserList()">
+		회원조회
+	</button> <br>
+	 -->
+
+
+
 	</div>
 
 
@@ -118,6 +133,10 @@
 			
 			function goSnackInsert(){ //새로운 간식 추가하기위한 서블릿
 				location.href="<%=request.getContextPath()%>/snackInsertForm.do"
+			}
+			function goReForm(){
+				console.log("실행 확인");
+				location.href="/reservationList.do"
 			}
 			
 			function goUserSearch(){ //회원의 간식 구매 목록을 확인하기 위한 서블릿

@@ -24,6 +24,7 @@ public class UserDao {
 	//UserDao 생성자
 	public UserDao() {
 		
+		//읽어올 파일이름(userDao이므로 user쿼리 읽어오기)
 		String fileName = UserDao.class.getResource("/sql/user/user-query.properties").getPath();
 		System.out.println("fileName " + fileName);
 		try {
@@ -44,6 +45,7 @@ public class UserDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
+		//아이디와 패스워드를 기준으로 조회
 		//loginUser=SELECT * FROM R_USER 
 		//WHERE USER_ID=? AND USER_PWD=? AND STATUS='Y'
 		String sql = prop.getProperty("loginUser");
@@ -59,7 +61,7 @@ public class UserDao {
 			//쿼리 실행 후 결과 받기
 			rset = pstmt.executeQuery();
 			
-			/*
+			/*  조회되는 컬럼(전체 조회 *)
 			 	USER_NO
 				USER_ID
 				EMAIL
@@ -120,7 +122,9 @@ public class UserDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//findUserId=SELECT USER_ID FROM R_USER WHERE USER_NAME=? AND EMAIL=? AND STATUS='Y'
+		//사용자가 입력한 이름과 이메일 기준으로 아이디만 조회
+		//findUserId=SELECT USER_ID FROM R_USER 
+		//WHERE USER_NAME=? AND EMAIL=? AND STATUS='Y'
 		String sql = prop.getProperty("findUserId");
 		
 		try {
@@ -160,7 +164,9 @@ public class UserDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//findUserPwd=SELECT USER_PWD FROM R_USER WHERE USER_NAME=? AND USER_ID=? AND EMAIL=? AND STATUS='Y'
+		//사용자가 입력한 이름, 아이디, 이메일 기준으로 조회
+		//findUserPwd=SELECT USER_PWD FROM R_USER 
+		//WHERE USER_NAME=? AND USER_ID=? AND EMAIL=? AND STATUS='Y'
 		String sql = prop.getProperty("findUserPwd");
 		
 		try {
@@ -201,7 +207,7 @@ public class UserDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//selectUser=SELECT * FROM R_USER WHERE USER_ID=? AND STATUS='Y';
+		//selectUser=SELECT * FROM R_USER WHERE USER_ID=? AND STATUS='Y'
 		String sql = prop.getProperty("selectUser");
 		
 		try {
@@ -246,7 +252,7 @@ public class UserDao {
 			close(pstmt);
 		}
 		
-		return user;
+		return user; //정보가 담겨있는 user객체 반환(조회가 되지 않았다면 null 반환)
 	}
 
 
@@ -258,8 +264,9 @@ public class UserDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
+		//사용자포인트 테이블에는 userId가 없기 때문에, 사용자테이블에서 서브쿼리를 통해 userNo를 얻은 후 조회 
 		//selectUserPoint=SELECT POINT 
-		//FROM R_USER_POINT 
+		//FROM USER_POINT 
 		//WHERE USER_NO=(SELECT USER_NO FROM R_USER WHERE USER_ID=?)
 		String sql = prop.getProperty("selectUserPoint");
 		
@@ -269,8 +276,10 @@ public class UserDao {
 			//쿼리 값 셋팅
 			pstmt.setString(1, userId);
 			
+			//쿼리 실행 후 결과 받기
 			rset = pstmt.executeQuery();
 			
+			//조회되는 컬럼은 포인트 컬럼 1개이므로 반복이 필요없음
 			if(rset.next()) {
 				result = rset.getInt(1);
 			}//if
@@ -298,15 +307,16 @@ public class UserDao {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		
+		//회원번호를 기준으로 사용자가 업데이트하고자 하는 컬럼들 업데이트
 		//updateUser=UPDATE R_USER 
 		//SET EMAIL=?, USER_NAME=?, PHONE=?, SMS_CHECKED=?, USER_GENDER=? 
-		//WHERE USER_NO=?
+		//WHERE USER_NO=? AND STATUS='Y'
 		String sql = prop.getProperty("updateUser");
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
 			
-			//쿼리 값 셋팅
+			//쿼리 값 셋팅(user 객체에 업데이트 내용들이 모두 담겨있으므로 get 해서 쿼리 순서에 맞게 셋팅)
 			pstmt.setString(1, user.getEmail());
 			pstmt.setString(2, user.getUserName());
 			pstmt.setString(3, user.getPhone());
@@ -338,7 +348,8 @@ public class UserDao {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		
-		//deleteUser=UPDATE R_USER SET STATUS='N' WHERE USER_ID=?
+		//deleteUser=UPDATE R_USER SET STATUS='N' 
+		//WHERE USER_ID=? AND STATUS='Y'
 		String sql = prop.getProperty("deleteUser");
 		
 		try {
@@ -366,11 +377,14 @@ public class UserDao {
 	public ArrayList<Dog> selectDogList(Connection conn, int userNo) {
 		//특정 회원(userId 기준)의 보유 강아지 리스트를 조회해오는 메소드
 		
+		//강아지 리스트가 담긴 결과 변수
 		ArrayList<Dog> dogList = new ArrayList<Dog>();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//selectDogList=SELECT DOG_NO, CLASS_NAME, DOG_NAME, DOG_AGE, DOG_GENDER FROM R_DOG WHERE USER_NO=?
+		//회원번호를 기준으로 강아지 정보 조회
+		//selectDogList=SELECT DOG_NO, CLASS_NAME, DOG_NAME, DOG_AGE, DOG_GENDER 
+		//FROM DOG WHERE USER_NO=?
 		String sql = prop.getProperty("selectDogList");
 		
 		try {
@@ -382,7 +396,7 @@ public class UserDao {
 			//쿼리 실행 후 결과 반환받기
 			rset = pstmt.executeQuery();
 			
-			//반환되는 행(결과)이 1개 이상일 수 있으므로 반복문 돌리기. 
+			//반환되는 행(결과)이 1개 이상일 수 있으므로 반복문 돌리기. (한 회원이 여러마리의 강아지를 보유했을수도 있음!)
 			//조회되는 컬럼3개 DOG_NO, CLASS_NAME, DOG_NAME, DOG_AGE, DOG_GENDER
 			while(rset.next()) {
 				
@@ -397,7 +411,7 @@ public class UserDao {
 				dog.setDogAge(rset.getInt("DOG_AGE"));
 				dog.setDogGender(rset.getString("DOG_GENDER"));
 				
-				//정보가 담긴 dogList 추가
+				//정보가 담긴 dog객체를 dogList 추가
 				dogList.add(dog);
 				
 			}//while
@@ -426,7 +440,9 @@ public class UserDao {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		
-		//insertDog=INSERT INTO R_DOG VALUES(SEQ_DNO.NEXTVAL, ?, ?, 1, ?, ?, ?, ?, ?)
+		//쿼리에 데이터를 삽입할 컬럼을 생략했으므로, 전컬럼에 대한 데이터 삽입
+		//카테고리(분류번호) 컬럼은 1 로 고정값이다.
+		//insertDog=INSERT INTO DOG VALUES(SEQ_DNO.NEXTVAL, ?, ?, 1, ?, ?, ?, ?, ?)
 		String sql = prop.getProperty("insertDog");
 		
 		/*	쿼리 셋팅 순서(2개는 정적으로 고정되어있기때문에, 나머지 7개 물음표 순서대로 셋팅)
@@ -442,7 +458,7 @@ public class UserDao {
 		try {
 			pstmt = conn.prepareStatement(sql);
 			
-			//쿼리 값 셋팅
+			//쿼리 값 셋팅(정보가 담겨있는 dog 객체에서 get 해오면 됨)
 			pstmt.setInt(1, dog.getUserNo());
 			pstmt.setString(2, dog.getClassName());
 			pstmt.setString(3, dog.getDogName());
@@ -474,7 +490,8 @@ public class UserDao {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		
-		//insertAttachmentDog=INSERT INTO R_ATTACHMENT VALUES(SEQ_FNO.NEXTVAL, ?, SEQ_DNO.CURRVAL, 1, ?, ?, ?, SYSDATE, DEFAULT)
+		//insertAttachmentDog=INSERT INTO ATTACHMENT 
+		//VALUES(SEQ_FNO.NEXTVAL, ?, SEQ_DNO.CURRVAL, 1, ?, ?, ?, SYSDATE, DEFAULT)
 		String sql = prop.getProperty("insertAttachmentDog");
 		
 		/* 	쿼리 셋팅 순서 (5개는 고정, 나머지만 4개만 내가 넣어주면 된다)
@@ -517,7 +534,9 @@ public class UserDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//selectClassName=SELECT CLASS_NAME FROM SCHOOL WHERE WEIGHT=? AND TOTAL_COUNT != CURRENT_COUNT
+		//조건 : 선택한 몸무게 and 그 반의 현재정원이 0이상 입학정원미만 인 경우만 반이름 조회!
+		//selectClassName=SELECT CLASS_NAME FROM SCHOOL 
+		//WHERE WEIGHT=? AND CURRENT_COUNT BETWEEN 0 AND TOTAL_COUNT-1
 		String sql = prop.getProperty("selectClassName");
 		
 		try {
@@ -529,7 +548,7 @@ public class UserDao {
 			
 			rset = pstmt.executeQuery();
 			
-			//결과 행은 1개임
+			//결과 행은 1개임(1행 1열로 반이름만 조회가 됨)
 			if(rset.next()) {
 				className = rset.getString(1);
 			}//if
@@ -544,7 +563,7 @@ public class UserDao {
 			close(pstmt);
 		}	
 		
-		//결과 반환
+		//결과 반환(조건을 만족하지 못했으면 null 반환)
 		return className;
 	}
 
@@ -552,11 +571,13 @@ public class UserDao {
 	public ArrayList<Attachment> selectDogImgList(Connection conn, int userNo) {
 		//특정 회원(userNO)의 강아지 사진 리스트를 가져오는 메소드 
 		
+		//반환할 결과 변수
 		ArrayList<Attachment> dogImgList = new ArrayList<Attachment>();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//selectDogImgList=SELECT * FROM R_ATTACHMENT WHERE USER_NO=? AND STATUS='Y'
+		//회원번호를 기준으로 강아지 사진을 조회해오기
+		//selectDogImgList=SELECT * FROM ATTACHMENT WHERE USER_NO=? AND STATUS='Y'
 		String sql = prop.getProperty("selectDogImgList");
 		
 		try {
@@ -595,7 +616,7 @@ public class UserDao {
 												, rset.getString("STATUS")
 											);
 				
-				//값이 모두 셋팅된 객체 at 리스트에 추가
+				//값이 모두 셋팅된 객체 at을 이미지리스트에 추가
 				dogImgList.add(at);
 			}
 			
@@ -609,17 +630,19 @@ public class UserDao {
 			close(pstmt);
 		}	
 		
-		return dogImgList; //해당 회원의 강아지 리스트가 담겨있는 결과 반환 
+		return dogImgList; //해당 회원의 강아지 리스트가 담겨있는 결과 반환 (없으면 empty)
 	}
 
 	public int idCheck(Connection conn, String userId) {
-
+		//회원가입시 호출되는 메소드로, 아이디의 중복여부를 체크하는 메소드(DB에서 userId는 유니크 제약조건이 걸려있음)
+		
 		//결과 반환 변수(중복된 아이디가 있으면 1, 없으면 0)
 		int result = 0;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//idCheck=SELECT COUNT(*) FROM R_USER WHERE USER_ID=?
+		//idCheck=idCheck=SELECT COUNT(*) FROM R_USER 
+		//WHERE USER_ID=? AND STATUS='Y'
 		String sql = prop.getProperty("idCheck");
 		
 		try {
@@ -630,7 +653,7 @@ public class UserDao {
 			
 			rset = pstmt.executeQuery();
 			
-			//COUNT 조회이므로 결과 행은 1개
+			//COUNT 조회이므로 결과 행은 1개 => 조회 결과가 있다는 것은 해당 아이디가 이미 존재한다는 것 => 사용불가!
 			if(rset.next()) {
 				result = rset.getInt(1); //1번째 컬럼 값 담기
 			}
@@ -650,16 +673,17 @@ public class UserDao {
 
 
 	public int insertUser(Connection conn, User user) {
-
+		//회원을 등록하는 메소드
+		
 		//반환할 결과변수
 		int result = 0; 
 		PreparedStatement pstmt = null;
 		
-		//insertUser=INSERT INTO R_USER VALUES  
-		//(SEQ_UNO.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?, DEFAULT, SYSDATE, DEFAULT, DEFAULT);
+		//insertUser=INSERT INTO R_USER 
+		//VALUES(SEQ_UNO.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?, DEFAULT, SYSDATE, DEFAULT, DEFAULT)
 		String sql = prop.getProperty("insertUser");
 	
-		/*	셋팅해줘야 하는 부분
+		/*	셋팅해줘야 하는 부분(나머지는 고정값)
 			USER_ID	VARCHAR2(30 BYTE)
 			EMAIL	VARCHAR2(100 BYTE)
 			USER_PWD	VARCHAR2(100 BYTE)
@@ -703,13 +727,15 @@ public class UserDao {
 
 
 	public String getUserEmail(Connection conn, String userId) {
-
+		//회원의 이메일을 얻는(조회해오는) 메소드
+		
 		//반환해줄 결과 변수
 		String userEmail = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//getUserEmail=SELECT EMAIL FROM R_USER WHERE USER_ID=?
+		//아이디를 기준으로 메일 조회해오기
+		//getUserEmail=SELECT EMAIL FROM R_USER WHERE USER_ID=? AND STATUS='Y'
 		String sql = prop.getProperty("getUserEmail");
 		
 		try {
@@ -721,7 +747,7 @@ public class UserDao {
 			
 			rset = pstmt.executeQuery();
 			
-			//결과 행은 1개임
+			//결과 행은 1개임(1행 1열로 메일주소만 얻음)
 			if(rset.next()) {
 				userEmail = rset.getString(1);
 			}//if
@@ -742,12 +768,16 @@ public class UserDao {
 
 
 	public String selectEmailHashCode(Connection conn, String userId) {
-
+		//이메일 해쉬코드를 조회해오는 메소드(조회되는 해쉬코드를 이메일 인증시 넘어오는 파라미터와 비교하기 위해 필요)
+		
+		//반환할 결과 변수
 		String emailHashCode = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//selectEmailHashCode=SELECT EMAIL_HASH FROM R_USER WHERE USER_ID=?
+		//아이디를 기준으로 해당 아이디의 이메일 해쉬코드를 얻어옴(해당 해쉬코드는 회원가입시 자동으로 생성되었음)
+		//selectEmailHashCode=SELECT EMAIL_HASH 
+		//FROM R_USER WHERE USER_ID=? AND STATUS='Y'
 		String sql = prop.getProperty("selectEmailHashCode");
 		
 		try {
@@ -785,7 +815,8 @@ public class UserDao {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		
-		//updateEmailChecked=UPDATE R_USER SET EMAIL_CHECKED='Y' WHERE USER_ID=?
+		//회원아이디를 기준으로 이메일체크 컬럼을 Y로 업데이트 해주기
+		//updateEmailChecked=UPDATE R_USER SET EMAIL_CHECKED='Y' WHERE USER_ID=? AND STATUS='Y'
 		String sql = prop.getProperty("updateEmailChecked");
 		
 		try {
@@ -794,6 +825,7 @@ public class UserDao {
 			//쿼리값셋팅
 			pstmt.setString(1, userId);
 			
+			//쿼리실행 후 결과 반환
 			result = pstmt.executeUpdate();
 			
 			//확인
@@ -816,8 +848,9 @@ public class UserDao {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		
-		//updateCookieChecked=UPDATE R_USER SET COOKIE_CHECKED='Y' WHERE USER_ID=?
-		String sql = prop.getProperty("updateEmailChecked");
+		//아이디를 기준으로 해당 아이디의 쿠키컬럼을 Y로 변경(회원가입시 디폴트로 N이 들어갔음)
+		//updateCookieChecked=UPDATE R_USER SET COOKIE_CHECKED='Y' WHERE USER_ID=? AND STATUS='Y'
+		String sql = prop.getProperty("updateCookieChecked");
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -825,6 +858,7 @@ public class UserDao {
 			//쿼리값셋팅
 			pstmt.setString(1, userId);
 			
+			//쿼리 실행 후 결과 반환
 			result = pstmt.executeUpdate();
 			
 			//확인
@@ -848,7 +882,7 @@ public class UserDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//selectUserbyGoogle=SELECT * FROM R_USER WHERE USER_NAME=? AND EMAIL=?
+		//selectUserbyGoogle=SELECT * FROM R_USER WHERE USER_NAME=? AND EMAIL=? AND STATUS='Y'
 		String sql = prop.getProperty("selectUserbyGoogle");
 		
 		/*  조회되는 컬럼 
@@ -877,23 +911,6 @@ public class UserDao {
 			
 			//쿼리 실행 후 결과 받기
 			rset = pstmt.executeQuery();
-			
-			/*
-			 	USER_NO
-				USER_ID
-				EMAIL
-				USER_PWD
-				USER_NAME
-				PHONE
-				SMS_CHECKED
-				EMAIL_HASH
-				EMAIL_CHECKED
-				USER_GENDER
-				STATUS
-				ENROLL_DATE
-				COOKIE_CHECKED
-				ADMIN_CHECKED
-			 */
 			
 			//조회결과로 오는 행은 1개이므로 반복문은 필요없음 
 			if(rset.next()) { //조회 결과가 있다면
@@ -938,6 +955,8 @@ public class UserDao {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		
+		//넘어오는 매개변수는 userId뿐이므로, 회원테이블에서 userId를 기준으로 userNo를 얻는 서브쿼리가 필요
+		//포인트테이블에서 해당 userNo의 포인트를 업데이트 해준다.
 		//updateUserPoint=UPDATE USER_POINT SET POINT =? 
 		//WHERE USER_NO =(SELECT USER_NO FROM R_USER WHERE USER_ID =?)
 		String sql = prop.getProperty("updateUserPoint");
@@ -963,7 +982,5 @@ public class UserDao {
 		
 		return result; //결과 반환
 	}
-
-
 
 }
