@@ -1,3 +1,4 @@
+<%@page import="com.semi.user.model.dto.Dog"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!--  import = "com.semi.user.model.dto.*" %> -->
@@ -20,6 +21,8 @@
 	justify-content: center;
 	display: flex;
 }
+
+
 </style>
 
 </head>
@@ -62,7 +65,7 @@
 
 					<br> <br>
 
-					<h4 id="center">아이디 : <b style="color:#0099FF"><%=loginUser.getUserId() %></b></h4>
+					<h4 id="center">아이디 :&nbsp <b style="color:#0099FF"><%=loginUser.getUserId() %></b></h4>
 
 				</div>
 			</div>
@@ -86,14 +89,11 @@
 
 	<br>
 
-
-	<!--  		
-	<button  class="btn btn-outline-warning btn-lg" style="width: 20%" id="center" onclick="goUserList()">
-		회원조회
-	</button> <br>
-	 -->
-
-
+	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
+		id="center" onclick="goUserSearch()">회원 정보 조회</button>
+	<br>
+	
+	
 	</div>
 
 
@@ -118,6 +118,11 @@
 			
 			function goSnackInsert(){ //새로운 간식 추가하기위한 서블릿
 				location.href="<%=request.getContextPath()%>/snackInsertForm.do"
+			}
+			
+			function goUserSearch(){ //회원의 간식 구매 목록을 확인하기 위한 서블릿
+				location.href="<%=request.getContextPath()%>/userSearchForm.do?userNo=<%=loginUser.getUserNo() %>"
+			 
 			}
 			
 	</script>
