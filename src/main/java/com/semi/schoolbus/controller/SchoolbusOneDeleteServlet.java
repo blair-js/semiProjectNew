@@ -1,7 +1,7 @@
 package com.semi.schoolbus.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,20 +9,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.semi.schoolbus.model.dto.UserReservation;
 import com.semi.schoolbus.model.service.SchoolbusService;
 
 /**
- * Servlet implementation class UserReservationFromServlet
+ * Servlet implementation class SchoolbusOneDeleteServlet
  */
-@WebServlet("/reservationForm.do")
-public class UserReservationFormServlet extends HttpServlet {
+@WebServlet("/resdelete.do")
+public class SchoolbusOneDeleteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UserReservationFormServlet() {
+    public SchoolbusOneDeleteServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,16 +30,20 @@ public class UserReservationFormServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// 예약한 회원 정보와 화면전환 해주는 서블릿
-		// 예약한 회원 목록을 받아서 넘겨줄거임
-		ArrayList<UserReservation> list = new SchoolbusService().selectReList();
+		// 개별 삭제 버튼 클릭시 버스예약 번호를 받아서 온다.
+		// 통학버스 테이블의 좌석수 증가위해서 버스내용도 같이 받아준다.
+		int bno = Integer.parseInt(request.getParameter("bno"));
+		String content = request.getParameter("content");
+		System.out.println("예약 번호 : " + bno);
+		// DB에 버스 예약번호로 접근해서 데이터 삭제
+		int result = new SchoolbusService().deleteOneSchoolbus(bno, content);
 		
-		if(list != null) {
-			request.setAttribute("list", list);
-			request.getRequestDispatcher("views/schoolbus/userResForm.jsp").forward(request, response);
+		if(result > 0) {
+			request.getSession().setAttribute("msg", "예약 취소 완료");
+			response.sendRedirect("reservationList.do");
 		}else {
-			request.setAttribute("msg", "예약 회원 목록 조회 실패");
-			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+			request.setAttribute("msg", "예약 취소 실패");
+			request.getRequestDispatcher("views/common/errorPage").forward(request, response);
 		}
 	}
 

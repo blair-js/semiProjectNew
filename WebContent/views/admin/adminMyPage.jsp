@@ -124,7 +124,7 @@
 			}
 			function goReForm(){
 				console.log("실행 확인");
-				location.href="/reservationForm.do"
+				location.href="/reservationList.do"
 			}
 			
 	</script>

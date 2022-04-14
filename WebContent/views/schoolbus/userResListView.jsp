@@ -41,21 +41,31 @@
 						<tbody>
 							<% for(UserReservation re : list) { %>
 								<tr>
-									<td><%= re.getBusNo() %></td>
-									<td><%= re.getResUserName() %></td>
-									<td><%= re.getResUserId() %></td>
-									<td><%= re.getResUserPhone() %></td>
-									<td><%= re.getBusDailyNo() %></td>
-									<td><button class="btn bg-secondary btn-sm" style="color:white;">예약취소</button></td>
+									<td style="font-size:1.2rem;"><%= re.getBusNo() %></td>
+									<td style="font-size:1.2rem;"><%= re.getResUserName() %></td>
+									<td style="font-size:1.2rem;"><%= re.getResUserId() %></td>
+									<td style="font-size:1.2rem;"><%= re.getResUserPhone() %></td>
+									<td style="font-size:1.2rem;"><%= re.getBusDailyNo() %></td>
+									<td style="font-size:1.2rem;"><input class="btn btn-secondary btn-sm" type="button" onclick="deleteOne('<%= re.getBusNo() %>', '<%= re.getBusDailyNo() %>');" value="삭제"></td>
 								</tr>
 							<% } %>
 						</tbody>
 					</table>
-					<button class="btn bg-warning btn-lg" style="color:white;">예약테이블 리셋</button>
+					<button class="btn bg-warning btn-lg" style="color:white;">예약내역 전체삭제</button>
 				</form>
 			</div>
 		<% } %>
 	</div>
   	<%@ include file = "../common/footer.jsp" %>
+  	<script>
+  		// 회원 개별 삭제 기능 구현 함수
+  		// 위에서 삭제 버튼 클릭시 매개변수로 버스 예약번호와 버스일정내용을 넘겨준다.
+  		function deleteOne(bno, content){
+  			var ans = confirm("선택하신 회원의 예약을 취소하시겠습니까?");
+  			if(!ans) return false;
+			
+  			location.href = "resdelete.do?bno="+bno+"&content="+content;
+  		}
+  	</script>
 </body>
 </html>

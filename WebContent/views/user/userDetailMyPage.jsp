@@ -163,10 +163,69 @@ main .sm{
 					<button type="button" class="w-100 btn btn-secondary btn-lg" onclick="goDetailDog()">
 						<b>강아지 정보 상세보기</b>
 					</button>
+					<!-- 통학버스 예약 정보 -->
+					<h4 class="d-flex justify-content-between align-items-center mb-3">
+						<span class="text-primary">Your Reservation</span>
+					</h4>
+					<!-- 회원 예약 내역 보여줄 부분 -->
+					<div id="resBus">
+					</div>
 				</div>
 				<!-- 우측 강아지의 간략한 정보 끝 -->
-				<!--  -->	
-					
+				<!--  -->
+				
+				<script>
+				selectResUser();	
+				// 회원의 버스 예약정보 조회 함수
+					function selectResUser(){
+						if($("#resBus").empty()){
+							$("#resBus").html("통학버스 예약 내역이 존재하지 않습니다.");
+						}
+						
+						$.ajax({
+							url:"userRes.do",
+							data:{uNo : <%= u.getUserNo() %>},
+							type:"get",
+							success:function(userRe){
+								console.log(userRe);
+								var value = "";
+								// 버스를 예약하지 않은 회원의 경우
+								if(userRe.busNo == 0){
+									value='예약된 버스 내역이 존재하지 않습니다.'									
+								}else{
+									value='<span>예약번호 : ' + userRe.busNo
+										  + '<hr style="color:black;">예약차량 : ' + userRe.busDailyNo
+										  + '&nbsp;<input type="button" class="btn btn-secondary btn-sm" onclick="deleteRe(\''+userRe.busNo+'\',\''+userRe.busDailyNo+'\');" value="예약취소">'
+								}
+								$("#resBus").html(value);
+							}
+						})
+					}
+				// 회원 예약 취소 함수
+				function deleteRe(bNo, content){
+					var ans = confirm("예약을 취소하시겠습니까?");
+					if(!ans) return false;
+					// 확인을 눌렀을경우 ajax 실행
+					$.ajax({
+						url:"deleteUserRes.do",
+						type:"post",
+						data:{
+							bNo:bNo,
+							content:content
+						},
+						success:function(status){
+							if(status == "success"){
+								// 예약 취소된 화면전환위해 조회 함수 실행
+								selectResUser();
+								alert("예약이 취소 되었습니다.");
+							}
+						},
+						error : function(){
+							alert("예약 취소 실패. ajax-통신 에러");
+						}
+					});
+				}
+				</script>	
 					
 					
 				<!-- 강아지 로고가 있는 위쪽과 정보를 뿌려주는 아래쪽과의 구분선 -->	
