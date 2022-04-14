@@ -42,4 +42,80 @@ public class QnaService {
 		return list;
 	}
 
+	public int insertQna(Qna q) {
+		Connection conn = getConnection();
+		
+		int result = new QnaDao().insertQna(conn, q);
+		
+		close(conn);		
+		return result;
+	}
+
+	public Qna selectQna(int qno) {
+		Connection conn = getConnection();
+		
+		//조회수 증가 메소드
+		int result = new QnaDao().increaseCount(conn, qno);
+		Qna q = null;
+		
+		if(result > 0) {
+			commit(conn); //조회수 commit
+			q = new QnaDao().selectQna(conn, qno);
+		}else {
+			rollback(conn);
+		}
+		
+		close(conn);
+		return q;
+	}
+
+	public Qna selectUpdateQna(int qno) {
+		Connection conn = getConnection();
+		
+		Qna q = new QnaDao().selectQna(conn, qno);
+		
+		close(conn);
+		return q;
+	}
+
+	public int updateQna(Qna q) {
+		Connection conn = getConnection();
+		
+		int result = new QnaDao().updateQna(conn, q);
+		
+		if(result > 0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		
+		close(conn);
+		return result;
+	}
+
+	public int deleteQna(int qno) {
+		Connection conn = getConnection();
+		
+		int result = new QnaDao().deleteQna(conn, qno);
+		
+		if(result > 0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		
+		close(conn);
+		return result;
+	}
+
+	public Qna selectPwdCheck(int qno, int userNo) {
+		Connection conn = getConnection();
+		
+		Qna q = new QnaDao().selectPwdCheck(conn, qno, userNo);
+		
+		close(conn);
+		
+		return q;
+	}
+
 }

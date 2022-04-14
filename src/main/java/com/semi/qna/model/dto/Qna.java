@@ -12,7 +12,7 @@ public class Qna {
 	private int count;				//조회수
 	private Date createDate;		//작성일
 	private String status;			//상태값(Y/N)
-	private int qnaPwd;				//비밀글 비밀번호
+	private String qnaPwd;				//비밀글 비밀번호
 	private String qnaSecret;		//비밀글 여부
 	private String answer;			//답변 여부
 	private int rowNo;				//list에서 rownum으로 게시판 번호를 주기 위함
@@ -25,7 +25,7 @@ public class Qna {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Qna(int qnaNo, String qnaTitle, String answer, String qnaWriter, int count, Date createDate, int qnaPwd, String qnaSecret, int rowNo) {
+	public Qna(int qnaNo, String qnaTitle, String answer, String qnaWriter, int count, Date createDate, String qnaPwd, String qnaSecret, int rowNo) {
 		super();
 		this.qnaNo = qnaNo;
 		this.qnaTitle = qnaTitle;
@@ -37,9 +37,19 @@ public class Qna {
 		this.qnaSecret = qnaSecret;
 		this.rowNo = rowNo;
 	}
+	
+	public Qna(int qnaNo, String qnaTitle, String qnaWriter, Date createDate, int count, String qnaContent) {
+		super();
+		this.qnaNo = qnaNo;
+		this.qnaTitle = qnaTitle;
+		this.qnaWriter = qnaWriter;
+		this.createDate = createDate;
+		this.count = count;
+		this.qnaContent = qnaContent;		
+	}
 
 	public Qna(int qnaNo, String qnaWriter, int category, String qnaTitle, String qnaContent, int count,
-			Date createDate, String status, int qnaPwd, String qnaSecret, int rowNo) {
+			Date createDate, String status, String qnaPwd, String qnaSecret, int rowNo) {
 		super();
 		this.qnaNo = qnaNo;
 		this.qnaWriter = qnaWriter;
@@ -134,11 +144,11 @@ public class Qna {
 		this.answer = answer;
 	}
 
-	public int getQnaPwd() {
+	public String getQnaPwd() {
 		return qnaPwd;
 	}
 
-	public void setQnaPwd(int qnaPwd) {
+	public void setQnaPwd(String qnaPwd) {
 		this.qnaPwd = qnaPwd;
 	}
 

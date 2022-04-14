@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="com.semi.qna.model.dto.*"%>
+<%
+	Qna q = (Qna)request.getAttribute("q");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,6 +25,16 @@
 	
 	.table-condensed>tfoot>tr>td { padding: 15px;}
 </style>
+<script type="text/javascript" src = "./resources/ckeditor/ckeditor.js"></script>
+<script>
+	var ckeditor_config = {
+			height: 600,
+			resize_enaleb : false,
+			enterMode : CKEDITOR.ENTER_BR,
+			shiftEnterMode : CKEDITOR.ENTER_P
+			//filebrowerUploadUrl : "/uploadQna.do"
+	};
+</script>
 </head>
 <body>
 	<%@ include file="../common/menubar.jsp" %>
@@ -30,11 +43,68 @@
 	
 		<div class="container">
 	
-		<hr class="bor">
+			<hr class="bor">
+			
+			<!-- ckeditor 사용 -->
+			<form id="enrollForm" action="<%= contextPath %>/updateQna.do" method="post">
+				<input type="hidden" name="qno" value="<%=q.getQnaNo() %>">
+				<div class="form-group">
+					<h3 class="mb-1">제목</h3>
+					<input type="text" name="title" class="form-control mb-4" placeholder="제목을 입력하세요" value="<%=q.getQnaTitle()%>">
+				</div>
+				
+				<div class="form-group">
+					<textarea name="content" id="summernote"><%=q.getQnaContent()%></textarea>
+				</div>
+	
+				<hr>
+				
+				<div class="my-4">
+					<span>비밀글 설정</span>
+					<input type="radio" class="form-check-input mx-3" id="secret" name="secret" value="N" checked="checked"><span class="ml-3">공개글</span>&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="radio" class="form-check-input mx-3" id="secret" name="secret" value="Y"><span class="ml-2">비밀글</span>
+				</div>
+				
+				<hr>
+				
+				<div class="my-4">
+					<span>비밀번호</span>
+					<%if(q.getQnaPwd() == null) {%>
+					<input type="text" id="secretPwd" name="secretPwd" class="mx-4" placeholder="비밀번호를 설정하세요" value="">
+					<%} else {%>
+					<input type="text" id="secretPwd" name="secretPwd" class="mx-4" placeholder="비밀번호를 설정하세요" value="<%=q.getQnaPwd()%>">
+					<%} %>
+				</div>	
+				
+				<hr>
+				
+				<div class="row">
+					<div class="col-md-12 text-md-end p-3">
+						<input class="btn btn-secondary m-1" type="button" value="취소" onclick="location.href='<%=contextPath%>/listQna.do'">
+						<input class="btn btn-secondary m-1" type="submit" value="수정">
+					</div>
+				</div>	
+			</form>
+		</div>
+		
+		<script>
+			CKEDITOR.replace("content", ckeditor_config);
+		</script>
+		
+		<script>
+			$(function(){
+				$('input:submit').on('click', function(){
+					if($('input[name=secret]:checked').val() == 'Y'){
+						$("#secretPwd").attr("required", true);
+					}
+				})
+			
+			});
+		</script>
 		
 		<!-- 글 수정하기 -->
 		<!-- 수정할 값을 request에서 꺼내서 뿌려줘야한다. -->
-		<form id="enrollForm" action="<%= contextPath %>/updateQna.do" method="post" enctype="multipart/form-data">
+		<!-- <form id="enrollForm" action="<= contextPath %>/updateQna.do" method="post" enctype="multipart/form-data">
 			<div class="form-group">
 				<table class="table table-condensed table-borded pd-1">	
 					<tbody>
@@ -89,18 +159,11 @@
 						</tr>
 					</tbody>	
 				</table>
-			</div>
+			</div> 
 			
-			<hr class="bor">
 			
-			<div class="row">
-				<div class="col-md-12 text-md-end p-3">
-					<input class="btn btn-secondary m-1" type="button" value="취소" onclick="location.href='<%=contextPath%>/listQna.do'">
-					<input class="btn btn-secondary m-1" type="submit" value="수정">
-				</div>
-			</div>	
 		</form>			
-	</div>
+	</div>-->
 	
 	<%@ include file="../common/footer.jsp" %>
 </body>

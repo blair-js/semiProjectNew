@@ -59,6 +59,8 @@ public class QnaListServlet extends HttpServlet {
 		if(testSearchKey != null && !testSearchKey.equals("")) {
 			searchKey = testSearchKey;
 		}
+		System.out.println("keyword: " +  keyword);
+		System.out.println("searchKey: " +  searchKey);
 		
 		//총 게시글 개수
 		listCount = new QnaService().getListCount(searchKey, keyword);

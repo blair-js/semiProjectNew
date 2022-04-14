@@ -22,13 +22,16 @@
 	
 	.table-condensed>tfoot>tr>td { padding: 15px;}
 </style>
-
-<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script> 
-
-<!-- summernote 사용을 위한 import -->
-<link rel="stylesheet" href="./resources/summernote/css/summernote-lite.css">
-<script src="./resources/summernote/js/summernote-lite.js"></script>
-<script src="./resources/summernote/lang/summernote-ko.KR.js"></script>
+<script type="text/javascript" src = "./resources/ckeditor/ckeditor.js"></script>
+<script>
+	var ckeditor_config = {
+			height: 600,
+			resize_enaleb : false,
+			enterMode : CKEDITOR.ENTER_BR,
+			shiftEnterMode : CKEDITOR.ENTER_P
+			//filebrowerUploadUrl : "/uploadQna.do"
+	};
+</script>
 </head>
 <body>
 	<%@ include file="../common/menubar.jsp" %>
@@ -38,27 +41,59 @@
 	<div class="container">
 	
 		<hr class="bor">
-		<!-- summernote를 사용하기 위해 선언, 호출 -> textarea or div 두 가지의 방법이 있다. -->
+		<!-- ckeditor 사용 -->
 		<form id="enrollForm" action="<%= contextPath %>/insertQna.do" method="post">
-			<textarea name="editordata"" id="summernote"></textarea>
+			<div class="form-group">
+				<h3 class="mb-1">제목</h3>
+				<input type="text" name="title" class="form-control mb-4" placeholder="제목을 입력하세요">
+			</div>
+			
+			<div class="form-group">
+				<textarea name="content" id="summernote"></textarea>
+			</div>
+
+			<hr>
+			
+			<div class="my-4">
+				<span>비밀글 설정</span>
+				<input type="radio" class="form-check-input mx-3" id="secret" name="secret" value="N" checked="checked"><span class="ml-3">공개글</span>&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="radio" class="form-check-input mx-3" id="secret" name="secret" value="Y"><span class="ml-2">비밀글</span>
+			</div>
+			
+			<hr>
+			
+			<div class="my-4">
+				<span>비밀번호</span>
+				<input type="text" id="secretPwd" name="secretPwd" class="mx-4" placeholder="비밀번호를 설정하세요">
+			</div>
+			
+			<hr>
+			
+			<div class="row">
+				<div class="col-md-12 text-md-end p-3">
+					<input class="btn btn-secondary m-1" type="button" value="취소" onclick="location.href='<%=contextPath%>/listQna.do'">
+					<input class="btn btn-secondary m-1" type="submit" value="등록">
+				</div>
+			</div>	
 		</form>
 		
 		<script>
-			//summernote 웹 에디터 로딩
-			$(document).ready(function() {
-				$('#summernote').summernote({
-					height: 300,		//에디터 높이
-					minHeight: null,	//최소 높이
-					maxHeight: null,	//최대 높이
-					focus: true,		//에디터 로딩 후 포커스를 맞출지 여부
-					lang: "ko-KR",		//한글 설정
-					placeholder: '내용을 입력하세요.'
-				});
-			});
-			
+			CKEDITOR.replace("content", ckeditor_config);
 		</script>
+		
+		<script>
+			$(function(){
+				$('input:submit').on('click', function(){
+					if($('input[name=secret]:checked').val() == 'Y'){
+						$("#secretPwd").attr("required", true);
+					}
+				})
+			
+			});
+		</script>
+		
 		<!-- 글 작성하기 -->
-		<!-- <form id="enrollForm" action="<%= contextPath %>/insertQna.do" method="post" enctype="multipart/form-data">
+		<!-- <form id="enrollForm" action="<= contextPath %>/insertQna.do" method="post" enctype="multipart/form-data">
 			<div class="form-group">
 				<table class="table table-condensed table-borded pd-1">	
 					<tbody>
@@ -105,7 +140,7 @@
 			
 			<div class="row">
 				<div class="col-md-12 text-md-end p-3">
-					<input class="btn btn-secondary m-1" type="button" value="취소" onclick="location.href='<%=contextPath%>/listQna.do'">
+					<input class="btn btn-secondary m-1" type="button" value="취소" onclick="location.href='<=contextPath%>/listQna.do'">
 					<input class="btn btn-secondary m-1" type="submit" value="등록">
 				</div>
 			</div>			

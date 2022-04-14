@@ -16,7 +16,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>	
-	#notice{
+	#qna{
 		text-align : center;
 	}
 	
@@ -45,7 +45,7 @@
 	
 	<%-- container : 부트스트랩에서 반응형으로 사용할 HTML 요소들을 둘러싸는 기본 클래스
 		 container는 반응형 고정 너비 컨테이너, container-fluid는 화면 너비 전체를 사용(width 100%) --%>
-	<div class = "container p-2" id="notice">	
+	<div class = "container p-2" id="qna">	
 
 		<%-- row로 감싸서 행을 생성 -> col-md-*, col-lg-*를 사용해 영역을 나눔(디바이스 크기에 따라)--%>
 		<div class="row">
@@ -53,7 +53,7 @@
 			<div class="col-md-6 text-md-start">
 				<%-- text-md(lg/xl)-start : 디바이스 크기에 따라 정렬되는 반응형 정렬 -> 일반 float-left를 쓰면 정렬이 안된다. --%>
 				<div class="m-3" id="allListCount">
-					<b>전체글 : <%=listCount %>개</b>
+					<b>전체글 : <%= listCount %>개</b>
 				</div>
 			</div>
 			
@@ -73,7 +73,7 @@
 						<!-- 검색어 입력 -->		
 						<input type="text" class="form-control" id="searchKey" name="searchKey" placeholder="검색어를 입력하세요." value="${param.searchKey }">	
 						<!-- 검색 버튼 --> 
-						<a href="#" class="btn btn-secondary" role="button" id="searchBtn">검색</a>							
+						<input type="submit" class="btn btn-secondary" id="searchBtn" value="검색">							
 					</div>	
 				</form>	
 			</div>
@@ -104,12 +104,13 @@
 				 	<% if(q.getQnaSecret().equals("Y")) { %> <!-- 자물쇠 아이콘이 나오기 위한 if -> secret 상태가 y인 경우  -->
 				 	<tr>
 				 		<td class="d-none"><%= q.getQnaNo()%></td>
+				 		<td class="d-none"><%= q.getQnaSecret()%></td>
 				 		<td><%= q.getRowNo()%></td>
 						<td>
 							<i class="bi bi-lock-fill"></i> <!-- 자물쇠 아이콘 나옴 -->
 							<%= q.getQnaTitle()%>
 						</td>
-						<% if(q.getAnswer() != null) {%>
+						<% if(q.getAnswer().equals("답변 완료")) {%>
 							<td>답변 완료</td>
 						<% } else{ %>
 							<td>미답변</td>
@@ -121,9 +122,10 @@
 				 	<%} else { %> <!-- 비밀 글이 아닌 경우 -->
 				 	<tr>
 				 		<td class="d-none"><%= q.getQnaNo()%></td>
+				 		<td class="d-none"><%= q.getQnaSecret()%></td>
 				 		<td><%= q.getRowNo()%></td>
 						<td><%= q.getQnaTitle()%></td>
-						<% if(q.getAnswer() != null) {%>
+						<% if(q.getAnswer().equals("답변 완료")) {%>
 							<td>답변 완료</td>
 						<% } else{ %>
 							<td>미답변</td>
@@ -182,17 +184,18 @@
 	<script type="text/javascript">
    	$(function(){
    		$(".table>tbody>tr").click(function() {
-   			var nno = $(this).children().eq(0).text(); 
+   			var qno = $(this).children().eq(0).text(); 
+   			var qnaSecret = $(this).children().eq(1).text(); 
    			
-   			if(n.getQnaSecret() == "Y"){   			
-   				location.href = "<%= contextPath%>/PwdCheckQna.do?nno="+nno; <%--번호도 같이 가져간다. -> 그 게시글 번호의 비밀번호를 확인 --%>
+   			if(qnaSecret == "Y"){  
+   				location.href = "<%= contextPath%>/pwdCheckFormQna.do?qno="+qno; <%--번호도 같이 가져간다. -> 그 게시글 번호의 비밀번호를 확인 --%>
    			}else {
-   				location.href = "<%= contextPath%>/detailQna.do?nno="+nno; <%--번호도 같이 가져간다.--%>
+   				location.href = "<%= contextPath%>/detailQna.do?qno="+qno; <%--번호도 같이 가져간다.--%>
    			}
    		})
    	})
    </script>
-	
+	   			
 	 <%@ include file="../common/footer.jsp" %>
 </body>
 </html>

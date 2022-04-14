@@ -1,6 +1,8 @@
 package com.semi.qna.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,6 +13,7 @@ import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.semi.common.MyFileRenamePolicy;
+import com.semi.common.dto.Attachment;
 
 /**
  * Servlet implementation class QnaUploadServlet
@@ -42,7 +45,7 @@ public class QnaUploadServlet extends HttpServlet {
 			
 			MultipartRequest multiRequest = new MultipartRequest(request, savePath, maxSize, "UTF-8", new MyFileRenamePolicy());
 			
-			String
+			ArrayList<Attachment> fileList = new ArrayList<Attachment>();
 		}
 	}
 
