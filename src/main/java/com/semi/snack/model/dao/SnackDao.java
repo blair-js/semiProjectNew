@@ -463,58 +463,27 @@ public class SnackDao {
 		return snack;
 	}
 
-	public int getUserListCount(Connection conn, int uno) {
-		int listCount = 0;
-		
-		PreparedStatement pstmt = null;
-		ResultSet rset = null;
-		
-		String sql = prop.getProperty("getUserListCount");
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, uno);
-			
-			rset = pstmt.executeQuery(sql);
-			
-			
-			if(rset.next()) {//( 카운트, 썸, 에버리지 = 하나만 값이 나오기에 if문 사용 )
-				listCount = rset.getInt(1); //딱 하나만 나오기에 한 행만 나오기에 1번째 컬럼만 가져오겠다는 뜻 //COUNT(*) 집계함수 숫자하나만 나옴  
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally {
-			close(rset);
-			close(pstmt);
-		}
-		
-		return listCount;
-	}
-
-
-
 	public ArrayList<SnackOrder> selectSnackOrderList(Connection conn, PageInfo pi) {
 		//SELECT A.ORDER_NO, A.ORDER_DATE, C.USER_ID, B.SNACK_NAME FROM SNACK_ORDER A JOIN SNACK B ON A.SNACK_NO = B.SNACK_NO JOIN R_USER C ON A.USER_NO = C.USER_NO
 		ArrayList<SnackOrder> list = new ArrayList<>();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-
 		String sql = prop.getProperty("selectSnackOrderList");
+		
 		
 		int startRow = (pi.getCurrentPage()-1) * pi.getBoardLimit() + 1; //물음표에 값을 넣어주기 위해 구해준다 pi에서 다 받아온거에서 가져오는거임 담겨있는걸 쓰는거임
 		int endRow = startRow + pi.getBoardLimit() -1;
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
-<
-			pstmt.setInt(1, uno);
-			pstmt.setInt(2, startRow);
-			pstmt.setInt(3, endRow);
+			pstmt.setInt(1, startRow);
+			pstmt.setInt(2, endRow);
 			
 			rset = pstmt.executeQuery();
-
+			
+			System.out.println( "rset 잘 담았는지 체크" + rset );
+			
 			while(rset.next()) {
 				SnackOrder so = new SnackOrder();
 				so.setOrderNo(rset.getInt("ORDER_NO"));
@@ -525,6 +494,7 @@ public class SnackDao {
 				list.add(so);
 			}
 			
+			System.out.println("list에 담긴 값" + list);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -536,7 +506,8 @@ public class SnackDao {
 		
 		return list;
 	}
-
+			
+		
 
 	public int getListCount(Connection conn) { //총 게시글 갯수를 구하는 메서드
 		
@@ -578,7 +549,7 @@ public class SnackDao {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, uno);
 			
-			rset = pstmt.executeQuery(sql);
+			rset = pstmt.executeQuery();
 			
 			
 			if(rset.next()) {//( 카운트, 썸, 에버리지 = 하나만 값이 나오기에 if문 사용 )
@@ -594,7 +565,6 @@ public class SnackDao {
 		
 		return listCount;
 	}
-
 
 	public ArrayList<SnackOrder> userSnackOrderList(Connection conn, PageInfo pi, int uno) {
 		
@@ -639,7 +609,7 @@ public class SnackDao {
 	}
 
 
-	public ArrayList<User> userSearch(Connection conn, int uno) {
+	public ArrayList<User> userSearch(Connection conn, PageInfo pi) {
 				
 		ArrayList<User> list = new ArrayList<>();
 		PreparedStatement pstmt = null;
@@ -648,22 +618,38 @@ public class SnackDao {
 		String sql = prop.getProperty("userSearch");
 		//쿼리문 짜고 snackOrder에 생성자 만들고 멤버 변수도 만들어줘야함 
 		
+		int startRow = (pi.getCurrentPage()-1) * pi.getBoardLimit() + 1; //물음표에 값을 넣어주기 위해 구해준다 pi에서 다 받아온거에서 가져오는거임 담겨있는걸 쓰는거임
+		int endRow = startRow + pi.getBoardLimit() -1;
+		
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, uno);
+			pstmt.setInt(1, startRow);
+			pstmt.setInt(2, endRow);
 			
 			rset = pstmt.executeQuery();
 			
 			while(rset.next()) {
 				User u = new User();
+				u.setUserNo(rset.getInt("USER_NO"));
+				u.setUserId(rset.getString("USER_ID"));
+				u.setUserName(rset.getString("USER_NAME"));
+				u.setPhone(rset.getString("PHONE"));
+				u.setEnrollDate(rset.getDate("ENROLL_DATE"));
+				
+				list.add(u);
 			}
+			
+			System.out.println("userlist에 담은 값" + list);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
 		}
 		
-		return null;
+		return list;
 	}
 
 
