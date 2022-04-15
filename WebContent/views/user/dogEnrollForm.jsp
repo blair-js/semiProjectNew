@@ -89,6 +89,12 @@ div .bDog{
 #goLogin{
 	text-align: center;
 }
+div .canBtn{
+	background-color: red;
+	color: white;
+	font-weight: bold;
+}
+
 </style>
 </head>
 <body>
@@ -167,22 +173,30 @@ div .bDog{
 				<label class="form-label">대기여부</label> 
 					<input type="radio" id="radioBtnYes" name="wating" value="Y"> 예
 					<input type="radio" id="radioBtnNo" name="wating" value="N"> 아니오
+					<div class="field-row btnWrapper mt-3">
+						<button type="reset" class="form-button btn-success">다시작성</button>
+						<button type="button" class="form-button canBtn" onclick="goCancel();">신청취소</button>
+					</div>
 			</div>
 			<!-- 입학신청서 제출 버튼 -->
-			<div class="field-row btnWrapper mt-5">
+			<div class="field-row btnWrapper mt-7">
 				<button type="submit" id="enrollBtn" class="form-button">입학신청서 제출</button>&nbsp;
 				<button type="submit" id="watingBtn" class="form-button">대기신청서 제출</button>
 			</div>
 			
 			<!-- 숨겨져있는 파일영역 -->
 			<div id="fileArea">
-		    	<input type="file" name="file" id="file" onchange="loadImg(this);" required>
+		    	<input type="file" accept="image/*" name="file" id="file" onchange="loadImg(this);" required>
 		    </div>
 	</form>
 	<!-- 신청서 form 끝 -->
 	
 
 	<script>
+		function goCancel() {
+			window.history.back();
+		}
+		
 		$(function(){
 		      // 파일 input 하는 부분은 숨겼음
 		      $("#fileArea").hide();
