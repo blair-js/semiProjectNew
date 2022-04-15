@@ -81,6 +81,7 @@
 	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
 		id="center" onclick="goSnackOrder()">간식 구매목록</button>
 	<br>
+	
 	<br>
 
 	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
@@ -94,6 +95,7 @@
 		id="center" onclick="goUserSearch()">회원 정보 조회</button>
 	<br>
 	
+	<br>
 	
 
 	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
@@ -140,7 +142,7 @@
 			}
 			
 			function goUserSearch(){ //회원의 간식 구매 목록을 확인하기 위한 서블릿
-				location.href="<%=request.getContextPath()%>/userSearchForm.do?userNo=<%=loginUser.getUserNo() %>"
+				location.href="<%=request.getContextPath()%>/userSearchForm.do"
 			 
 			}
 			
