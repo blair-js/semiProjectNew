@@ -90,6 +90,9 @@ public class DogInsertServlet extends HttpServlet {
 			
 			//////////////////////////////////////////////////////////////////////////////////////////////////
 			
+			//실패용 test code
+			//result = -1;
+			
 			if(result > 0) { //입학(등록) 성공시
 				
 				//request 객체에 Dog 객체의 정보 담아주기 => dogInsertOk에서 값을 받아서 정보 출력할 예정!
