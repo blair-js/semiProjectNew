@@ -72,15 +72,6 @@
 				<tr id="content">
 					<td colspan="4"><%=q.getQnaContent() %></td>
 				</tr>
-				<%-- 뿌려줄 첨부파일이 있는지 없는지 확인 --%>
-				<%-- for문을 돌려서 첨부파일이 있으면 추가 첨부파일의 수만큼 늘어난다. --%>
-				<%-- <td colspan="3">
-						<% if(at != null){ %>
-						<a download="<%= at.getOriginName() %>" href="<%=contextPath%>/resources/board_upfiles/<%=at.getChangeName()%>"><%= at.getOriginName() %></a>
-						<% }else{ %>
-						첨부파일이 없습니다.
-					<% } %>
-				</td> --%>
 			</tbody>	
 		</table>
 		
@@ -92,68 +83,163 @@
 	  <div class="comment-txt">
 	  	<!-- 관리자에게만 보이도록 한다. -->
 	  	  <% if(loginUser != null && loginUser.getUserId().contains("admin")){ %>
-          <textarea cols="120" rows="3" id="replyCnt" style="resize: none;" placeholder="댓글을 작성해주세요."></textarea>
-          <button id="addreply-btn" class="btn btn-dark btn-lg mb-6 pl-3 "style="height: 4.5rem">등록하기</button>
+          <textarea rows="3" id="replyCnt" style="resize: none; width:92%" placeholder="댓글을 작성해주세요."></textarea>
+          <button id="addreply" class="btn btn-dark btn-lg mb-6 pl-3 "style="height: 4.5rem">등록하기</button>
           <%} else {%>
-          <textarea cols="120" rows="3" id="replyCnt" style="resize: none;" placeholder="관리자만 작성이 가능합니다."></textarea>	
-          <button id="addreply-btn" class="btn btn-dark btn-lg mb-6 pl-3 "style="height: 4.5rem" disabled>등록하기</button>
+          <textarea cols="200" rows="3" id="replyCnt" style="resize: none; width:92%" placeholder="관리자만 작성이 가능합니다."></textarea>	
+          <button id="addreply" class="btn btn-dark btn-lg mb-6 pl-3 "style="height: 4.5rem" disabled>등록하기</button>
           <%} %>
        </div> 
-
-       <div class="row">
-       	  <table class="table table-striped" style="text-align: center; border: 1px solid #dddddd">
-      		  <tbody>
-              	<tr>
-                   <td align="left" bgcolor="beige">댓글</td>
-                </tr>
-                <tr>
-                   <%--
-	               CommentDAO commentDAO = new CommentDAO();
-	               ArrayList<Comment> list = commentDAO.getList(boardID, bbsID);
-	               for(int i=0; i<list.size(); i++){
-	            	--%>
-                <div class="row">
-                   <table class="table table-striped"
-                      style="text-align: center; border: 1px solid #dddddd">
-                      <tbody>
-                         <tr>
-                            <td align="left">
-                               <%-- list.get(i).getUserID() %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= list.get(i).getCommentDate().substring(0,11) + list.get(i).getCommentDate().substring(11,13) + "시" + list.get(i).getCommentDate().substring(14,16) + "분" --%>
-                            </td>
-                            <td colspan="2"></td>
-                            <td align="right">
-                               <%--
-                            if(list.get(i).getUserID() != null && list.get(i).getUserID().equals(userID)){   //댓글 쓴사람과 지금 유저가 같을 때 수정과 삭제를 가능하게 함
-                            %>
-                               <form name = "p_search">
-                                  <a type="button" onclick="nwindow(<%=boardID%>,<%=bbsID %>,<%=list.get(i).getCommentID()%>)" class="btn-primary">수정</a>
-                               </form>   
-                                  <a onclick="return confirm('정말로 삭제하시겠습니까?')" href = "commentDeleteAction.jsp?commentID=<%= list.get(i).getCommentID() %>" class="btn-primary">삭제</a>                                                   
-                            <%
-                            }
-                            --%>
-                            </td>
-                         </tr>
-                         <tr>
-                            <td colspan="5" align="left">
-                               <%--= list.get(i).getCommentText() --%> <%--    
-                            String commentReal = "C:\\Users\\j8171\\Desktop\\studyhard\\JSP\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\BBS\\commentUpload";
-                            File commentFile = new File(commentReal+"\\"+bbsID+"사진"+list.get(i).getCommentID()+".jpg");
-                            if(commentFile.exists()){           //해당 댓글에 대응되는 사진이 있을 경우 사진도 보여준다.
-                         %>   
-                         <br><br><img src = "commentUpload/<%=bbsID%>사진<%=list.get(i).getCommentID() %>.jpg" border="300px" width="300px" height="300px"><br><br></td>
-                         <%} %> --%>
-                         </tr>
-                      </tbody>
-                   </table>
-             	</div>
-                <%--
-                }
-             --%>
-            </tr>
-         </table>
-      </div>              
+		
+		<!-- 댓글을 보여주는 div -->
+      	<div class="row">
+      	<div class="bg-secondary text-white text-center">댓글</div>
+       	  <table class="table table-striped replyList" id="replyList" style="text-align: center; border: 1px solid #dddddd">
+       	  
+      	  </table>
+        </div>                
     </div>
+    
+    <!-- 댓글script -->
+    <script>
+    //댓글 등록
+	    $(function(){
+	    	selectReplyList(); //onload될 때 댓글이 있다면 댓글을 가져와서 뿌려준다.
+	    	$('#addreply').click(function() { //등록버튼을 누르면 실행
+	    		var content = $('#replyCnt').val();
+	    		var qno = <%=q.getQnaNo()%>
+	    		
+	    		$.ajax({
+	    			url:"insertReplyQna.do",
+	    			type:"post",
+	    			data:{
+	    				content:content,
+	    				qno:qno
+	    			},
+	    			success:function(status){
+	    				if(status == "success"){
+	    					selectReplyList();
+	    					$('#replyCnt').val(""); //value에 있던 댓글 내용을 지운다.
+	    				}
+	    			}, 
+	    			error:function(){
+	    				console.log("ajax 통신 실패 -댓글등록");
+	    			}
+	    		})
+	    	})
+	    })
+	    //댓글 리스트
+	    function selectReplyList(){
+	    	$('#replyList').empty(); //새로 로드하기 위해 안의 내용 비운다.
+	    	var userId = "<%= loginUser.getUserId() %>";
+	    	$.ajax({
+	    		url:"replyListQna.do",
+	    		data:{qno:<%=q.getQnaNo()%>},
+	    		type:"get",
+	    		success:function(list){
+	    			console.log(list)
+	    			//반복문 돌리기
+	    			var value="";
+	    			$.each(list, function(index, obj){
+	    				if(userId.includes("admin") || userId == obj.replyWriter){ //관리자와 글 작성자만 댓글을 달 수 있다.
+	        				value += '<tr style="border-top: 10px solid #fff;">' +
+	        						 '<td style="text-align:left; border:none;">' + obj.replyWriter + ' | ' + obj.createDate + '</td>' +
+	        						 '<td style="text-align:left; border:none;"><input class="btn btn-secondary btn-sm" type="button" onclick="updateBtn('+ obj.qnaReplyNo +');" value="수정">' + 
+	        						 '<input class="btn btn-secondary btn-sm mx-2" type="button" onclick="deleteReply(' + obj.qnaReplyNo + ');" value="삭제"></td>' + 
+	        						 '</tr>' + 
+	        						 '<tr id="reply'+obj.qnaReplyNo +'">' +
+	        						 '<td style="text-align:left;" colspan="2">' + obj.qnaReplyContent + '</td>' +
+	        						 '</tr>' +
+	        						 '<tr id="update'+obj.qnaReplyNo +'" style="display: none">' +
+	        						 '<td><textarea rows="3" id="textarea'+obj.qnaReplyNo+'" style="resize: none; width:92%">'+ obj.qnaReplyContent +'</textarea></td>' +
+	        						 '<td>&nbsp<input type="button" onclick="updateReply('+obj.qnaReplyNo +');" class="btn btn-secondary" value="수정하기">' +
+	        						 '<input type="button" class="btn btn-secondary mx-2" onclick="closeR('+obj.qnaReplyNo +');" value="취소"></td>'+
+	        						 '</tr>'
+	        						 
+	    				}else {
+	    					value += '<tr style="border-top: 10px solid #fff;">' +
+	    							 '<td style="text-align:left; border:none;">' + obj.replyWriter + ' | ' + obj.createDate + '</td>' +
+	    							 '</tr>' +
+	    							 '<tr>' +
+	        						 '<td style="text-align:left; border:none;">' + obj.qnaReplyContent + '</td>' +     
+	        						 '</tr>'
+	    							 
+	    				}
+	    			});
+	    			$('#replyList').html(value); //댓글이 나오는 곳에 value를 html로 넣는다.
+	    		},
+	    		error:function(){
+	    			console.log('ajax 통신 실패-댓글 조회');
+	    		}
+	    	})    	    	
+	    }
+    	//댓글 수정 버튼 누르면 수정 text area가 나온다.
+    	function updateBtn(rQno){
+    		var replyId = "reply" + rQno;
+    		var updateId = "update" + rQno;
+    		
+    		$('#' + replyId).hide();
+    		$('#' + updateId).show();
+    	}
+    	
+    	//취소 버튼을 누르면 다시 list로 돌아간다.
+    	function closeR(rQno){
+    		var replyId = "reply" + rQno;
+    		var updateId = "update" + rQno;
+    		
+    		$('#' + replyId).show();
+    		$('#' + updateId).hide();
+    	}
+    	
+    	//수정하기 버튼을 누르면 수정이 된다.
+    	function updateReply(rQno){
+    		//수정된 내용을 보내줘야하기 때문에 textarea에 담긴 value를 변수에 담아서 보낸다.
+    		var content = $('#textarea'+rQno).val();
+    		
+    		$.ajax({
+    			url:"updateReplyQna.do",
+    			type:"post",
+    			data : {
+    				rQno:rQno,
+    				content:content
+    			},
+    			success:function(status){
+    				if(status == "success"){
+    					selectReplyList();
+    					alert("댓글 수정 성공");
+    				}
+    			},
+    			error:function(){
+    				alert("댓글 수정 실패");
+    			}
+    		})    		
+    	}
+    	
+	    //댓글 삭제
+	    function deleteReply(rQno){
+		   	 var result = confirm("댓글을 삭제하시겠습니까?");
+		   	 //취소를 눌렀을 경우
+		   	 if(!result) return false;
+		   	 //확인을 눌렀을 경우
+		   	 $.ajax({
+		   		 url:"deleteReplyQna.do",
+		   		 type:"post",
+		   		 data:{
+		   			 rQno:rQno
+		   		 },	   		 
+		   		 success:function(status){
+		   			 if(status == "success"){
+		   				 selectReplyList();
+		   				 alert("댓글이 삭제되었습니다.");
+		   			 }
+		   		 },
+		   		 error:function(){
+		   			 alert("댓글 삭제에 실패하였습니다.");
+		   		 }	 
+		   	 });	
+	    }
+	 
+    </script>
     
 	<div class="container"> 
 		<!-- 목록 버튼-->

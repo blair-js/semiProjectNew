@@ -14,8 +14,10 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import com.semi.common.dto.PageInfo;
+import com.semi.common.dto.Reply;
 import com.semi.notice.model.dao.NoticeDao;
 import com.semi.qna.model.dto.Qna;
+import com.semi.qna.model.dto.QnaReply;
 
 public class QnaDao {
 
@@ -97,8 +99,9 @@ public class QnaDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//selectList=SELECT * FROM (SELECT ROWNUM RNUM, A.* FROM (SELECT QNA_NO, QNA_TITLE, ANSWER, USER_ID, COUNT, CREATE_DATE, QNA_PWD, QNA_SECRET\
-		//FROM QA A JOIN R_USER B ON QNA_WRITER=USER_NO WHERE A.STATUS = 'Y' ORDER BY A.QNA_NO DESC) A) WHERE RNUM BETWEEN ? AND ?;
+		//selectList=SELECT * FROM (SELECT ROWNUM RNUM, A.*
+		//FROM (SELECT QNA_NO, QNA_TITLE, USER_ID, COUNT, CREATE_DATE, QNA_PWD, QNA_SECRET\
+		//FROM QA A JOIN R_USER B ON QNA_WRITER=USER_NO WHERE A.STATUS = 'Y' ORDER BY A.QNA_NO DESC) A) WHERE RNUM BETWEEN ? AND ?
 		String sql = prop.getProperty("selectList");
 		
 		//where 조건문에는 한 페이지 당 보여지는 게시물(10개)를 보여주기 위해
@@ -112,11 +115,10 @@ public class QnaDao {
 			
 			rset = pstmt.executeQuery();
 			
-			//QNA_NO, QNA_TITLE, ANSWER, USER_ID, COUNT, CREATE_DATE, QNA_PWD, QNA_SECRET, RNUM
+			//QNA_NO, QNA_TITLE, USER_ID, COUNT, CREATE_DATE, QNA_PWD, QNA_SECRET, RNUM
 			while(rset.next()){
 				list.add(new Qna(rset.getInt("QNA_NO"),
 								rset.getString("QNA_TITLE"),
-								rset.getString("ANSWER"),
 								rset.getString("USER_ID"),
 								rset.getInt("COUNT"),
 								rset.getDate("CREATE_DATE"),
@@ -124,7 +126,7 @@ public class QnaDao {
 								rset.getString("QNA_SECRET"),
 								rset.getInt("RNUM")
 								));
-			}
+			}			
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -147,7 +149,7 @@ public class QnaDao {
 		int endRow = startRow + pi.getBoardLimit() - 1; //10
 		
 		String sql = "SELECT * FROM (SELECT ROWNUM RNUM, A.* FROM ( "
-						+ "SELECT QNA_NO, QNA_TITLE, ANSWER, USER_ID, COUNT, CREATE_DATE, QNA_PWD, QNA_SECRET "
+						+ "SELECT QNA_NO, QNA_TITLE, USER_ID, COUNT, CREATE_DATE, QNA_PWD, QNA_SECRET "
 						+ "FROM QA A JOIN R_USER B ON QNA_WRITER=USER_NO WHERE A.STATUS = 'Y' AND "+keyword+" LIKE ? "
 						+ "ORDER BY A.QNA_NO DESC) A) WHERE RNUM BETWEEN ? AND ?";
 		
@@ -162,7 +164,6 @@ public class QnaDao {
 			while(rset.next()) {
 				list.add(new Qna(rset.getInt("QNA_NO"),
 						rset.getString("QNA_TITLE"),
-						rset.getString("ANSWER"),
 						rset.getString("USER_ID"),
 						rset.getInt("COUNT"),
 						rset.getDate("CREATE_DATE"),
@@ -346,6 +347,187 @@ public class QnaDao {
 		}
 		
 		return q;
+	}
+
+	public ArrayList<QnaReply> selectRList(Connection conn, int qno) {
+		ArrayList<QnaReply> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		//selectRList=SELECT QNA_REPLY_NO, QNA_REPLY_CONTENT, USER_ID, CREATE_DATE FROM QA_REPLY A JOIN R_USER B ON REPLY_WRITER=USER_NO WHERE A.STATUS='Y' AND REF_QNO=? ORDER BY QNA_REPLY_NO DESC
+		String sql = prop.getProperty("selectRList");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, qno);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				QnaReply qr = new QnaReply();
+				qr.setQnaReplyNo(rset.getInt("QNA_REPLY_NO"));
+				qr.setQnaReplyContent(rset.getString("QNA_REPLY_CONTENT"));
+				qr.setReplyWriter(rset.getString("USER_ID"));
+				qr.setCreateDate(rset.getDate("CREATE_DATE"));
+				
+				list.add(qr);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return list;
+	}
+
+	public int insertReply(Connection conn, QnaReply qr) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		//insertReply=INSERT INTO QA_REPLY VALUES (SEQ_RNO.NEXTVAL, ?, ?, ?, SYSDATE, DEFAULT)
+		String sql = prop.getProperty("insertReply");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, qr.getRefQno());
+			pstmt.setInt(2, Integer.parseInt(qr.getReplyWriter()));
+			pstmt.setString(3, qr.getQnaReplyContent());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}	
+		
+		return result;
+	}
+
+	public int deleteReply(Connection conn, int rQno) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		//UPDATE QA_REPLY SET STATUS='N' WHERE QNA_REPLY_NO=?
+		String sql = prop.getProperty("deleteReply");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, rQno);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public int updateReply(Connection conn, int rQno, String content) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		//updateReply=UPDATE QA_REPLY SET QNA_REPLY_CONTENT=? WHERE QNA_REPLY_NO=?
+		String sql = prop.getProperty("updateReply");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, content);
+			pstmt.setInt(2, rQno);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public ArrayList<Qna> reCountList(Connection conn, PageInfo pi) {
+		ArrayList<Qna> reCountList = new ArrayList<Qna>();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		//reCount=SELECT * FROM (SELECT ROWNUM RNUM, A.* FROM (SELECT DISTINCT A.QNA_NO, (SELECT COUNT(*) \
+		//FROM QA_REPLY WHERE A.QNA_NO=B.REF_QNO AND QA_REPLY.STATUS='Y') CNT FROM QA A LEFT JOIN QA_REPLY B ON A.QNA_NO=B.REF_QNO \
+		//WHERE A.STATUS = 'Y' ORDER BY A.QNA_NO DESC)A) WHERE RNUM BETWEEN ? AND ?
+		String sql = prop.getProperty("reCount");
+		
+		//where 조건문에는 한 페이지 당 보여지는 게시물(10개)를 보여주기 위해
+		int startRow = (pi.getCurrentPage() - 1) * pi.getBoardLimit() + 1; //1
+		int endRow = startRow + pi.getBoardLimit() - 1; //10
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, startRow);
+			pstmt.setInt(2, endRow);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				Qna q = new Qna();
+				q.setRowNo(rset.getInt("RNUM"));
+				q.setQnaNo(rset.getInt("QNA_NO"));
+				q.setReCount(rset.getInt("CNT"));
+				
+				reCountList.add(q);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return reCountList;
+	}
+
+	public ArrayList<Qna> reCountSearch(Connection conn, PageInfo pi, String keyword, String searchKey) {
+		ArrayList<Qna> reCountList = new ArrayList<Qna>();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String sql = "SELECT * FROM (SELECT ROWNUM RNUM, A.* FROM (SELECT DISTINCT A.QNA_NO, "
+					  + "(SELECT COUNT(*) FROM QA_REPLY WHERE QNA_NO=REF_QNO AND QA_REPLY.STATUS='Y') CNT "
+					  + "FROM QA A LEFT JOIN QA_REPLY B ON A.QNA_NO=B.REF_QNO WHERE A.STATUS = 'Y' AND "+keyword+" LIKE ? "
+					  + "ORDER BY A.QNA_NO DESC)A) WHERE RNUM BETWEEN ? AND ?";
+		
+		//where 조건문에는 한 페이지 당 보여지는 게시물(10개)를 보여주기 위해
+		int startRow = (pi.getCurrentPage() - 1) * pi.getBoardLimit() + 1; //1
+		int endRow = startRow + pi.getBoardLimit() - 1; //10
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%" + searchKey + "%");
+			pstmt.setInt(2, startRow);
+			pstmt.setInt(3, endRow);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				Qna q = new Qna();
+				q.setRowNo(rset.getInt("RNUM"));
+				q.setQnaNo(rset.getInt("QNA_NO"));
+				q.setReCount(rset.getInt("CNT"));
+				
+				reCountList.add(q);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return reCountList;
 	}
 
 }
