@@ -44,6 +44,9 @@ public class UserMyDetailServlet extends HttpServlet {
 		//전환할 화면의 경로를 담을 객체
 		RequestDispatcher view = null;
 		
+		//test code
+		//user = null;
+		
 		if(user != null) { //회원이 제대로 조회가 되어 null이 아닌 경우
 			
 			//현재 로그인 유저에 해당 user 객체 값을 set 해주기
@@ -63,8 +66,8 @@ public class UserMyDetailServlet extends HttpServlet {
 			
 		}else { //조회된 회원이 없는경우(null인 경우) 
 			
-			request.setAttribute("msg", "조회실패하였습니다.");
-			view = request.getRequestDispatcher("views/common/errorPage.jsp"); //에러페이지로 이동
+			request.getSession().setAttribute("msg", "조회실패하였습니다.");
+			view = request.getRequestDispatcher("index.jsp"); //에러페이지로 이동
 			
 		}//if~else
 		

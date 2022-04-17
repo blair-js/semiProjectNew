@@ -340,10 +340,14 @@ public class ClassNoticeDao {
 		// 게시글에 달려있는 댓글 조회 하는 메소드
 		
 		ArrayList<Reply> list = new ArrayList<>();
-		
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
-//		selectRList=SELECT REPLY_NO, REPLY_CONTENT, USER_ID, CREATE_DATE FROM REPLY A JOIN R_USER ON(REF_WRITER = USER_NO) WHERE REF_NO = ? AND A.STATUS='Y' ORDER BY REPLY_NO DESC
+//		int limit = 10;
+		// 조회 시작 번호, 마지막 번호 구해주어야 함, 페이징때와 비슷하게 구현
+//		int startRow = (startNum -1) * limit + 1;
+//		int lastRow = startRow + limit - 1;
+		
+//		selectRList=SELECT ROWNUM, REPLY_NO, REPLY_CONTENT, USER_ID, CREATE_DATE FROM CLASS_REPLY A JOIN R_USER ON(REF_WRITER = USER_NO) WHERE REF_NO = ? AND A.STATUS='Y' AND ROWNUM BETWEEN ? AND ? ORDER BY REPLY_NO DESC
 		String sql = prop.getProperty("selectRList");
 		
 		try {
@@ -485,6 +489,63 @@ public class ClassNoticeDao {
 			close(pstmt);
 		}
 		return result;
+	}
+	public ArrayList<ClassNotice> selectseList(Connection conn, PageInfo pi, String className, String keyword,
+			String searchkey) {
+		// 검색어한 값으로 조회된 게시글만 보여줄 메소드
+		
+		ArrayList<ClassNotice> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		// 페이징 처리 마찬가지로 해주어야하니까 시작행 끝행 담아주고
+		int startRow = (pi.getCurrentPage()-1) * pi.getBoardLimit() + 1;
+		int endRow = startRow + pi.getBoardLimit() - 1;
+		
+		System.out.println("내용 : " + searchkey);
+		String sql = "SELECT * FROM (SELECT ROWNUM RNUM, A.* FROM "
+									+ "(SELECT CLASS_NOTICE_NO, CLASS_NOTICE_TITLE, CHANGE_NAME, USER_ID, COUNT, CREATE_DATE,"
+									+ "(SELECT COUNT(*) FROM CLASS_REPLY WHERE REF_NO=CLASS_NOTICE_NO AND CLASS_REPLY.STATUS = 'Y')CNT"
+									+ " FROM CLASS_NOTICE B JOIN R_USER C ON (NOTICE_WRITER=USER_NO)"
+					                + " LEFT JOIN ATTACHMENT D ON (C.USER_NO = D.USER_NO)"
+									+ " WHERE CLASS_NAME= ? AND B.STATUS='Y' AND B.CLASS_NOTICE_NO = D.REF_NO"
+					                + " AND "+keyword+" LIKE ?"
+					                + " AND D.CATEGORY = B.CATEGORY ORDER BY CLASS_NOTICE_NO DESC) A)"
+									+ " WHERE RNUM BETWEEN ? AND ?";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, className);
+			pstmt.setString(2, "%"+searchkey+"%");
+			pstmt.setInt(3, startRow);
+			pstmt.setInt(4, endRow);
+			rset = pstmt.executeQuery();
+			
+			// 기존 조회처럼 받아야 하는값들 다 받아서 객체 생성
+			while(rset.next()) {
+				ClassNotice c = new ClassNotice();
+				c.setClassNoticeNo(rset.getInt("CLASS_NOTICE_NO"));
+				c.setClassNoticeTitle(rset.getString("CLASS_NOTICE_TITLE"));
+				c.setNoticeWriter(rset.getString("USER_ID"));
+				c.setCreateDate(rset.getDate("CREATE_DATE"));
+				c.setCount(rset.getInt("COUNT"));
+				c.setTitleImg(rset.getString("CHANGE_NAME"));
+				c.setReplyCount(rset.getInt("CNT"));
+				
+				list.add(c);
+			}
+			System.out.println("게시글 개수" + list.size());
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+
+		return list;
 	}
 
 }

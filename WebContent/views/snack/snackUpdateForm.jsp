@@ -92,10 +92,10 @@
 						<br>
 					</div>
 			<br>
-			<pre id="center"><p>수정 전                                                        수정 후</p></pre>
+			<pre id="center"><p>수정 전                                                           수정 후</p></pre>
 			<div id="center">
 					
-			<td><img src="<%= contextPath %>/resources/FileUpload_test(SNACK)/<%= at.getChangeName() %>">
+			<td><img src="<%= contextPath %>/resources/FileUpload_test(SNACK)/<%= at.getChangeName() %>">&nbsp&nbsp
 			<img id="snackImg" height="293px" width="279px" /></td>
 			</div>
 			<div id="fileArea">	

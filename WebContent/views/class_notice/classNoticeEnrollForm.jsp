@@ -23,7 +23,8 @@
 				placeholder="게시글 제목을 입력하세요." style="width: 100%;">
 			<div id="smarteditor">
 				<p>내용</p>
-				<div class="thumbnail mb-3 mt-2">썸네일이미지 선택 : <input type="file" id="titleimg" name="titleimg"></div>
+				<!-- acept 속성을 통해 원하는 확장자로만 제한 (image/* : 이미지 파일들만 업로드 가능) -->
+				<div class="thumbnail mb-3 mt-2">썸네일이미지 선택 : <input type="file" accept="image/*" id="titleimg" name="titleimg"></div>
 				<textarea name="content" id="content" rows="20" cols="10"
 					style="width: 100%"></textarea>
 			</div>

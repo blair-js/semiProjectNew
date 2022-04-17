@@ -39,8 +39,7 @@
 
 .bg-image {
   background-image:	url("assets/img/gallery/enrollDog.jpg");
-  background-size: 500 500;
-  background-position: center;
+
 }
 
 .login-heading {
@@ -64,6 +63,14 @@ div h5{
 }
 div h5 a{
 	color: #0099FF;
+}
+div .canBtn{
+	background-color: red;
+	color: white;
+	font-weight: bold;
+}
+div #resetBtn{
+	background-color: #79B93C;
 }
 </style>
 </head>
@@ -89,7 +96,7 @@ div h5 a{
   		<div class="row">
   			<!-- 강아지 이미지 -->
     		<div class="d-none d-md-flex col-md-5 bg-image">
-    		
+    			
     		</div>
     		
     		<!-- 회원가입 정보 작성 영역 -->
@@ -150,9 +157,10 @@ div h5 a{
 				                <!-- reset, submit 버튼 두개 -->
 				                <div class="row form-group">
 					               <div class="col-md-12 text-center pb-5 mt-5">
-					                  <input type="reset" value="다시 작성" class="btn btn-lg btn-success">
+					                  <input type="reset" id="resetBtn" value="다시 작성" class="btn btn-lg btn-success">
 					                  <!-- 위에서 아이디 중복확인 후 ok되어야만 disabled 속성이 풀려서 회원가입이 진행된다. -->
 					                  <input type="submit" id="joinBtn" value="회원 가입" class="btn btn-lg btn-info" disabled>
+					                  <button type="button" class="btn btn-lg canBtn" onclick="goCancel();">취소</button>
 					               </div>
 					            </div>
 				                <!-- 버튼 두개 끝 -->
@@ -175,6 +183,16 @@ div h5 a{
 		<!-- 큰 컨테이너 끝 -->
 
 	<script>
+		function goCancel() {
+			window.history.back();
+		}
+	
+		//다시작성 버튼 클릭시 데이터 초기화는 버튼 태그가 알아서 해주고, 
+		//아이디 중복확인으로 인해 생성되었던 readonly 속성 지워주기
+		$('#resetBtn').click(function() {
+			$('#userId').removeAttr("readonly", "false");
+		})
+	
 		//아이디 중복확인(ajax 통신으로 확인)
 		function checkId() {
 			//아이디가 enrollForm인 것의 자식 중 input에서 name이 userId인 요소 선택(**값이 들어간 것이 아님에 주의**)
@@ -187,6 +205,16 @@ div h5 a{
 				alert('아이디를 입력해주세요.')
 				return false;
 			}
+			
+			//한글과 특수문자를 검사하기 위한 정규식
+			var check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+			var replaceChar = /[~!@\#$%^&*\()\-=+_'\;<>\/.\`:\"\\,\[\]?|{}]/gi;
+			
+			if(check.test(userId.val()) || replaceChar.test(userId.val())){
+				alert('아이디는 영어 대/소문자와 숫자만 가능합니다.')
+				return false;
+			}
+
 			
 			//위의 if 조건문을 통과했다면(아이디를 입력했다면)
 			$.ajax({

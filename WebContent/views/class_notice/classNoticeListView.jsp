@@ -48,6 +48,24 @@ button:hover {
 			<% if (list.isEmpty()) { %>
 				<h3>조회된 게시물이 없습니다.</h3>
 			<% } else { %>
+				<div class="col-md-6" id="search">	
+					<form action="/classNoticeList.do" method="get">
+						<div class="input-group mb-3 input-group-sm">
+							<!-- 검색 키워드 선택 토글 -->
+							<div class="input-group-prepend">
+								<select class="form-select border-1 rounded-0" id="searchSelect" name="keyword">
+									<option ${(param.keyword == "CLASS_NOTICE_TITLE") ? "selected" : "" } value="CLASS_NOTICE_TITLE">제목</option>
+									<option ${(param.keyword == "USER_ID") ? "selected" : "" } value="USER_ID">작성자</option>
+								</select>
+							</div>
+							<input type="hidden" name="classname" value="<%=classname %>">	
+							<!-- 검색어 입력 -->		
+							<input type="text" class="form-control" id="searchKey" name="searchKey" placeholder="검색어를 입력하세요." value="${param.searchKey }">	
+							<!-- 검색 버튼 --> 
+							<input type="submit" class="btn btn-secondary" id="searchBtn" value="검색">							
+						</div>	
+					</form>
+				</div>
 				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 					<% for (ClassNotice n : list) { %>
 					<div class="col">
@@ -58,11 +76,6 @@ button:hover {
 								<a href="#"
 									style="text-decoration: none"> <img class="img-thumbnail mt-3" style="width:100%; height:16rem;"
 									src="/resources/board_upfiles/<%= n.getTitleImg() %>">
-								</a>
-							<% }else { %>
-								<a href="#"
-									style="text-decoration: none"> <img class="card-img-top"
-									src="assets/img/gallery/fdog.png">
 								</a>
 							<% } %>
 							</div>
