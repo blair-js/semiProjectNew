@@ -1,26 +1,23 @@
-package com.semi.schoolbus.controller;
+package com.semi.class_notice.controller;
 
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.semi.schoolbus.model.service.SchoolbusService;
-
 /**
- * Servlet implementation class SchoolbusAllDeleteServlet
+ * Servlet implementation class ReplyGetMoreServlet
  */
-@WebServlet("/schoolbusAllDelete.do")
-public class SchoolbusAllDeleteServlet extends HttpServlet {
+@WebServlet("/getMoreContents.do")
+public class ReplyGetMoreServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SchoolbusAllDeleteServlet() {
+    public ReplyGetMoreServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,17 +26,8 @@ public class SchoolbusAllDeleteServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// 예약 테이블 값 모두 없애기 값을 없애줄때 통학버스 테이블의 잔여 좌석수 모두 30으로 초기화 시켜준다.
-		
-		int result = new SchoolbusService().deleteAllSchoolbus();
-		
-		if(result > 0) {
-			request.getSession().setAttribute("msg", "통학버스 예약내용이 모두 삭제 되었습니다.");
-			response.sendRedirect("reservationList.do");
-		}else{
-			request.setAttribute("msg", "통학버스 예약내용 전체 삭제 실패");
-			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
-		}
+		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**

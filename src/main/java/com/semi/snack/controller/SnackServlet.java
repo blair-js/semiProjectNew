@@ -43,16 +43,13 @@ public class SnackServlet extends HttpServlet {
 		request.setAttribute("up", 0);
 		
 		if(userno != 0) {
-		int userNo = Integer.parseInt(request.getParameter("userNo"));
-		UserPoint up = new UserPoint();		
-		up.setUserNo(userNo);
-		
-		UserPoint userPoint = new SnackService().selectUserPoint(up); //유저 포인트 조회를 위한 메서드
-		System.out.println(userNo);
-
-		System.out.println(userPoint.getUserPoint() + "가져온값");
-		
-		request.setAttribute("up", userPoint.getUserPoint());
+			int userNo = Integer.parseInt(request.getParameter("userNo"));
+			UserPoint up = new UserPoint();		
+			up.setUserNo(userNo);
+			
+			UserPoint userPoint = new SnackService().selectUserPoint(up); //유저 포인트 조회를 위한 메서드
+			System.out.println(userNo);
+			request.setAttribute("up", userPoint.getUserPoint());
 		}
 		
 		
