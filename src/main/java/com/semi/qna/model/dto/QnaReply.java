@@ -5,7 +5,7 @@ import java.sql.Date;
 public class QnaReply {
 	
 	private int qnaReplyNo;
-	private int qnaNo;
+	private int refQno;
 	private String replyWriter; // 조회시 : 작성자 이름,  댓글작성시 : 회원번호로 쓰일 것!!
 	private String qnaReplyContent;
 	private Date createDate;
@@ -16,12 +16,12 @@ public class QnaReply {
 		// TODO Auto-generated constructor stub
 	}
 
-	public QnaReply(int qnaReplyNo, int qnaNo, String replyWriter, String qnaReplyContent, Date createDate, String status,
-			int rowNo) {
+	public QnaReply(int qnaReplyNo, int refQno, String replyWriter, String qnaReplyContent, Date createDate,
+			String status, int rowNo) {
 		super();
 		this.qnaReplyNo = qnaReplyNo;
-		this.qnaNo = qnaNo;
-		this.replyWriter = replyWriter; 
+		this.refQno = refQno;
+		this.replyWriter = replyWriter;
 		this.qnaReplyContent = qnaReplyContent;
 		this.createDate = createDate;
 		this.status = status;
@@ -36,12 +36,12 @@ public class QnaReply {
 		this.qnaReplyNo = qnaReplyNo;
 	}
 
-	public int getQnaNo() {
-		return qnaNo;
+	public int getRefQno() {
+		return refQno;
 	}
 
-	public void setQnaNo(int qnaNo) {
-		this.qnaNo = qnaNo;
+	public void setRefQno(int refQno) {
+		this.refQno = refQno;
 	}
 
 	public String getReplyWriter() {
@@ -86,7 +86,7 @@ public class QnaReply {
 
 	@Override
 	public String toString() {
-		return "QnaReply [qnaReplyNo=" + qnaReplyNo + ", qnaNo=" + qnaNo + ", replyWriter=" + replyWriter
+		return "QnaReply [qnaReplyNo=" + qnaReplyNo + ", refQno=" + refQno + ", replyWriter=" + replyWriter
 				+ ", qnaReplyContent=" + qnaReplyContent + ", createDate=" + createDate + ", status=" + status
 				+ ", rowNo=" + rowNo + "]";
 	}

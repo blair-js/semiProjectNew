@@ -111,6 +111,7 @@ td {
 		</div>
 
 	</div>
+	
 	<!-- 페이징바 만들기 -->
 		<div class="pagingArea" align="center">
 			<!-- 맨 처음으로 (<<) -->
@@ -129,7 +130,7 @@ td {
 				<%if(p == currentPage){ %>
 				<button style="color : #FFFFFF; background-color: #FDC800" disabled> <%= p %> </button>
 				<%}else{ %>
-				<button style="color : #FFFFFF; background-color: #FDC800" onclick="location.href='<%=contextPath %>/snackOrderListForm.do?currentPage=<%= p %>'"> <%= p %> </button>
+			<button style="color : #FFFFFF; background-color: #FDC800" onclick="location.href='<%=contextPath %>/snackOrderListForm.do?currentPage=<%= p %>'"> <%= p %></button>
 				<%} %>
 				
 			<%} %>

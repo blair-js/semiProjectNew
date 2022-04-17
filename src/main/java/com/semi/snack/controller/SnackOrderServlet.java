@@ -103,7 +103,7 @@ public class SnackOrderServlet extends HttpServlet {
 		}*/
 		}else {
 			request.getSession().setAttribute("msg", "구매 실패 보유 뼈다귀를 확인해주세요");
-			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response); 
+			request.getRequestDispatcher("snack.do?userNo=" + uno).forward(request, response);
 		}
 
 	}

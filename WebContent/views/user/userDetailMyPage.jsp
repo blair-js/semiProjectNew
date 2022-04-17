@@ -174,7 +174,7 @@ main .sm{
 						<b>나의 간식 구매내역 확인</b>
 					</button>
 					<!-- 간식구매내역 추가 0414 끝 -->
-
+					<hr>
 					<!-- 통학버스 예약 정보 -->
 					<h4 class="d-flex justify-content-between align-items-center mb-3">
 						<span class="text-primary">Your Reservation</span>
@@ -420,9 +420,9 @@ main .sm{
 		//회원의 간식구매내역 확인 함수
 	 	function goUserSnackOrder(){ 
 	 		var userNo = $('#userNo').val();
-            location.href="<%=contextPath%>/userOrderListForm.do?userNo="+userNo;
+	 		location.href="<%=contextPath%>/userOrderListForm.do?userNo="+userNo; 
         }
-		
+	 	
 	</script>
 
 	<!-- footer -->

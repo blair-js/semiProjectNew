@@ -3,6 +3,7 @@
 <%
 	ArrayList<Qna> list = (ArrayList<Qna>)request.getAttribute("list");
 	PageInfo pi = (PageInfo)request.getAttribute("pi");
+	ArrayList<Qna> reCountList = (ArrayList<Qna>)request.getAttribute("reCountList"); 
 	
 	int listCount = pi.getListCount();
 	int currentPage = pi.getCurrentPage();
@@ -33,7 +34,6 @@
 		width: 10px;
 	}
 	
-
 </style>
 </head>
 <body>
@@ -110,11 +110,15 @@
 							<i class="bi bi-lock-fill"></i> <!-- 자물쇠 아이콘 나옴 -->
 							<%= q.getQnaTitle()%>
 						</td>
-						<% if(q.getAnswer().equals("답변 완료")) {%>
-							<td>답변 완료</td>
-						<% } else{ %>
-							<td>미답변</td>
-						<%} %>
+						<% for(int i = 0; i < reCountList.size(); i++) { %>
+							<% if(q.getQnaNo() == reCountList.get(i).getQnaNo()) { %>
+								<%if(reCountList.get(i).getReCount() == 0) {%>
+									<td>미답변</td>
+								<% } else {%>
+									<td>답변 완료</td>
+								<%} %>
+							<%} %>
+						<% } %>
 						<td><%= q.getQnaWriter()%></td>
 						<td><%= q.getCount()%></td>
 						<td><%= q.getCreateDate()%></td>						 		
@@ -125,11 +129,15 @@
 				 		<td class="d-none"><%= q.getQnaSecret()%></td>
 				 		<td><%= q.getRowNo()%></td>
 						<td><%= q.getQnaTitle()%></td>
-						<% if(q.getAnswer().equals("답변 완료")) {%>
-							<td>답변 완료</td>
-						<% } else{ %>
-							<td>미답변</td>
-						<%} %>
+						<% for(int i = 0; i < reCountList.size(); i++) { %>
+							<% if(q.getQnaNo() == reCountList.get(i).getQnaNo()) { %>
+								<%if(reCountList.get(i).getReCount() == 0) {%>
+									<td>미답변</td>
+								<% } else {%>
+									<td>답변 완료</td>
+								<%} %>
+							<%} %>
+						<% } %>
 						<td><%=q.getQnaWriter()%></td>
 						<td><%=q.getCount()%></td>
 						<td><%=q.getCreateDate()%></td>						 		
@@ -184,16 +192,24 @@
 	<script type="text/javascript">
    	$(function(){
    		$(".table>tbody>tr").click(function() {
-   			var qno = $(this).children().eq(0).text(); 
-   			var qnaSecret = $(this).children().eq(1).text(); 
    			
-   			if(qnaSecret == "Y"){  
+			var qno = $(this).children().eq(0).text(); 
+   			var qnaSecret = $(this).children().eq(1).text(); 
+			var userId = "<%= loginUser.getUserId() %>";
+			
+			//자바스크립트에서는 contains아닌 indexof나 include 사용 
+			//indexOf는-> 포함하고 있는 문자를 가지고 있지 않으면 -1반환
+			//includes는 문자가 있느면 true, 없으면 false 반환
+   			if(qnaSecret == "Y" && userId.includes("admin")) { //관리자는 비밀번호를 입력하지 않아도 모든 글을 다 볼 수 있다.
+   				location.href = "<%= contextPath%>/detailQna.do?qno="+qno; 
+   			} else if(qnaSecret == "Y"){  
    				location.href = "<%= contextPath%>/pwdCheckFormQna.do?qno="+qno; <%--번호도 같이 가져간다. -> 그 게시글 번호의 비밀번호를 확인 --%>
    			}else {
-   				location.href = "<%= contextPath%>/detailQna.do?qno="+qno; <%--번호도 같이 가져간다.--%>
+   				location.href = "<%= contextPath%>/detailQna.do?qno="+qno;
    			}
-   		})
-   	})
+	   			
+   		});
+   	});
    </script>
 	   			
 	 <%@ include file="../common/footer.jsp" %>

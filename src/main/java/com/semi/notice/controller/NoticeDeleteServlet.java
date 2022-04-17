@@ -37,8 +37,8 @@ public class NoticeDeleteServlet extends HttpServlet {
 			request.getSession().setAttribute("msg", "게시글이 성공적으로 삭제되었습니다.");
 			response.sendRedirect("listNotice.do");
 		}else {
-			request.setAttribute("msg", "게시글 삭제에 실패하였습니다.");
-			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+			request.getSession().setAttribute("msg", "게시글 삭제에 실패하였습니다.");
+			response.sendRedirect("listNotice.do");
 		}
 		
 	}

@@ -26,7 +26,7 @@
 		<% } else { %>
 			<!-- 예약 회원 전체 삭제, 한명만 삭제 두가지 구현 -->
 			<div class="mb-5">
-				<form id="resList" action="/schoolbusAllDelete.do" method="post">
+				<form id="resList" action="" method="post">
 					<table class="table table-bordered" style="border:solid 1px #808080;">
 						<thead class="bg-secondary" style="color:white;">
 							<tr>
@@ -51,13 +51,24 @@
 							<% } %>
 						</tbody>
 					</table>
-					<button class="btn bg-warning btn-lg" style="color:white;">예약내역 전체삭제</button>
+					<button onclick="allDelete();" class="btn bg-warning btn-lg" style="color:white;">예약내역 전체삭제</button>
 				</form>
 			</div>
 		<% } %>
 	</div>
   	<%@ include file = "../common/footer.jsp" %>
   	<script>
+  		function allDelete(){
+  			var pwd = prompt("비밀번호를 입력하세요.");
+			
+  			if(pwd == '<%= loginUser.getUserPwd() %>'){
+  				$("#resList").attr("action", "/schoolbusAllDelete.do");
+  				$("#resList").submit();
+  			}else if(!pwd){
+  				return false;
+  			}
+  			alert("비밀번호를 잘못 입력하셨습니다.");
+  		}
   		// 회원 개별 삭제 기능 구현 함수
   		// 위에서 삭제 버튼 클릭시 매개변수로 버스 예약번호와 버스일정내용을 넘겨준다.
   		function deleteOne(bno, content){

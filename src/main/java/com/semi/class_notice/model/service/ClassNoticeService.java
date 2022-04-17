@@ -26,11 +26,18 @@ public class ClassNoticeService {
 		return listCount;
 	}
 
-	public ArrayList<ClassNotice> selectList(PageInfo pi, String className) {
+	public ArrayList<ClassNotice> selectList(PageInfo pi, String className, String keyword, String searchkey) {
 		Connection conn = getConnection();
 		
-		ArrayList<ClassNotice> list = new ClassNoticeDao().selectList(conn, pi, className);
+		ArrayList<ClassNotice> list = null;
 		
+		// 검색 값이 넘어오지 않으면 기존 조회방식 이용
+		if(searchkey == "") {
+			list = new ClassNoticeDao().selectList(conn, pi, className);
+		}else {
+			// 검색 값이 넘어 올 경우 쿼리 다르기때문에 메소드 생성
+			list = new ClassNoticeDao().selectseList(conn, pi, className, keyword, searchkey);
+		}
 		close(conn);
 		
 		return list;

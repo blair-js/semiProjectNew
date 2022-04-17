@@ -1,6 +1,7 @@
-package com.semi.schoolbus.controller;
+package com.semi.qna.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,19 +9,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.semi.schoolbus.model.service.SchoolbusService;
+import com.semi.qna.model.service.QnaService;
 
 /**
- * Servlet implementation class SchoolbusAllDeleteServlet
+ * Servlet implementation class QnaReplyDeleteServlet
  */
-@WebServlet("/schoolbusAllDelete.do")
-public class SchoolbusAllDeleteServlet extends HttpServlet {
+@WebServlet("/deleteReplyQna.do")
+public class QnaReplyDeleteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SchoolbusAllDeleteServlet() {
+    public QnaReplyDeleteServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,17 +30,19 @@ public class SchoolbusAllDeleteServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// 예약 테이블 값 모두 없애기 값을 없애줄때 통학버스 테이블의 잔여 좌석수 모두 30으로 초기화 시켜준다.
+		int rQno = Integer.parseInt(request.getParameter("rQno"));
 		
-		int result = new SchoolbusService().deleteAllSchoolbus();
+		int result = new QnaService().deleteReply(rQno);
 		
+		PrintWriter out = response.getWriter();
 		if(result > 0) {
-			request.getSession().setAttribute("msg", "통학버스 예약내용이 모두 삭제 되었습니다.");
-			response.sendRedirect("reservationList.do");
-		}else{
-			request.setAttribute("msg", "통학버스 예약내용 전체 삭제 실패");
-			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+			out.print("success");
+		}else {
+			out.print("fail");
 		}
+		
+		out.flush();
+		out.close();
 	}
 
 	/**

@@ -1,6 +1,9 @@
 package com.semi.qna.model.service;
 
-import static com.semi.common.JDBCTemplate.*;
+import static com.semi.common.JDBCTemplate.close;
+import static com.semi.common.JDBCTemplate.commit;
+import static com.semi.common.JDBCTemplate.getConnection;
+import static com.semi.common.JDBCTemplate.rollback;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -8,6 +11,7 @@ import java.util.ArrayList;
 import com.semi.common.dto.PageInfo;
 import com.semi.qna.model.dao.QnaDao;
 import com.semi.qna.model.dto.Qna;
+import com.semi.qna.model.dto.QnaReply;
 
 public class QnaService {
 
@@ -117,5 +121,76 @@ public class QnaService {
 		
 		return q;
 	}
+
+	public ArrayList<QnaReply> selectRList(int qno) {
+		Connection conn = getConnection();
+		
+		ArrayList<QnaReply> list = new QnaDao().selectRList(conn, qno);
+		
+		close(conn);
+		return list;
+	}
+
+	public int deleteReply(int rQno) {
+		Connection conn = getConnection();
+		
+		int result = new QnaDao().deleteReply(conn, rQno);
+		
+		if(result > 0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		
+		close(conn);
+		return result;
+	}
+
+	public int updateReply(int rQno, String content) {
+		Connection conn = getConnection();
+		
+		int result = new QnaDao().updateReply(conn, rQno, content);
+		
+		if(result > 0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		
+		close(conn);
+		return result;
+	}
+
+	public int insertReply(QnaReply qr) {
+		Connection conn = getConnection();
+		
+		//댓글 작성
+		int result = new QnaDao().insertReply(conn, qr);
+		
+		if(result > 0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		
+		close(conn);
+		return result;
+	}
+
+	public ArrayList<Qna> reCountList(PageInfo pi, String keyword, String searchKey) {
+		Connection conn = getConnection();
+		
+		ArrayList<Qna> reCountList = null;
+		
+		if(keyword == "QNA_TITLE" && searchKey == "") {
+			reCountList = new QnaDao().reCountList(conn, pi);
+		}else {
+			reCountList = new QnaDao().reCountSearch(conn, pi, keyword, searchKey);
+		}
+		
+		close(conn);
+		return reCountList;
+	}
+
 
 }
