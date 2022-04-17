@@ -25,7 +25,11 @@
 	margin:auto;
 }
 tr {
-  border-bottom: 10px solid #fff;
+  border-bottom: solid #fff;
+}
+table>tr>td>pre{
+	font-family: 'GmarketSansMedium';
+	font-size:13px;
 }
 </style>
 </head>
@@ -85,12 +89,28 @@ tr {
 				<textarea cols="110" rows="3" id="replyCnt" style="resize: none;"
 					placeholder="댓글을 남겨보세요."></textarea>
 				<button id="addreply-btn" class="btn btn-dark btn-lg mb-6 pl-3 " style="height: 4.5rem">등록하기</button>
-			
-			<%-- 댓글 기능 스크립트 시작 --%>
+				<div class="container">
+					<div class="row">
+					<div class="bg-secondary text-white text-center">댓글</div>
+						<table class="replyList" id="replyList"
+							style="text-align: center; border: 1px solid #dddddd">
+							<%-- 댓글 목록 넣어지는 공간 --%>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
 			<script>
+			<%-- 댓글 기능 스크립트 시작 --%>
+			
 				$(function(){
 					selectReplyList(); // 댓글이 달려 있는경우 조회해서 뿌려주기
 					$("#addreply-btn").click(function(){
+						// 댓글 입력창 내용이 비어있으면 false 반환
+						if($("#replyCnt").val().length == 0){
+							alert("내용을 입력하세요.");
+							return false;
+						}
 						// 댓글 등록 textarea에 담겨있는 값과, 참조게시글번호 변수에 담아준다.
 						var content = $("#replyCnt").val();
 						var nno = <%=cNotice.getClassNoticeNo() %>;
@@ -132,26 +152,27 @@ tr {
 							var value = "";
 							$.each(list, function(index, obj){
 								// 서블릿으로 생성한 댓글 객체로 화면에 뿌려주어야함
+								console.log(obj);
 							if(rUserId == obj.replyWriter){ // 현재 로그인한 회원과 작성자 회원 아이디가 같을경우 수정 | 삭제 보이게
-								value += '<tr style="border-top: 10px solid #fff;">' +
-										 '<td style="text-align:left; border:none;">' + obj.replyWriter+ ' | ' + obj.createDate + '</td>'+
-										 '<td style="text-align:right; border:none;"><input class="btn btn-secondary" type="button" onclick="updateBtn('+ obj.replyId +');" value="수정"> <input class="btn btn-secondary" type="button" onclick="deleteReply('+ obj.replyId + ');" value="삭제"> </td>' +
+								value += '<tr style="solid #fff;">' +
+										 '<td style="text-align:left; border:none;">' + obj.replyWriter+ ' |<small> ' + obj.createDate + '</small></td>'+
+										 '<td style="text-align:right; border:none;"><input class="updatebtn btn btn-secondary" type="button" onclick="updateBtn('+ obj.replyId +');" value="수정"> <input class="deletebtn btn btn-secondary" type="button" onclick="deleteReply('+ obj.replyId + ');" value="삭제"> </td>' +
 										 '</tr>' +
 										 '<tr>' +
-										 '<td style="text-align:left;" colspan="2">' + obj.replyContent + '</td>' +
+										 '<td id="reply'+obj.replyId+'" style="text-align:left;" colspan="2"><pre>' + obj.replyContent + '</pre></td>' +
 										 '<!-- <td></td> -->' +
 										 '</tr>' + 
 										 '<tr id="update'+obj.replyId +'" style="display:none;">' +
-										 '<td style="text-align:left;"><textarea id="textarea'+obj.replyId+'" style="resize:none;" cols="90" rows="2">' + obj.replyContent + '</textarea></td>' +
+										 '<td style="text-align:left;"><textarea id="textarea'+obj.replyId+'" style="resize:none;" cols="80" rows="2">' + obj.replyContent + '</textarea></td>' +
 										 '<td>&nbsp<input type="button" onclick="updateReply('+obj.replyId +');" class="btn btn-secondary" value="수정완료"> <input type="button" class="btn btn-secondary" onclick="closeR('+obj.replyId +');" value="취소"></td>'+
 										 '</tr>';
 							}else{ // 현재 로그인한 아이디와 작성자 아이디가 같지 않을경우
 								value += '<tr style="border-top: 10px solid #fff;">' +
-								 '<td style="text-align:left; border:none;">' + obj.replyWriter+ ' | ' + obj.createDate + '</td>'+
+								 '<td style="text-align:left; border:none;">' + obj.replyWriter+ ' | <small>' + obj.createDate + '</small></td>'+
 								 '<!-- <td></td> -->' +
 								 '</tr>' +
 								 '<tr>' +
-								 '<td style="text-align:left; colspan="2">' + obj.replyContent + '</td>' +
+								 '<td style="text-align:left; colspan="2"><pre">' + obj.replyContent + '</pre></td>' +
 								 '<!-- <td></td> -->' +
 								 '</tr>';
 							}
@@ -167,6 +188,12 @@ tr {
 				function closeR(rno){
 					var id = "update" + rno;
 					$('#' + id).css('display', 'none');
+					
+					//취소 버튼 클릭시 숨겼던 다른 버튼들 및 수정 창 숨기기
+					$("#update" + rno).hide();
+					$("#reply"+rno).show();
+					$(".updatebtn").show();
+					$(".deletebtn").show();
 				}
 				// 댓글 수정 버튼 클릭했을때 수정 input 숨기기 해제
 				function updateBtn(rno){
@@ -174,9 +201,13 @@ tr {
 					var id = "update"+rno;
 					console.log(id);
 					
-					var an = $('#'+id).css('display');
-					
-					$('#' + id).css('display', 'block');
+					// 수정 버튼 클릭시 기존 댓글 내용 숨기고, 수정 textarea 보여주기
+					$("#reply"+rno).hide();
+					$(".updatebtn").hide();
+					$(".deletebtn").hide();
+					if($("#"+id).css("display") == "none"){
+						$("#"+id).show();
+					}
 				}
 				
 				// 댓글 수정 함수 댓글번호를 매개변수로 받음
@@ -226,17 +257,6 @@ tr {
 					});
 				}
 			</script>
-			</div>
-		</div>
-		<div class="container">
-			<div class="row">
-			<div class="bg-secondary text-white text-center">댓글</div>
-				<table class="replyList" id="replyList"
-					style="text-align: center; border: 1px solid #dddddd">
-						<%-- 댓글 목록 넣어지는 공간 --%>
-				</table>
-			</div>
-		</div>
 	</section>
 	<%@ include file="../common/footer.jsp"%>
 </body>

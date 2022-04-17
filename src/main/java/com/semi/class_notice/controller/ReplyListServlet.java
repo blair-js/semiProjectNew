@@ -35,6 +35,8 @@ public class ReplyListServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 게시글 번호로 그 게시글의 댓글 뿌려주는 서블릿
 		int nno = Integer.parseInt(request.getParameter("nno")); // 참조 게시글 번호 받아온다. 반이름은 필요 없음, 어차피 게시글 번호는 시퀀스 고유하기때문에
+		// 더보기 기능 구현하기 위해서 생성 시작번호 받아준다. 10개씩 뿌려준다.
+//		int startNum = Integer.parseInt(request.getParameter("startNum"));
 		
 		System.out.println("참조게시글번호: " +nno);
 		ArrayList<Reply> list = new ClassNoticeService().selectRList(nno);
