@@ -39,8 +39,7 @@
 
 .bg-image {
   background-image:	url("assets/img/gallery/enrollDog.jpg");
-  background-size: 500 500;
-  background-position: center;
+
 }
 
 .login-heading {
@@ -97,7 +96,7 @@ div #resetBtn{
   		<div class="row">
   			<!-- 강아지 이미지 -->
     		<div class="d-none d-md-flex col-md-5 bg-image">
-    		
+    			
     		</div>
     		
     		<!-- 회원가입 정보 작성 영역 -->
