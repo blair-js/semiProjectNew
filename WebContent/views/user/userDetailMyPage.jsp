@@ -420,9 +420,9 @@ main .sm{
 		//회원의 간식구매내역 확인 함수
 	 	function goUserSnackOrder(){ 
 	 		var userNo = $('#userNo').val();
-            location.href="<%=contextPath%>/userOrderListForm.do?userNo="+userNo;
+	 		location.href="<%=contextPath%>/userOrderListForm.do?userNo="+userNo; 
         }
-		
+	 	
 	</script>
 
 	<!-- footer -->
