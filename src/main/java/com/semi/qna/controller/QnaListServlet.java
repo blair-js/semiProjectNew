@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.semi.common.dto.PageInfo;
 import com.semi.notice.model.service.NoticeService;
+import com.semi.qna.model.dao.QnaDao;
 import com.semi.qna.model.dto.Qna;
 import com.semi.qna.model.service.QnaService;
 
@@ -93,12 +94,15 @@ public class QnaListServlet extends HttpServlet {
 		//페이지 정보를 담아주는 객체 생성
 		PageInfo pi = new PageInfo(listCount, currentPage, startPage, endPage, maxPage, pageLimit, boardLimit);
 		
-		ArrayList<Qna> list = new QnaService().selectList(pi, keyword, searchKey);
+		ArrayList<Qna> list = new QnaService().selectList(pi, keyword, searchKey);	
+		
+		ArrayList<Qna> reCountList = new QnaService().reCountList(pi, keyword, searchKey);
 		
 		//값이 담겨져 있는 list를 setAttribute해서 담아서 넘긴다.
 		request.setAttribute("list", list);
 		//페이징 바를 위해서 페이지 정보가 담겨져 있는 pi를 넘긴다.
 		request.setAttribute("pi", pi);
+		request.setAttribute("reCountList", reCountList);
 		
 		request.getRequestDispatcher("views/qna/qnaListView.jsp").forward(request, response);
 	}
