@@ -39,7 +39,8 @@ public class UserSnackOrderListFormServlet extends HttpServlet {
 		
 		int uno = Integer.parseInt(request.getParameter("userNo"));
 		
-		System.out.println(uno);
+		System.out.println("유저넘버 받는지 체크" + uno);
+		
 		// 페이징처리
 
 		int listCount; // 총게시글 갯수
@@ -93,6 +94,7 @@ public class UserSnackOrderListFormServlet extends HttpServlet {
 		
 		request.setAttribute("list", list);
 		request.setAttribute("pi", pi);
+		
 		request.getRequestDispatcher("views/snack/userSnackOrderList.jsp").forward(request, response);
 	}
 

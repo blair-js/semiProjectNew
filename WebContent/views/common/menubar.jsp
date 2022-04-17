@@ -94,7 +94,7 @@
             <ul class="navbar-nav ms-auto pt-2 pt-lg-0 font-base">
               <li class="nav-item px-2 linav"><a class="nav-link active" aria-current="page" href="index.jsp">홈</a></li>
               <li class="nav-item px-2 linav"><a class="nav-link" aria-current="page" href="<%= contextPath %>/intro.do">소개</a></li>
-              <li class="nav-item px-2 linav"><a class="nav-link" aria-current="page" href="<%=contextPath%>/listQna.do">Q&A</a></li>
+              <li class="nav-item px-2 linav"><a class="nav-link" aria-current="page" href="#" onclick="goQna();" >Q&A</a></li>
               <li class="nav-item px-2 linav"><a class="nav-link" aria-current="page" href="<%=contextPath%>/listNotice.do">공지사항</a></li>
 
               <li class="nav-item px-2 linav"><a class="nav-link" aria-current="page" href="#" onclick="goSnack();">나만 먹을개</a></li>
@@ -143,7 +143,16 @@
 	        			location.href ="/snack.do?userNo=<%=loginUser.getUserNo()%>";
 	        		<% } %>
 	        	}
+	            function goQna(){
+	            	<% if(loginUser == null) {%>
+	            		alert("로그인이 필요한 서비스입니다.");
+	            		location.href= "<%=contextPath %>/loginForm.do";
+	            	<%} else {%>
+	            		location.href= "<%=contextPath%>/listQna.do";
+	            	<%} %>
+	            }
             </script>
+            
             
             <%-- 로그인 된 user가 없다면 로그인+회원가입 버튼을 보여주고 --%>
             <%if(loginUser == null) {%>

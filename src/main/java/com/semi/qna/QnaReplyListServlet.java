@@ -1,6 +1,7 @@
-package com.semi.notice.controller;
+package com.semi.qna;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,19 +9,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.semi.notice.model.service.NoticeService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.semi.qna.model.dto.QnaReply;
+import com.semi.qna.model.service.QnaService;
 
 /**
- * Servlet implementation class NoticeDeleteServlet
+ * Servlet implementation class QnaReplyListServlet
  */
-@WebServlet("/deleteNotice.do")
-public class NoticeDeleteServlet extends HttpServlet {
+@WebServlet("/replyListQna.do")
+public class QnaReplyListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public NoticeDeleteServlet() {
+    public QnaReplyListServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,18 +33,15 @@ public class NoticeDeleteServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int nno = Integer.parseInt(request.getParameter("nno"));
+		int qno = Integer.parseInt(request.getParameter("qno"));
 		
-		int result = new NoticeService().deleteNotice(nno);
+		//댓글이 여러 개에 넘어올 수 있기 때문에 arraylist
+		ArrayList<QnaReply> list = new QnaService().selectRList(qno);
 		
-		if(result > 0) {
-			request.getSession().setAttribute("msg", "게시글이 성공적으로 삭제되었습니다.");
-			response.sendRedirect("listNotice.do");
-		}else {
-			request.getSession().setAttribute("msg", "게시글 삭제에 실패하였습니다.");
-			response.sendRedirect("listNotice.do");
-		}
+		response.setContentType("application/json; charset=utf-8");
+		Gson gson = new GsonBuilder().setDateFormat("yyyy년 MM월 dd일").create();
 		
+		gson.toJson(list, response.getWriter());
 	}
 
 	/**

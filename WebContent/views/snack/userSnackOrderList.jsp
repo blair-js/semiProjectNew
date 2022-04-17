@@ -84,7 +84,7 @@ td {
 			<p class="display-5 fw-bold"></p>
 
 			<form id="userOrderList" action="<%=request.getContextPath() %>/userOrderListForm.do" method="post">
-			
+			<input type="hidden" id="userNo" name="userNo" value="<%= loginUser.getUserNo() %>">
 			<table class="tftable" border="1">
 				<tr>
 					<th style="" width=200px">주문번호</th>
@@ -113,13 +113,13 @@ td {
 	<!-- 페이징바 만들기 -->
 		<div class="pagingArea" align="center">
 			<!-- 맨 처음으로 (<<) -->
-			<button style="color : #FFFFFF; background-color: #FDC800" onclick="location.href='<%=contextPath%>/userOrderListForm.do?currentPage=1'"> &lt;&lt; </button>
+			<button style="color : #FFFFFF; background-color: #FDC800" onclick="location.href='<%=contextPath%>/userOrderListForm.do?currentPage=1&userNo=<%=loginUser.getUserNo()%>'"> &lt;&lt; </button>
 		
 			<!-- 이전페이지로(<) -->
 			<%if(currentPage == 1){ %>
 			<button style="color : #FFFFFF; background-color: #FDC800" disabled> &lt; </button>
 			<%}else{ %>
-			<button style="color : #FFFFFF; background-color: #FDC800" onclick="location.href='<%= contextPath %>/userOrderListForm.do?currentPage=<%= currentPage-1 %>'"> &lt; </button>
+			<button style="color : #FFFFFF; background-color: #FDC800" onclick="location.href='<%= contextPath %>/userOrderListForm.do?currentPage=<%= currentPage-1 %>&userNo=<%=loginUser.getUserNo()%>'"> &lt; </button>
 			<%} %>
 			
 			<!-- 페이지 목록 -->
@@ -128,7 +128,7 @@ td {
 				<%if(p == currentPage){ %>
 				<button style="color : #FFFFFF; background-color: #FDC800" disabled> <%= p %> </button>
 				<%}else{ %>
-				<button style="color : #FFFFFF; background-color: #FDC800" onclick="location.href='<%=contextPath %>/userOrderListForm.do?currentPage=<%= p %>'"> <%= p %> </button>
+				<button style="color : #FFFFFF; background-color: #FDC800" onclick="location.href='<%=contextPath %>/userOrderListForm.do?currentPage=<%= p %>&userNo=<%=loginUser.getUserNo()%>'"> <%= p %> </button>
 				<%} %>
 				
 			<%} %>
@@ -137,11 +137,11 @@ td {
 			<%if(currentPage == maxPage){ %>
 			<button style="color : #FFFFFF; background-color: #FDC800" disabled> &gt; </button>
 			<%}else { %>
-			<button style="color : #FFFFFF; background-color: #FDC800" onclick="location.href='<%= contextPath %>/userOrderListForm.do?currentPage=<%= currentPage+1 %>'"> &gt; </button>
+			<button style="color : #FFFFFF; background-color: #FDC800" onclick="location.href='<%= contextPath %>/userOrderListForm.do?currentPage=<%= currentPage+1 %>&userNo=<%=loginUser.getUserNo()%>'"> &gt; </button>
 			<%} %>
 		
 			<!-- 맨 끝으로 (>>) -->
-			<button style="color : #FFFFFF; background-color: #FDC800" onclick="location.href='<%=contextPath%>/userOrderListForm.do?currentPage=<%=maxPage%>'"> &gt;&gt; </button>
+			<button style="color : #FFFFFF; background-color: #FDC800" onclick="location.href='<%=contextPath%>/userOrderListForm.do?currentPage=<%=maxPage%>&userNo=<%=loginUser.getUserNo()%>'"> &gt;&gt; </button>
 	
 		</div> 
 	<!-- 컨테이너 끝 div -->
