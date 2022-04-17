@@ -86,7 +86,7 @@ table>tr>td>pre{
 			<hr class="line">
 			<div class="comment-txt">
 			
-				<textarea cols="110" rows="3" id="replyCnt" style="resize: none;"
+				<textarea cols="120" rows="3" id="replyCnt" style="resize: none;"
 					placeholder="댓글을 남겨보세요."></textarea>
 				<button id="addreply-btn" class="btn btn-dark btn-lg mb-6 pl-3 " style="height: 4.5rem">등록하기</button>
 				<div class="container">
@@ -163,7 +163,7 @@ table>tr>td>pre{
 										 '<!-- <td></td> -->' +
 										 '</tr>' + 
 										 '<tr id="update'+obj.replyId +'" style="display:none;">' +
-										 '<td style="text-align:left;"><textarea id="textarea'+obj.replyId+'" style="resize:none;" cols="80" rows="2">' + obj.replyContent + '</textarea></td>' +
+										 '<td style="text-align:left;"><textarea id="textarea'+obj.replyId+'" style="resize:none;" cols="100" rows="2">' + obj.replyContent + '</textarea></td>' +
 										 '<td>&nbsp<input type="button" onclick="updateReply('+obj.replyId +');" class="btn btn-secondary" value="수정완료"> <input type="button" class="btn btn-secondary" onclick="closeR('+obj.replyId +');" value="취소"></td>'+
 										 '</tr>';
 							}else{ // 현재 로그인한 아이디와 작성자 아이디가 같지 않을경우
