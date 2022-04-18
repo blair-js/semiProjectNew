@@ -55,6 +55,7 @@ public class EmailSendServlet extends HttpServlet {
 
 		//서버의 정보를 설정하는 부분
 		Properties p = new Properties();
+		p.put("mail.smtp.ssl.protocols", "TLSv1.2"); 
 		p.put("mail.smtp.user", from);
 		p.put("mail.smtp.host", "smtp.googlemail.com"); //이메일 발송을 처리해줄 smtp 서버
 		p.put("mail.smtp.port", "465");

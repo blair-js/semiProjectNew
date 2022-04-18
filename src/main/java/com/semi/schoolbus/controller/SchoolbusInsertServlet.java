@@ -30,10 +30,6 @@ public class SchoolbusInsertServlet extends HttpServlet {
 		if(result > 0) {
 			request.getSession().setAttribute("msg", "통학버스 신청이 완료되었습니다.");
 
-
-
-			//response.sendRedirect("index.jsp");
-
 			response.sendRedirect("/userMyDetail.do");
 
 		}else {

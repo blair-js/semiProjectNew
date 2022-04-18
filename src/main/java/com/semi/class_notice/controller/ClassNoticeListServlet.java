@@ -38,18 +38,20 @@ public class ClassNoticeListServlet extends HttpServlet {
 		String keyword = request.getParameter("keyword");
 		String aSearchKey = request.getParameter("searchKey");
 		
-		System.out.println("키" + keyword);
+		System.out.println("키 " + keyword);
+		
 
 		// 검색어는 "" 값이 들어 올 수 있음 유효성 검사
 		String searchkey = "";
 		if(aSearchKey != null && !aSearchKey.equals("")) {
 			searchkey = aSearchKey;
 		}
+		
 		System.out.println("검색어 : " + searchkey);
+		listCount = new ClassNoticeService().getListCount(className, keyword, searchkey);
 		
 		// 총 게시글 개수 DB 조회 후 받아 옴
-		listCount = new ClassNoticeService().getListCount(className);
-		System.out.println("listCount : " + listCount);
+		System.out.println("조회할 게시글 수 : " + listCount);
 		
 		// 현재 페이지
 		currentPage = 1;

@@ -129,29 +129,22 @@
 
       <div>
          
-
          <%if (loginUser != null && loginUser.getAdminChecked().equals("Y") && list.size() <= 8) {%> <!-- 관리자는 구매 버튼이아닌 간식추가 버튼이 보여지도록 설정 -->
-
             
          <button class="btn btn-outline-warning btn-lg" style="width: 20%"
          id="center" onclick="goSnackInsert()"> 간식 추가</button>
          
-
          <% } else if( loginUser.getAdminChecked().equals("Y") ) { %> 
-         	<p id ="center" style="color:red"> <u>간식은 최대 9개까지만 등록이 가능합니다.</u></p>
-         	<p></p>
-         	<p id="center"><mark>간식을 추가하려면 삭제 후 등록해주시기 바랍니다.</mark> </p>
-         	<% } %>
-
-
+            <p id ="center" style="color:red"> <u>간식은 최대 9개까지만 등록이 가능합니다.</u></p>
+            <p></p>
+            <p id="center"><mark>간식을 추가하려면 삭제 후 등록해주시기 바랍니다.</mark> </p>
+            <% } %>
          
          <% if ( userNo != 0 && loginUser.getAdminChecked().equals("N") ) { %> <!-- 관리자 번호는 구매 버튼이 보이지않도록 설정 -->
          <button class="btn btn-outline-warning btn-lg" style="width: 20%"
             id="center" onclick="goSnackResult()">
 
-
             <b>구매</b>
-
 
          </button>
             <% } %>
@@ -163,13 +156,6 @@
 
       <br> <br>
 
-
-            <div class="thumbnail" align="center">
-               <input type="hidden" name="sno" value="<%=s.getSanckNo()%>">
-   
-               <div class="container-md">
-                  <div class="row">
-                     <div class="col-sm row gx-0">
 
       <div class="listArea">
          <%
@@ -209,7 +195,6 @@
                <div class="container-md">
                   <div class="row">
                      <div class="col-sm row gx-0">
-
 
                         <img
                            src="<%=contextPath%>/resources/FileUpload_test(SNACK)/<%=s.getTitleImg()%>"
@@ -332,15 +317,13 @@
          
          //관리자만 들어갈 수 있는 경로
          function goSnackInsert(){ //새로운 간식 추가하기위한 서블릿
-        	 location.href="<%=request.getContextPath()%>/snackInsertForm.do"
+            location.href="<%=request.getContextPath()%>/snackInsertForm.do"
          }
          
 
          
       
    </script>
-
-
 
    <%@ include file="../common/footer.jsp"%>
 </body>

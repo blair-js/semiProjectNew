@@ -67,8 +67,6 @@ public class UserPointInsertServlet extends HttpServlet {
       }//if~else
       
    }
-
-
    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       doGet(request, response);
    }

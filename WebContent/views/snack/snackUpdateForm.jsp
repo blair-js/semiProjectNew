@@ -57,12 +57,10 @@
 
 					<div name="snack_img1" id="center">
 						<% if(at != null) { %>
-
 						   <input type='hidden' name='originFile' value='<%=at.getChangeName()%>'>	 
 						   <input type='hidden' name='originFileNo' value='<%=at.getFileNo()%>'>
 						   
 						   <% } %>
-
 					</div>
 
 
