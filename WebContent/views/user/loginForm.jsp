@@ -17,7 +17,7 @@
 
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 
-<title>둥글개 로그인</title>
+<title>둥글개 둥글개</title>
 
 <!-- 제이쿼리 사용하기 위해 CDN 연결 -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

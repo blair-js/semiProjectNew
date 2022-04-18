@@ -79,7 +79,7 @@
 					<img src="assets/img/gallery/introDog3.jpg" alt="소개강아지3" width="50" />
 				</div>
 				<div class="col-sm row gx-1">
-					<img src="assets/img/gallery/introDog4.jpg" alt="소개강아지4" width="50" />
+					<img src="assets/img/gallery/introDog44.jpg" alt="소개강아지4" width="50" />
 				</div>
 			</div>
 		</div>
