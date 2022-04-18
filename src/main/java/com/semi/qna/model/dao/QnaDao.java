@@ -71,7 +71,7 @@ public class QnaDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		String sql = "SELECT COUNT(*) FROM QA WHERE STATUS='Y' AND "+keyword+" LIKE ?";
+		String sql = "SELECT COUNT(*) FROM QA A JOIN R_USER B ON USER_NO=QNA_WRITER WHERE A.STATUS='Y' AND "+keyword+" LIKE ?";
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -499,7 +499,8 @@ public class QnaDao {
 		
 		String sql = "SELECT * FROM (SELECT ROWNUM RNUM, A.* FROM (SELECT DISTINCT A.QNA_NO, "
 					  + "(SELECT COUNT(*) FROM QA_REPLY WHERE QNA_NO=REF_QNO AND QA_REPLY.STATUS='Y') CNT "
-					  + "FROM QA A LEFT JOIN QA_REPLY B ON A.QNA_NO=B.REF_QNO WHERE A.STATUS = 'Y' AND "+keyword+" LIKE ? "
+					  + "FROM QA A LEFT JOIN QA_REPLY B ON A.QNA_NO=B.REF_QNO JOIN R_USER C ON A.QNA_WRITER=C.USER_NO "
+					  + " WHERE A.STATUS = 'Y' AND "+keyword+" LIKE ? "
 					  + "ORDER BY A.QNA_NO DESC)A) WHERE RNUM BETWEEN ? AND ?";
 		
 		//where 조건문에는 한 페이지 당 보여지는 게시물(10개)를 보여주기 위해

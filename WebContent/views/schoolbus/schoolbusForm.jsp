@@ -114,6 +114,7 @@
   				$("#userService").hide();
   				$("#checkNo").hide();
   				$("#ment").show();
+
   			}
   			
   			if(<%= loginUser.getAdminChecked().equals("Y") %>){

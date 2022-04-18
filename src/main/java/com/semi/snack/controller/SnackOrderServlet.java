@@ -59,8 +59,7 @@ public class SnackOrderServlet extends HttpServlet {
 		}
 
 		System.out.println("uno 찍어보기 : " + uno);
-		// System.out.println("snackArrays 찍어보기 : " + snackArrays.toString()); 그냥 배열을
-		// 찍지말고 배열의 인덱스 값을 찍어주기..
+
 		System.out.println("sum 찍어보기 : " + sum);
 
 		
@@ -72,7 +71,7 @@ public class SnackOrderServlet extends HttpServlet {
 		
 		int pointNo = userPoint.getUserPoint();
 		
-		if(pointNo >= sum) {
+		if(pointNo >= sum) { //보유포인트가 구매하려는 포인트보다 크거나 같다면 구매가능
 			
 		
 		

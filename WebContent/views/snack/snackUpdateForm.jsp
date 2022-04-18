@@ -3,7 +3,7 @@
     <%@ page import= "java.util.ArrayList, com.semi.common.dto.*" %>
     
     <%
-   	Snack snack  = (Snack)request.getAttribute("snack"); 
+      Snack snack  = (Snack)request.getAttribute("snack"); 
     Attachment at  = (Attachment)request.getAttribute("at");
     
     %>
@@ -17,59 +17,43 @@
 <style>
 
 #center {
-	text-align: center;
-	margin: auto;
-	justify-content: center;
-	display: flex;
+   text-align: center;
+   margin: auto;
+   justify-content: center;
+   display: flex;
 }
 
 </style>
 
 </head>
 <body>
-	
-	<%@ include file="../common/menubar.jsp"%>
+   
+   <%@ include file="../common/menubar.jsp"%>
 
-		<!-- 컨테이너 시작 div -->
-
-
-		<!-- 해당 페이지는 로그인된 유저만 들어올 수 있으며 비회원이 클릭 시 alert 창으로 "로그인을 해주세요" 띄워주기 -->
-
-		<div class="px-3 py-3 my-4">
-			<!-- 초기 설정 4 5 5 -->
-
-			<h1>간식 수정</h1>
+      <!-- 컨테이너 시작 div -->
 
 
-			<hr style="height: 7px; color: #FDC800" ;  id="center">
+      <!-- 해당 페이지는 로그인된 유저만 들어올 수 있으며 비회원이 클릭 시 alert 창으로 "로그인을 해주세요" 띄워주기 -->
 
-			<p></p>
-			<!--  style="float:left" -->
+      <div class="px-3 py-3 my-4">
+         <!-- 초기 설정 4 5 5 -->
 
-			<p></p>
+         <h1>간식 수정</h1>
 
-			<div style="border: 1px solid #FDC800; background-color: #FDC800">
 
-				<br>
+         <hr style="height: 7px; color: #FDC800" ;  id="center">
 
-				<p>&nbsp&nbsp&nbsp저희 둥글개둥글개 에서 제공하는 간식은</p>
+         <p></p>
+         <!--  style="float:left" -->
 
-				<p>&nbsp&nbsp&nbsp뼈다귀 충전 후 보유한 포인트에서 차감하여 구매할 수 있습니다.</p>
+         <p></p>
 
-				<p>&nbsp&nbsp&nbsp구매 한 간식은 식사시간에 견주님의 강아지에게 소분하여 지급되며,</p>
+         <div style="border: 1px solid #FDC800; background-color: #FDC800">
 
-				<p>&nbsp&nbsp&nbsp필요 시 방문 및 통학버스를 이용하여 보호자님께서도</p>
+            <br>
 
-				<p>&nbsp&nbsp&nbsp직접 수령이 가능하십니다.</p>
+            <p>&nbsp&nbsp&nbsp저희 둥글개둥글개 에서 제공하는 간식은</p>
 
-			</div>
-		</div>
-				
-			<form id="updateForm" action="<%= contextPath %>/snackUpdate.do" method="post" enctype="multipart/form-data"> <!-- 첨부파일이있어서 멀티파트로 넘기고 서블릿에 넘김 -->	
-			<input type="hidden" name="sno" value="<%= snack.getSanckNo() %>">
-			<div class="container">
-			<div class="container-md">
-				<div class="row">
 
 					<div name="snack_img1" id="center">
 						<% if(at != null) { %>
@@ -77,10 +61,11 @@
 						   <input type='hidden' name='originFileNo' value='<%=at.getFileNo()%>'>
 						   
 						   <% } %>
-						
 					</div>
 
-				</div>
+
+            <p>&nbsp&nbsp&nbsp구매 한 간식은 식사시간에 견주님의 강아지에게 소분하여 지급되며,</p>
+
 
 			</div>
 			</div>
@@ -93,13 +78,15 @@
 			<pre id="center"><p>수정 전                                                           수정 후</p></pre>
 			<div id="center">
 					
-			<img style="width:297px;" src="<%= contextPath %>/resources/FileUpload_test(SNACK)/<%= at.getChangeName() %>">&nbsp&nbsp
-			<img id="snackImg" style="width:297px;" /></td>
+
+			<td><img src="<%= contextPath %>/resources/FileUpload_test(SNACK)/<%= at.getChangeName() %>" width="297px">&nbsp&nbsp
+			<img id="snackImg" width="297px" /></td>
+
 			</div>
 			<div id="fileArea">	
 			
 			<br> <input type="file" id="file" name="file"
-			onchange="loadImg(this, 1);"> <!-- 서블릿으로 보내는 파일 이름 -->
+			onchange="loadImg(this, 1);" > <!-- 서블릿으로 보내는 파일 이름 -->
 				
 			</div>
 			<p></p>
@@ -224,6 +211,6 @@
 	
 	
 	<%@ include file="../common/footer.jsp"%>
-	
+
 </body>
 </html>
