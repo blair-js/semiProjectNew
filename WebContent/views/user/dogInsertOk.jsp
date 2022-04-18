@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>둥글개 입학신청</title>
+<title>둥글개 둥글개</title>
 <style type="text/css">
 div h4{
 	color: #0099FF;
