@@ -78,7 +78,7 @@
 						   <input type='hidden' name='originFileNo' value='<%=at.getFileNo()%>'>
 						   
 						   <% } %>
-												
+
 					</div>
 
 				</div>
@@ -94,8 +94,10 @@
 			<pre id="center"><p>수정 전                                                           수정 후</p></pre>
 			<div id="center">
 					
-			<td><img src="<%= contextPath %>/resources/FileUpload_test(SNACK)/<%= at.getChangeName() %>">&nbsp&nbsp
-			<img id="snackImg" height="293px" width="297px" /></td>
+
+			<td><img src="<%= contextPath %>/resources/FileUpload_test(SNACK)/<%= at.getChangeName() %>" width="297px">&nbsp&nbsp
+			<img id="snackImg" width="297px" /></td>
+
 			</div>
 			<div id="fileArea">	
 			

@@ -123,8 +123,13 @@ public class SnackDao {
             list.add(snack);
 
          }
-            
+
+         for(int i=0; i<list.size(); i++) {
+        	 System.out.println(list.get(i));
+         }
+         
          System.out.println("list에 담겨있는 값 : " + list);
+         
       } catch (SQLException e) {
          // TODO Auto-generated catch block
          e.printStackTrace();

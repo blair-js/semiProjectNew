@@ -134,11 +134,14 @@
          <button class="btn btn-outline-warning btn-lg" style="width: 20%"
          id="center" onclick="goSnackInsert()"> 간식 추가</button>
          
+
          <% } else if( loginUser.getAdminChecked().equals("Y") ) { %> 
          	<p id ="center" style="color:red"> <u>간식은 최대 9개까지만 등록이 가능합니다.</u></p>
          	<p></p>
          	<p id="center"><mark>간식을 추가하려면 삭제 후 등록해주시기 바랍니다.</mark> </p>
          	<% } %>
+
+
          
          <% if ( userNo != 0 && loginUser.getAdminChecked().equals("N") ) { %> <!-- 관리자 번호는 구매 버튼이 보이지않도록 설정 -->
          <button class="btn btn-outline-warning btn-lg" style="width: 20%"
@@ -195,6 +198,7 @@
                <div class="container-md">
                   <div class="row">
                      <div class="col-sm row gx-0">
+
 
                         <img
                            src="<%=contextPath%>/resources/FileUpload_test(SNACK)/<%=s.getTitleImg()%>"
@@ -324,6 +328,7 @@
          
       
    </script>
+
 
    <%@ include file="../common/footer.jsp"%>
 </body>

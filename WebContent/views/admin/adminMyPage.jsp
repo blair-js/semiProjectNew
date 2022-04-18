@@ -77,7 +77,6 @@
 	<br>
 
 	<br>
-
 	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
 		id="center" onclick="goSnackInsert()">간식 추가</button>
 	<br>
@@ -88,6 +87,7 @@
 		id="center" onclick="goSnackOrder()">회원 간식 구매목록</button>
 	<br>
 	
+
 	<br>
 
 	<button class="btn btn-outline-warning btn-lg" style="width: 20%"

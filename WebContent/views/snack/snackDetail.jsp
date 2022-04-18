@@ -84,12 +84,14 @@
          <div class="container-md">
             <div class="row">
 
+
                <div name="snack_img" id="center">
                   <table>
                   <td><img src="<%= contextPath %>/resources/FileUpload_test(SNACK)/<%= at.getChangeName() %>" id="img" style="width:297px;"></td>
                   </table>
                   <!-- 현재 올릴 사진은 1개이기에 수업 jsp중 tuhmbnailInsertForm.jsp 참고-->
                </div>
+
 
             </div>
 

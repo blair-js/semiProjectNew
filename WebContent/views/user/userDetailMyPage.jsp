@@ -168,7 +168,7 @@ main .sm{
                <hr>
                <h4 class="d-flex justify-content-between align-items-center mb-3">
                   <span class="text-primary">Your Order History</span> 
-                  
+
                </h4>
                <button type="button" class="w-100 btn btn-secondary btn-lg" onclick="goUserSnackOrder()">
                   <b>나의 간식 구매내역 확인</b>
