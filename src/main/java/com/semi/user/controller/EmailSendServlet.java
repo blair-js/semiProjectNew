@@ -40,7 +40,7 @@ public class EmailSendServlet extends HttpServlet {
 		
 		//DB에 데이터가 들어갔으면 이메일을 보내야 한다. 
 		//여기서 구글 SMTP가 사용된다. 
-		String host = "http://localhost:8086/"; //보내는 서버 
+		String host = "http://localhost:9001/"; //보내는 서버 
 		
 		String from = "kjisu4717@gmail.com"; //보내는 사람 메일 계정(고정)
 		String to = new UserService().getUserEmail(userId); //받는 사람 메일(userId를 기준으로 메소드 실행하여 가져오기)
@@ -54,6 +54,7 @@ public class EmailSendServlet extends HttpServlet {
 
 		//서버의 정보를 설정하는 부분
 		Properties p = new Properties();
+		p.put("mail.smtp.ssl.protocols", "TLSv1.2"); 
 		p.put("mail.smtp.user", from);
 		p.put("mail.smtp.host", "smtp.googlemail.com"); //이메일 발송을 처리해줄 smtp 서버
 		p.put("mail.smtp.port", "465");

@@ -74,7 +74,7 @@ td {
 		<!-- 컨테이너 시작 div -->
 
 		<img class="d-block mx-auto mt-7 mb-4" src="assets/img/gallery/adminDogFood.png" alt="강아지로고" width="72" height="65">
-		<h1 class="magin" id="center" style="margin: 40px">간식 구매내역</h1>
+		<h1 class="magin" id="center" style="margin: 40px">회원 간식 구매내역</h1>
 
 		<hr style="height: 7px; color: #FDC800;">
 

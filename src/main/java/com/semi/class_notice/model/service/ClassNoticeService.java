@@ -16,10 +16,18 @@ import com.semi.common.dto.Reply;
 
 public class ClassNoticeService {
 
-	public int getListCount(String className) {
+	public int getListCount(String className, String keyword, String searchkey) {
 		Connection conn = getConnection();
 		
-		int listCount = new ClassNoticeDao().getListCount(conn, className);
+		int listCount = 0;
+		// 검색어가 있는경우, 없는경우 조회 게시글 수가 다르니 메서드 따로 생성
+		if(searchkey.equals("") && searchkey.length() == 0) {
+			// 검색어가 없는경우
+			listCount = new ClassNoticeDao().getListCount(conn, className);
+		}else {
+			// 검색어가 있는경우
+			listCount = new ClassNoticeDao().getSeListCount(conn, className, keyword, searchkey);
+		}
 		
 		close(conn);
 		
@@ -232,5 +240,4 @@ public class ClassNoticeService {
 		close(conn);
 		return result;
 	}
-
 }

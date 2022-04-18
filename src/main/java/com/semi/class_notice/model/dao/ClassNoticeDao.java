@@ -502,7 +502,6 @@ public class ClassNoticeDao {
 		int startRow = (pi.getCurrentPage()-1) * pi.getBoardLimit() + 1;
 		int endRow = startRow + pi.getBoardLimit() - 1;
 		
-		System.out.println("내용 : " + searchkey);
 		String sql = "SELECT * FROM (SELECT ROWNUM RNUM, A.* FROM "
 									+ "(SELECT CLASS_NOTICE_NO, CLASS_NOTICE_TITLE, CHANGE_NAME, USER_ID, COUNT, CREATE_DATE,"
 									+ "(SELECT COUNT(*) FROM CLASS_REPLY WHERE REF_NO=CLASS_NOTICE_NO AND CLASS_REPLY.STATUS = 'Y')CNT"
@@ -535,7 +534,6 @@ public class ClassNoticeDao {
 				
 				list.add(c);
 			}
-			System.out.println("게시글 개수" + list.size());
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -546,6 +544,34 @@ public class ClassNoticeDao {
 		}
 
 		return list;
+	}
+	public int getSeListCount(Connection conn, String className, String keyword, String searchkey) {
+		// DB에서 검색어로 조회한 게시글 개수 메소드
+		int listCount = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String sql = "SELECT COUNT(*) FROM CLASS_NOTICE A JOIN R_USER B ON A.NOTICE_WRITER=B.USER_NO WHERE A.STATUS='Y' AND A.CLASS_NAME=? AND "+keyword+" LIKE ?";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, className);
+			pstmt.setString(2, "%"+searchkey+"%");
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				listCount = rset.getInt("COUNT(*)");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		return listCount;
 	}
 
 }

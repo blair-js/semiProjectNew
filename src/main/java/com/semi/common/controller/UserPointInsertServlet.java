@@ -1,12 +1,14 @@
 package com.semi.common.controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.semi.user.model.dto.User;
 import com.semi.user.model.service.UserService;
 
 //charge.jsp에서 결제 성공시 넘어오는 페이지
@@ -41,11 +43,14 @@ public class UserPointInsertServlet extends HttpServlet {
 			
 			///////////////////////////////////////////////////////////////
 			
+			int userNo = ((User)request.getSession().getAttribute("loginUser")).getUserNo(); 
+			System.out.println(userNo + "유저번호");
+			
 			if(result > 0) { //포인트 업데이트 성공시
 				
 				//간식페이지를 뿌려주는 서블릿으로
 				//request.getRequestDispatcher("snack.do").forward(request, response);
-				response.sendRedirect("snack.do");
+				response.sendRedirect("snack.do?userNo=" + userNo);
 				
 			}else { //실패시 
 				

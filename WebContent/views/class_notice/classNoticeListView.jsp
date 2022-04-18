@@ -36,11 +36,11 @@ button:hover {
 	<%@ include file="../common/menubar.jsp"%>
 	
 	<%if(classname.equals("햇님반")) { %>
-	<h2 class="text-center">햇님반</h2>
+	<h2 class="text-center"><img src="assets/img/gallery/sun.png" style="height:80px;" alt="logo" /> 햇님반</h2>
 	<% } else if(classname.equals("달님반")){ %>
-	<h2 class="text-center">달님반</h2>
+	<h2 class="text-center"><img src="assets/img/gallery/moon.png" style="height:80px;" alt="logo" /> 달님반</h2>
 	<% } else { %>
-		<h2 class="text-center">별님반</h2>
+		<h2 class="text-center"><img src="assets/img/gallery/star.png" style="height:80px;" alt="logo" /> 별님반</h2>
 	<% } %>
 	<p class="page-description text-center">반별 알림장</p>
 	<div class="album py-5 bg-light">
@@ -49,7 +49,7 @@ button:hover {
 				<h3>조회된 게시물이 없습니다.</h3>
 			<% } else { %>
 				<div class="col-md-6" id="search">	
-					<form action="/classNoticeList.do" method="get">
+					<form action="" method="get" id="searchForm">
 						<div class="input-group mb-3 input-group-sm">
 							<!-- 검색 키워드 선택 토글 -->
 							<div class="input-group-prepend">
@@ -62,10 +62,20 @@ button:hover {
 							<!-- 검색어 입력 -->		
 							<input type="text" class="form-control" id="searchKey" name="searchKey" placeholder="검색어를 입력하세요." value="${param.searchKey }">	
 							<!-- 검색 버튼 --> 
-							<input type="submit" class="btn btn-secondary" id="searchBtn" value="검색">							
+							<input type="button" class="btn btn-secondary" onclick="goSearch();" id="searchBtn" value="검색">							
 						</div>	
 					</form>
 				</div>
+				<script>
+					// 검색어를 입력 했을 경우에만 검색 버튼 눌리도록 설정, 값이 비어있으면 화면전환 X
+					function goSearch(){
+						if($("#searchKey").text().length() != 0){
+							$("#searchForm").attr("action", "/classNoticeList.do");
+							$("#searchForm").submit();
+						}
+					}
+				
+				</script>
 				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 					<% for (ClassNotice n : list) { %>
 					<div class="col">

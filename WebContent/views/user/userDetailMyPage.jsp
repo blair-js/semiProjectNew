@@ -168,7 +168,6 @@ main .sm{
 					<hr>
 					<h4 class="d-flex justify-content-between align-items-center mb-3">
 						<span class="text-primary">Your Order History</span> 
-						<span class="badge bg-primary rounded-pill">개수표시</span>
 					</h4>
 					<button type="button" class="w-100 btn btn-secondary btn-lg" onclick="goUserSnackOrder()">
 						<b>나의 간식 구매내역 확인</b>
@@ -380,6 +379,9 @@ main .sm{
 		//회원탈퇴 함수
 		function deleteUser() {
 			
+			var ans = confirm("정말 탈퇴하시겠습니까?");
+			if(!ans){return false;}
+			
 			//비밀번호를 입력받을 프롬프트 창 열기
 			var inputPwd = prompt("현재 비밀번호를 입력하세요.");
 			var originPwd = $('#userPwd').val(); //위 form안에서 hidden으로 숨기고있는 요소에서 현재 user의 비밀번호를 가져온다. 
@@ -387,20 +389,7 @@ main .sm{
 			//현재 user의 비번과 프롬프트에서 입력한 비번이 같아야 탈퇴 진행.
 			if(inputPwd != null){
 				if(inputPwd === originPwd){ //같다면
-					//재확인
-					var check = confirm('정말로 탈퇴하시겠습니까?');
-				
-					if(check){ //예 클릭시
-						//UserDeleteServlet으로 이동하도록
-						//action 속성을 해당 경로로 바꿔준다. 
-						$('#updateForm').attr("action", "<%= contextPath%>/deleteUser.do;");
-						
-						//submit() 해주기(해당 탈퇴 버튼은 type=button으로 되어있으므로 form안의 데이터가 넘어가지 않음)
-						$('#updateForm').submit();
-					}else{ //아니오 클릭시
-						alert('회원 탈퇴를 취소하였습니다.');
-					}//if~else
-						
+					location.href = "<%= contextPath%>/deleteUser.do?userId=<%= loginUser.getUserId() %>"
 				}else if(inputPwd != originPwd){
 					alert('비밀번호가 일치하지 않습니다. 다시 입력해주세요.');
 				}

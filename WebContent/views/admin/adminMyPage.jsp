@@ -79,14 +79,15 @@
 	<br>
 
 	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
-		id="center" onclick="goSnackOrder()">간식 구매목록</button>
+		id="center" onclick="goSnackInsert()">간식 추가</button>
 	<br>
-	
+
 	<br>
 
 	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
-		id="center" onclick="goSnackInsert()">간식 추가</button>
+		id="center" onclick="goSnackOrder()">회원 간식 구매목록</button>
 	<br>
+	
 
 	<br>
 
@@ -100,7 +101,7 @@
 
 	<button class="btn btn-outline-warning btn-lg" style="width: 20%"
 		id="center" onclick="goReForm();">
-		통학 버스 이용 회원 내역
+		회원 통학 버스 이용 내역
 	</button>
 
 	<!--  		
