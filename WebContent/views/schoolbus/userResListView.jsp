@@ -64,10 +64,9 @@
   			if(pwd == '<%= loginUser.getUserPwd() %>'){
   				$("#resList").attr("action", "/schoolbusAllDelete.do");
   				$("#resList").submit();
-  			}else if(!pwd){
-  				return false;
-  			}
-  			alert("비밀번호를 잘못 입력하셨습니다.");
+  			}else if(pwd != '<%= loginUser.getUserPwd() %>'){
+	  			alert("비밀번호를 잘못 입력하셨습니다.");
+  			}  
   		}
   		// 회원 개별 삭제 기능 구현 함수
   		// 위에서 삭제 버튼 클릭시 매개변수로 버스 예약번호와 버스일정내용을 넘겨준다.

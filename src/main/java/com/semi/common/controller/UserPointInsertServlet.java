@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.semi.user.model.dto.User;
 import com.semi.user.model.service.UserService;
 
 //charge.jsp에서 결제 성공시 넘어오는 페이지
@@ -23,6 +24,8 @@ public class UserPointInsertServlet extends HttpServlet {
 		//파라미터 확인(사용자 포인트 테이블에 데이터를 넣기 위해 회원아이디, 충전(결제)한 금액이 필요하다)
 		String userId = request.getParameter("userId"); //회원아이디
 		int updatePoint = Integer.parseInt(request.getParameter("point")); //충전금액(포인트)
+		int userNo = ((User)request.getSession().getAttribute("loginUser")).getUserNo();
+		
 		System.out.println("point 확인 : " + updatePoint);
 		System.out.println("userId 확인 : " + userId);
 		
@@ -45,7 +48,7 @@ public class UserPointInsertServlet extends HttpServlet {
 				
 				//간식페이지를 뿌려주는 서블릿으로
 				//request.getRequestDispatcher("snack.do").forward(request, response);
-				response.sendRedirect("snack.do");
+				response.sendRedirect("snack.do?userNo="+userNo);
 				
 			}else { //실패시 
 				

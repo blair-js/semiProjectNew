@@ -82,7 +82,7 @@
 	  <!-- 댓글 창 -->
 	  <div class="comment-txt">
 	  	<!-- 관리자에게만 보이도록 한다. -->
-	  	  <% if(loginUser != null && loginUser.getUserId().contains("admin")){ %>
+	  	  <% if(loginUser != null && loginUser.getAdminChecked().equals("Y")){ %>
           <textarea rows="3" id="replyCnt" style="resize: none; width:92%" placeholder="댓글을 작성해주세요."></textarea>
           <button id="addreply" class="btn btn-dark btn-lg mb-6 pl-3 "style="height: 4.5rem">등록하기</button>
           <%} else {%>
@@ -143,17 +143,17 @@
 	    			$.each(list, function(index, obj){
 	    				if(userId.includes("admin") || userId == obj.replyWriter){ //관리자와 글 작성자만 댓글을 달 수 있다.
 	        				value += '<tr style="border-top: 10px solid #fff;">' +
-	        						 '<td style="text-align:left; border:none;">' + obj.replyWriter + ' | ' + obj.createDate + '</td>' +
-	        						 '<td style="text-align:left; border:none;"><input class="btn btn-secondary btn-sm" type="button" onclick="updateBtn('+ obj.qnaReplyNo +');" value="수정">' + 
-	        						 '<input class="btn btn-secondary btn-sm mx-2" type="button" onclick="deleteReply(' + obj.qnaReplyNo + ');" value="삭제"></td>' + 
+	        						 '<td style="text-align:left; border:none;">' + obj.replyWriter + ' |<small> ' + obj.createDate + '</small></td>' +
+	        						 '<td style="text-align:left; border:none;"><input class="btn btn-secondary btn-sm" type="button" style="background:rgb(34 42 91)" onclick="updateBtn('+ obj.qnaReplyNo +');" value="수정">' + 
+	        						 '<input class="btn btn-secondary btn-sm mx-2" type="button" style="background:rgb(34 42 91)" onclick="deleteReply(' + obj.qnaReplyNo + ');" value="삭제"></td>' + 
 	        						 '</tr>' + 
 	        						 '<tr id="reply'+obj.qnaReplyNo +'">' +
 	        						 '<td style="text-align:left;" colspan="2">' + obj.qnaReplyContent + '</td>' +
 	        						 '</tr>' +
 	        						 '<tr id="update'+obj.qnaReplyNo +'" style="display: none">' +
-	        						 '<td><textarea rows="3" id="textarea'+obj.qnaReplyNo+'" style="resize: none; width:92%">'+ obj.qnaReplyContent +'</textarea></td>' +
-	        						 '<td>&nbsp<input type="button" onclick="updateReply('+obj.qnaReplyNo +');" class="btn btn-secondary" value="수정하기">' +
-	        						 '<input type="button" class="btn btn-secondary mx-2" onclick="closeR('+obj.qnaReplyNo +');" value="취소"></td>'+
+	        						 '<td style="text-align:left;"><textarea rows="3" id="textarea'+obj.qnaReplyNo+'" style="resize: none; width:92%">'+ obj.qnaReplyContent +'</textarea></td>' +
+	        						 '<td>&nbsp<input type="button" onclick="updateReply('+obj.qnaReplyNo +');" style="background:rgb(34 42 91)" class="btn btn-secondary" value="수정하기">' +
+	        						 '<input type="button" class="btn btn-secondary mx-2" style="background:rgb(34 42 91)" onclick="closeR('+obj.qnaReplyNo +');" value="취소"></td>'+
 	        						 '</tr>'
 	        						 
 	    				}else {
@@ -173,7 +173,7 @@
 	    		}
 	    	})    	    	
 	    }
-    	//댓글 수정 버튼 누르면 수정 text area가 나온다.
+    	//댓글 수정 버튼 누르면 수정 textarea가 나온다.
     	function updateBtn(rQno){
     		var replyId = "reply" + rQno;
     		var updateId = "update" + rQno;

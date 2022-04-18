@@ -35,18 +35,19 @@ public class QnaPwdCheckServlet extends HttpServlet {
 		//넘어온 qno, pwd 받아준다.
 		int qno = Integer.parseInt(request.getParameter("qno"));
 		String pwd = request.getParameter("pwd");
-		int userNo = ((User)request.getSession().getAttribute("loginUser")).getUserNo();
-	
+		int userNo = ((User)request.getSession().getAttribute("loginUser")).getUserNo(); 
+
 		Qna q = new QnaService().selectPwdCheck(qno, userNo);
 		
+		System.out.println(q.getQnaWriter());
 		//가져온 pwd와 사용자가 입력한 pwd가 같고, 게시글의 작성자의 번호와 현재 접속한 사람의 번호가 같다면
-		if(q.getQnaPwd().equals(pwd) && Integer.valueOf(q.getQnaWriter()) == userNo) { 
+		if(q.getQnaPwd().equals(pwd)) { 
 			//비밀번호가 맞으면 detailView로
 			response.sendRedirect("detailQna.do?qno="+qno);
 		} else {
 			//틀리면 error페이지 -> msg로 비밀번호가 틀렸습니다. 다시 입력해주세요
-			request.getSession().setAttribute("msg", "비밀번호가 일치하지 않습니다.");
-			response.sendRedirect("listQna.do");
+			request.setAttribute("msg", "비밀번호가 틀렸습니다.");
+			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
 		}
 	}
 
