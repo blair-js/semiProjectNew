@@ -117,8 +117,7 @@ public class QnaService {
 		
 		Qna q = new QnaDao().selectPwdCheck(conn, qno, userNo);
 		
-		close(conn);
-		
+		close(conn);		
 		return q;
 	}
 

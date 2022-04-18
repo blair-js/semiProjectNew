@@ -118,7 +118,7 @@
 		</table>
 
 		<%-- 글쓰기 버튼 -> 관리자에게만 보이도록한다. --%>
-		<% if(loginUser != null && loginUser.getUserId().contains("admin")){ %>
+		<% if(loginUser != null && loginUser.getAdminChecked().equals("Y")){ %>
 			<div class="text-md-end" id="button">
 				<button type="button" class="btn btn-dark m-2" onclick="location.href='<%=contextPath%>/enrollFormNotice.do'"><b>글쓰기</b></button>
 			</div>

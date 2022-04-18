@@ -3,7 +3,7 @@
 <%
 	ArrayList<Qna> list = (ArrayList<Qna>)request.getAttribute("list");
 	PageInfo pi = (PageInfo)request.getAttribute("pi");
-	ArrayList<Qna> reCountList = (ArrayList<Qna>)request.getAttribute("reCountList"); 
+	ArrayList<Qna> reCountList = (ArrayList<Qna>)request.getAttribute("reCountList");
 	
 	int listCount = pi.getListCount();
 	int currentPage = pi.getCurrentPage();
@@ -97,9 +97,7 @@
 			<!-- 넘어오는 글이 비밀글인 경우-> 비밀글이 Y인 경우 앞에 자물쇠 이미지와 비밀번호를 작성하라는 alret창 -->
 			<% if(list.isEmpty()) {%> <!-- 비어있는 경우 -->
 				<tr>
-
-					<td colspan="6" onclick="event.cancelBubble=true">조회된 리스트가 없습니다.</td>
-
+					<td colspan="6" onclick="event.cancelBubble=true"> 조회된 리스트가 없습니다.</td>
 				</tr>
 			<%} else{ %>
 				<% for(Qna q : list) {%>
@@ -107,6 +105,7 @@
 				 	<tr>
 				 		<td class="d-none"><%= q.getQnaNo()%></td>
 				 		<td class="d-none"><%= q.getQnaSecret()%></td>
+				 		<td class="d-none"><%= q.getQnaWriter() %></td>
 				 		<td><%= q.getRowNo()%></td>
 						<td>
 							<i class="bi bi-lock-fill"></i> <!-- 자물쇠 아이콘 나옴 -->
@@ -129,6 +128,7 @@
 				 	<tr>
 				 		<td class="d-none"><%= q.getQnaNo()%></td>
 				 		<td class="d-none"><%= q.getQnaSecret()%></td>
+				 		<td class="d-none"><%= q.getQnaWriter() %></td>
 				 		<td><%= q.getRowNo()%></td>
 						<td><%= q.getQnaTitle()%></td>
 						<% for(int i = 0; i < reCountList.size(); i++) { %>
@@ -197,19 +197,24 @@
    			
 			var qno = $(this).children().eq(0).text(); 
    			var qnaSecret = $(this).children().eq(1).text(); 
+   			var qnaWriter = $(this).children().eq(2).text(); 
 			var userId = "<%= loginUser.getUserId() %>";
-			
+						
 			//자바스크립트에서는 contains아닌 indexof나 include 사용 
 			//indexOf는-> 포함하고 있는 문자를 가지고 있지 않으면 -1반환
 			//includes는 문자가 있느면 true, 없으면 false 반환
    			if(qnaSecret == "Y" && userId.includes("admin")) { //관리자는 비밀번호를 입력하지 않아도 모든 글을 다 볼 수 있다.
    				location.href = "<%= contextPath%>/detailQna.do?qno="+qno; 
-   			} else if(qnaSecret == "Y"){  
-   				location.href = "<%= contextPath%>/pwdCheckFormQna.do?qno="+qno; <%--번호도 같이 가져간다. -> 그 게시글 번호의 비밀번호를 확인 --%>
-   			}else {
+   			} else if(qnaSecret == "Y"){ 
+	   			if(qnaWriter == userId){
+	   				location.href = "<%= contextPath%>/pwdCheckFormQna.do?qno="+qno; <%--번호도 같이 가져간다. -> 그 게시글 번호의 비밀번호를 확인 --%>
+   				} else{
+   					alert("게시글은 글 작성자만 열람 가능합니다.");
+   				}
+   			} else {
    				location.href = "<%= contextPath%>/detailQna.do?qno="+qno;
    			}
-	   			
+			
    		});
    	});
    </script>

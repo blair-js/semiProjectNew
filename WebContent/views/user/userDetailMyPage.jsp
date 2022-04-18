@@ -336,6 +336,7 @@ main .sm{
                   </div>
 
                   <hr class="my-4">
+
                      
                   <!-- 정보수정, 탈퇴 버튼 두개 -->
                   <div class="col-md-12 text-center pb-5">

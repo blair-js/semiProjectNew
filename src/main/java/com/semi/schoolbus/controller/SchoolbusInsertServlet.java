@@ -31,9 +31,11 @@ public class SchoolbusInsertServlet extends HttpServlet {
 			request.getSession().setAttribute("msg", "통학버스 신청이 완료되었습니다.");
 
 
+
 			//response.sendRedirect("index.jsp");
 
 			response.sendRedirect("/userMyDetail.do");
+
 		}else {
 			request.setAttribute("msg", "예약신청이 실패하였습니다. 관리자에게 문의하세요.");
 			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);

@@ -114,14 +114,18 @@
   				$("#userService").hide();
   				$("#checkNo").hide();
   				$("#ment").show();
+
   			}	
+
   			
   			if(<%= loginUser.getAdminChecked().equals("Y") %>){
   				$("#apply-btn").prop("disabled", true);
   			}else{
   				$("#apply-btn").prop("disabled", false);
   			} 
+
   			
+
   			// 예약을 한 회원의 경우 중복 예약 불가 예약 테이블에서 회원 아이디 조회
   			// 중복 예약 불가능하다고 멘트 보여주고 버튼 비활성화
   			// 예약한 회원이 없을 수도 있으니 rList가 비어있지 않을경우에만 실행하도록 if문 설정

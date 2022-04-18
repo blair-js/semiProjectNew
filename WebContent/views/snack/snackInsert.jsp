@@ -62,6 +62,7 @@
       
       <!-- 스낵 체크박스 체크 후 서블릿으로 이동시키기 위한 form 시작  -->
       <form id="snackInsert_img"
+
          action="<%=request.getContextPath()%>/snackInsert.do" method="post" enctype="multipart/form-data" onsubmit="return insertCheck();">
          <input type="hidden" id="userNo" name="userNo" value="<%= loginUser.getUserNo() %>">
          <!--  enctype="multipart/form-data" 일단 주석 -->
@@ -94,14 +95,18 @@
          
          <p></p>
 
+
          <!-- multipart/form-data 을 사용하여 데이터 전송 -->
+
 
          <!-- 구매에 대한 체크박스 필요 뼈다귀 수량이 있어야할 컨테이너 -->
          <div class="container-md">
             <div class="row">
 
+
                <div class="col-sm row gx-3">
                   <!-- snack 1 div 시작 -->
+
 
                   <table id="center">
                      <tr>
@@ -159,6 +164,7 @@
    <!-- container-md 종료 -->
 
 
+
    <!-- 스낵 체크박스 체크 후 서블릿으로 이동시키기 위한 form 끝  -->
 
    <br>
@@ -176,6 +182,7 @@
    <!-- 컨테이너 끝 div -->
 
    <script>
+
    
    
    console.log(<%=loginUser.getUserNo()%>)
@@ -210,6 +217,7 @@
       }
    }
    
+
    function insertCheck(){
 	   if(!(/[0-9]/.test($("#snackPrice").val()))){
 			alert('가격은 숫자만 가능합니다.')
@@ -227,6 +235,7 @@
 	   return true;
    }
 	
+
 
    </script>
 

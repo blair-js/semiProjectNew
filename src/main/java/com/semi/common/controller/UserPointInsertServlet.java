@@ -22,6 +22,7 @@ public class UserPointInsertServlet extends HttpServlet {
 
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+
       //파라미터 확인(사용자 포인트 테이블에 데이터를 넣기 위해 회원아이디, 충전(결제)한 금액이 필요하다)
       String userId = request.getParameter("userId"); //회원아이디
       int updatePoint = Integer.parseInt(request.getParameter("point")); //충전금액(포인트)
@@ -66,6 +67,7 @@ public class UserPointInsertServlet extends HttpServlet {
       }//if~else
       
    }
+
 
    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       doGet(request, response);

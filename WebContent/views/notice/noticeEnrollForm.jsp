@@ -39,12 +39,12 @@
 					<tbody>
 						<tr>
 							<th class="col-md-1"><h3>제목 : </h3></th>
-							<td><input type="text" class="form-control form-control-lg rounded-0 mt-3" name="title" placeholder="제목을 입력해주세요"></td>
+							<td><input type="text" class="form-control form-control-lg rounded-0 mt-3" name="title" placeholder="제목을 입력해주세요" required></td>
 						</tr>
 						<tr>
 							<td colspan="2">
 								<label for="comment"><h3>내용 : </h3></label>
-								<textarea class="form-control form-control-lg rounded-0" name="content" rows="20" style="resize:none"></textarea>
+								<textarea class="form-control form-control-lg rounded-0" name="content" rows="20" style="resize:none" required></textarea>
 							</td>
 						</tr>
 						<tr>
