@@ -1,3 +1,4 @@
+<%@page import="com.semi.snack.model.dto.Snack"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
    pageEncoding="UTF-8"%>
 
@@ -61,24 +62,12 @@
       
       <!-- 스낵 체크박스 체크 후 서블릿으로 이동시키기 위한 form 시작  -->
       <form id="snackInsert_img"
-         action="<%=request.getContextPath()%>/snackInsert.do" method="post" enctype="multipart/form-data">
+
+         action="<%=request.getContextPath()%>/snackInsert.do" method="post" enctype="multipart/form-data" onsubmit="return insertCheck();">
          <input type="hidden" id="userNo" name="userNo" value="<%= loginUser.getUserNo() %>">
          <!--  enctype="multipart/form-data" 일단 주석 -->
       
-      <div>
-
-         <button type="submit" class="btn btn-outline-warning btn-lg"
-            style="width: 20%" id="center" onclick="goSnackInsert()">
-
-            <b>간식 추가</b>
-
-         </button>
-
-
-         <p></p>
-
-
-      </div>
+    
 
       <br> <br>
 
@@ -88,7 +77,9 @@
 
                <div name="snack_img" id="center">
                   <table>
+                  <tr>
                   <td><img id="snackImg" height="250px" width="369.33px" /></td>
+                  </tr>
                   </table>
                   <!-- 현재 올릴 사진은 1개이기에 수업 jsp중 tuhmbnailInsertForm.jsp 참고-->
                </div>
@@ -99,19 +90,23 @@
             
          <div id="fileArea">   
          <br> <input type="file" id="file" name="file"
-            onchange="loadImg(this, 1);">
+            onchange="loadImg(this, 1);" >
          </div>
          
          <p></p>
 
+
          <!-- multipart/form-data 을 사용하여 데이터 전송 -->
+
 
          <!-- 구매에 대한 체크박스 필요 뼈다귀 수량이 있어야할 컨테이너 -->
          <div class="container-md">
             <div class="row">
 
+
                <div class="col-sm row gx-3">
                   <!-- snack 1 div 시작 -->
+
 
                   <table id="center">
                      <tr>
@@ -119,7 +114,8 @@
                         
                         <p> <h5> 간식명  :  <input type="text" name="snackName" placeholder="간식 명을 입력해주세요."  required></h5> </p> 
                          
-                        <p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" placeholder="수량 을 입력해주세요." required></h5> </p> 
+                         
+                        <p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" placeholder="가격 을 입력해주세요." id="snackPrice" required></h5> </p> 
                         
                         </td>
                      </tr>
@@ -131,6 +127,22 @@
 
                </div>
                <!-- snack 1 div 끝-->
+               
+                 <div>
+		
+         <button type="submit" class="btn btn-outline-warning btn-lg"
+            style="width: 20%" id="center" >
+
+            <b>간식 추가</b>
+
+         </button>
+
+
+         <p></p>
+
+
+      </div>
+               
       </form>
 
    </div>
@@ -152,16 +164,12 @@
    <!-- container-md 종료 -->
 
 
+
    <!-- 스낵 체크박스 체크 후 서블릿으로 이동시키기 위한 form 끝  -->
 
    <br>
    <br>
 
-   <!-- 회원 및 관리자 구분하여주기 -->
-   <button class="btn btn-outline-warning btn-lg" style="width: 20%"
-      id="center" onclick="goAdminmypage()">(관리자) 마이페이지 바로가기</button>
-
-   <br>
 
 
    <div class="px-4 py-1 my-5 text-center">
@@ -174,6 +182,9 @@
    <!-- 컨테이너 끝 div -->
 
    <script>
+
+   
+   
    console.log(<%=loginUser.getUserNo()%>)
    $(function(){
       $("#fileArea").hide();
@@ -206,14 +217,25 @@
       }
    }
    
-   function goSnackInsert(){ 
-            location.href="<%=request.getContextPath()%>/snackInsert.do;"    
-   }   
-   
-   function goAdminmypage(){//관리자 마이페이지 = 조건문으로 회원과 관리자의 마이페이지 경로를 다르게 이동시켜주기
-      location.href="<%=request.getContextPath()%>/adminMyPage.do"
+
+   function insertCheck(){
+	   if(!(/[0-9]/.test($("#snackPrice").val()))){
+			alert('가격은 숫자만 가능합니다.')
+			$("#snackPrice").focus();
+	        return false;
+		} 
+	   
+	   var fileCheck = document.getElementById("file").value; 
+	   
+	   if(!(fileCheck)) {
+		   alert("간식 이미지를 선택해주세요")
+		   $("#snackImg").focus();
+		   return false;
+	   }
+	   return true;
    }
-   
+	
+
 
    </script>
 

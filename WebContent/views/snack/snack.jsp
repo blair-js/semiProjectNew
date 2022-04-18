@@ -129,19 +129,29 @@
 
       <div>
          
-         <%if (loginUser != null && loginUser.getUserId().contains("admin")) {%> <!-- 관리자는 구매 버튼이아닌 간식추가 버튼이 보여지도록 설정 -->
+
+         <%if (loginUser != null && loginUser.getAdminChecked().equals("Y") && list.size() <= 8) {%> <!-- 관리자는 구매 버튼이아닌 간식추가 버튼이 보여지도록 설정 -->
+
             
          <button class="btn btn-outline-warning btn-lg" style="width: 20%"
          id="center" onclick="goSnackInsert()"> 간식 추가</button>
          
-         <% } %>
-         
+
+         <% } else if( loginUser.getAdminChecked().equals("Y") ) { %> 
+         	<p id ="center" style="color:red"> <u>간식은 최대 9개까지만 등록이 가능합니다.</u></p>
+         	<p></p>
+         	<p id="center"><mark>간식을 추가하려면 삭제 후 등록해주시기 바랍니다.</mark> </p>
+         	<% } %>
+
+
          
          <% if ( userNo != 0 && loginUser.getAdminChecked().equals("N") ) { %> <!-- 관리자 번호는 구매 버튼이 보이지않도록 설정 -->
          <button class="btn btn-outline-warning btn-lg" style="width: 20%"
             id="center" onclick="goSnackResult()">
 
+
             <b>구매</b>
+
 
          </button>
             <% } %>
@@ -153,6 +163,13 @@
 
       <br> <br>
 
+
+            <div class="thumbnail" align="center">
+               <input type="hidden" name="sno" value="<%=s.getSanckNo()%>">
+   
+               <div class="container-md">
+                  <div class="row">
+                     <div class="col-sm row gx-0">
 
       <div class="listArea">
          <%
@@ -167,7 +184,8 @@
          
          
             
-         
+          <!-- 스낵 체크박스 체크 후 서블릿으로 이동시키기 위한 form 시작  -->
+          <!-- multipart/form-data 을 사용하여 데이터 전송 -->
          <form id="snackOrder"
             action="<%=request.getContextPath()%>/snackResult.do" method="post">
             <% if ( userNo != 0 ) { %>
@@ -176,12 +194,13 @@
             
             <% } %>
             
+       
             <%
-            for (Snack s : list) {
+            for (Snack s : list ) {
             %>
-            <!-- 스낵 체크박스 체크 후 서블릿으로 이동시키기 위한 form 시작  -->
-            <!-- multipart/form-data 을 사용하여 데이터 전송 -->
-
+            
+         
+   
             <!-- 구매에 대한 체크박스 필요 뼈다귀 수량이 있어야할 컨테이너 -->
 
             <div class="thumbnail" align="center">
@@ -190,6 +209,7 @@
                <div class="container-md">
                   <div class="row">
                      <div class="col-sm row gx-0">
+
 
                         <img
                            src="<%=contextPath%>/resources/FileUpload_test(SNACK)/<%=s.getTitleImg()%>"
@@ -221,7 +241,7 @@
             }
             %>
             
-         
+     
          </form>
          
          
@@ -267,7 +287,7 @@
       
    <!-- 회원 및 관리자 구분하여주기 -->
    
-   <%if (loginUser != null && loginUser.getUserId().contains("admin")) {%> <!-- 관리자는 관리자의 마이페이지가 보이도록 설정 -->
+   <%if (loginUser != null && loginUser.getAdminChecked().equals("Y")) {%> <!-- 관리자는 관리자의 마이페이지가 보이도록 설정 -->
    <button class="btn btn-outline-warning btn-lg" style="width: 20%"
       id="center" onclick="goAdminmypage()">(관리자) 마이페이지 바로가기</button>
       <% } %>
@@ -288,7 +308,7 @@
 
    <script>
    
-   <%if (loginUser != null && loginUser.getUserId().contains("admin")) {%> //간식 번호를 가지고 디테일로 이동 관리자만
+   <%if (loginUser != null && loginUser.getAdminChecked().equals("Y")) {%> //간식 번호를 가지고 디테일로 이동 관리자만
    $(function(){
       $(".thumbnail").click(function(){
          var sno = $(this).children().eq(0).val();
@@ -297,7 +317,7 @@
       });
       <%}%>
    
-        //서블릿 잘 다녀오는지 테스트차 만들어봄
+      //서블릿 잘 다녀오는지 테스트차 만들어봄
          function goSnackResult() { //간식 구매 완료 후 이동 되는 서블릿
          document.getElementById("snackOrder").submit();      
          }   
@@ -312,13 +332,15 @@
          
          //관리자만 들어갈 수 있는 경로
          function goSnackInsert(){ //새로운 간식 추가하기위한 서블릿
-            location.href="<%=request.getContextPath()%>/snackInsertForm.do"
+        	 location.href="<%=request.getContextPath()%>/snackInsertForm.do"
          }
          
 
          
       
    </script>
+
+
 
    <%@ include file="../common/footer.jsp"%>
 </body>

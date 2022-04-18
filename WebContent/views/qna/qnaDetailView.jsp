@@ -26,8 +26,6 @@
 	
 	.table-condensed>tfoot>tr>td { padding: 15px;}
 
-	
-	
 </style>
 </head>
 <body>
@@ -143,17 +141,20 @@
 	    			$.each(list, function(index, obj){
 	    				if(userId.includes("admin") || userId == obj.replyWriter){ //관리자와 글 작성자만 댓글을 달 수 있다.
 	        				value += '<tr style="border-top: 10px solid #fff;">' +
-	        						 '<td style="text-align:left; border:none;">' + obj.replyWriter + ' |<small> ' + obj.createDate + '</small></td>' +
-	        						 '<td style="text-align:left; border:none;"><input class="btn btn-secondary btn-sm" type="button" style="background:rgb(34 42 91)" onclick="updateBtn('+ obj.qnaReplyNo +');" value="수정">' + 
-	        						 '<input class="btn btn-secondary btn-sm mx-2" type="button" style="background:rgb(34 42 91)" onclick="deleteReply(' + obj.qnaReplyNo + ');" value="삭제"></td>' + 
+
+	        						 '<td style="text-align:left; border:none;">' + obj.replyWriter + ' | ' + obj.createDate + '</td>' +
+	        						 '<td style="text-align:left; border:none;"><input class="btn btn-secondary btn-sm" style="background-color:#002147" type="button" onclick="updateBtn('+ obj.qnaReplyNo +');" value="수정">' + 
+	        						 '<input class="btn btn-secondary btn-sm mx-2" style="background-color:#002147" type="button" onclick="deleteReply(' + obj.qnaReplyNo + ');" value="삭제"></td>' + 
+
 	        						 '</tr>' + 
 	        						 '<tr id="reply'+obj.qnaReplyNo +'">' +
 	        						 '<td style="text-align:left;" colspan="2">' + obj.qnaReplyContent + '</td>' +
 	        						 '</tr>' +
 	        						 '<tr id="update'+obj.qnaReplyNo +'" style="display: none">' +
-	        						 '<td style="text-align:left;"><textarea rows="3" id="textarea'+obj.qnaReplyNo+'" style="resize: none; width:92%">'+ obj.qnaReplyContent +'</textarea></td>' +
-	        						 '<td>&nbsp<input type="button" onclick="updateReply('+obj.qnaReplyNo +');" style="background:rgb(34 42 91)" class="btn btn-secondary" value="수정하기">' +
-	        						 '<input type="button" class="btn btn-secondary mx-2" style="background:rgb(34 42 91)" onclick="closeR('+obj.qnaReplyNo +');" value="취소"></td>'+
+ 						 '<td><textarea rows="3" id="textarea'+obj.qnaReplyNo+'" style="resize: none; width:92%">'+ obj.qnaReplyContent +'</textarea></td>' +
+	        						 '<td>&nbsp<input type="button" onclick="updateReply('+obj.qnaReplyNo +');" class="btn btn-secondary" style="background-color:#002147" value="수정하기">' +
+	        						 '<input type="button" class="btn btn-secondary mx-2" style="background-color:#002147" onclick="closeR('+obj.qnaReplyNo +');" value="취소"></td>'+
+
 	        						 '</tr>'
 	        						 
 	    				}else {
