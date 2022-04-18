@@ -12,7 +12,7 @@
 <meta charset="UTF-8">
 
 <meta name="google-signin-scope" content="profile email">
-<meta name="google-signin-client_id" content="952213952257-qfucuv5qsicj7vihnm1kndfbqdseqpaa.apps.googleusercontent.com">
+<meta name="google-signin-client_id" content="821072282485-pafufg8p84rr1e1aqd9im0ut4gcueep8.apps.googleusercontent.com">
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 
 <title>둥글개 로그인</title>

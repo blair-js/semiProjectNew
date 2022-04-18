@@ -52,6 +52,7 @@ public class Snack {
 		this.price = price;
 		this.titleImg = titleImg;
 	}
+	
 
 	public Snack(String sanckName, int price) {
 		super();

@@ -98,7 +98,7 @@ public class SnackDao {
 
 
    public ArrayList<Snack> selectList(Connection conn) { //간식에 대한 정보를 화면에 뿌려줄 메서드
-      
+      //selectList=SELECT A.SNACK_NO, A.SNACK_NAME, A.PRICE, B.CHANGE_NAME FROM SNACK A JOIN ATTACHMENT B ON A.SNACK_NO = B.REF_NO WHERE A.STATUS = 'Y' AND B.CATEGORY = '2' ORDER BY A.PRICE
       ArrayList<Snack> list = new ArrayList<>();
       PreparedStatement pstmt = null;
       ResultSet rset = null;
@@ -378,7 +378,7 @@ public class SnackDao {
    }
 
 
-   public int OrderEnd(Connection conn, UserPoint up) {
+   public int OrderEnd(Connection conn, UserPoint up) { //사용자의 보유 포인트를 업데이트 하기위한 메서드
       
       int result = 0;
       
@@ -463,7 +463,7 @@ public class SnackDao {
       return snack;
    }
 
-   public ArrayList<SnackOrder> selectSnackOrderList(Connection conn, PageInfo pi) {
+   public ArrayList<SnackOrder> selectSnackOrderList(Connection conn, PageInfo pi) { //관리자가 회원의 간식 구매내역을 확인하기 위한 메서드
       //SELECT A.ORDER_NO, A.ORDER_DATE, C.USER_ID, B.SNACK_NAME FROM SNACK_ORDER A JOIN SNACK B ON A.SNACK_NO = B.SNACK_NO JOIN R_USER C ON A.USER_NO = C.USER_NO
       ArrayList<SnackOrder> list = new ArrayList<>();
       PreparedStatement pstmt = null;
@@ -537,7 +537,7 @@ public class SnackDao {
    }
 
 
-   public int getUserListCount(Connection conn, int uno) {
+   public int getUserListCount(Connection conn, int uno) { //유저에 게시글 총 갯수를 구하는 메서드
       int listCount = 0;
       
       PreparedStatement pstmt = null;
@@ -566,7 +566,7 @@ public class SnackDao {
       return listCount;
    }
 
-   public ArrayList<SnackOrder> userSnackOrderList(Connection conn, PageInfo pi, int uno) {
+   public ArrayList<SnackOrder> userSnackOrderList(Connection conn, PageInfo pi, int uno) { //회원이 구매한 간식을 확인하는 메서드
       
       //SELECT * FROM (SELECT ROWNUM RNUM, A.* FROM (SELECT B.ORDER_NO, B.ORDER_DATE, C.USER_ID, D.SNACK_NAME FROM SNACK_ORDER B JOIN R_USER C ON B.USER_NO = C.USER_NO JOIN SNACK D ON B.SNACK_NO = D.SNACK_NO WHERE C.USER_NO = ? ORDER BY B.ORDER_NO) A) WHERE RNUM BETWEEN ? AND ?
       
@@ -609,7 +609,7 @@ public class SnackDao {
    }
 
 
-   public ArrayList<User> userSearch(Connection conn, PageInfo pi) {
+   public ArrayList<User> userSearch(Connection conn, PageInfo pi) { //관리자가 회원목록을 확인하기 위한 메서드
             
       ArrayList<User> list = new ArrayList<>();
       PreparedStatement pstmt = null;
