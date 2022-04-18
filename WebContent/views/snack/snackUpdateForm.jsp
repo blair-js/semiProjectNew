@@ -73,11 +73,12 @@
 
 					<div name="snack_img1" id="center">
 						<% if(at != null) { %>
+
 						   <input type='hidden' name='originFile' value='<%=at.getChangeName()%>'>	 
 						   <input type='hidden' name='originFileNo' value='<%=at.getFileNo()%>'>
 						   
 						   <% } %>
-						
+
 					</div>
 
 				</div>
@@ -93,13 +94,15 @@
 			<pre id="center"><p>수정 전                                                           수정 후</p></pre>
 			<div id="center">
 					
+
 			<td><img src="<%= contextPath %>/resources/FileUpload_test(SNACK)/<%= at.getChangeName() %>" width="297px">&nbsp&nbsp
 			<img id="snackImg" width="297px" /></td>
+
 			</div>
 			<div id="fileArea">	
 			
 			<br> <input type="file" id="file" name="file"
-			onchange="loadImg(this, 1);"> <!-- 서블릿으로 보내는 파일 이름 -->
+			onchange="loadImg(this, 1);" > <!-- 서블릿으로 보내는 파일 이름 -->
 				
 			</div>
 			<p></p>

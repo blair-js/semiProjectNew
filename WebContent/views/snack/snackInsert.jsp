@@ -1,3 +1,4 @@
+<%@page import="com.semi.snack.model.dto.Snack"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
    pageEncoding="UTF-8"%>
 
@@ -109,7 +110,7 @@
                         <p> <h5> 간식명  :  <input type="text" name="snackName" placeholder="간식 명을 입력해주세요."  required></h5> </p> 
                          
                          
-                        <p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" placeholder="수량 을 입력해주세요." id="snackPrice" required></h5> </p> 
+                        <p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" placeholder="가격 을 입력해주세요." id="snackPrice" required></h5> </p> 
                         
                         </td>
                      </tr>
@@ -123,7 +124,7 @@
                <!-- snack 1 div 끝-->
                
                  <div>
-
+		
          <button type="submit" class="btn btn-outline-warning btn-lg"
             style="width: 20%" id="center" >
 
@@ -210,17 +211,22 @@
    }
    
    function insertCheck(){
+	   if(!(/[0-9]/.test($("#snackPrice").val()))){
+			alert('가격은 숫자만 가능합니다.')
+			$("#snackPrice").focus();
+	        return false;
+		} 
 	   
-      var fileCheck = document.getElementById("file").value; 
-      
-      if(!(fileCheck)) {
-         alert("간식 이미지를 선택해주세요")
-         $("#snackImg").focus();
-         return false;
-      }
-      return true;
+	   var fileCheck = document.getElementById("file").value; 
+	   
+	   if(!(fileCheck)) {
+		   alert("간식 이미지를 선택해주세요")
+		   $("#snackImg").focus();
+		   return false;
+	   }
+	   return true;
    }
-   
+	
 
    </script>
 

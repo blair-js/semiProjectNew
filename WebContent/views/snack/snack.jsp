@@ -134,9 +134,14 @@
          <button class="btn btn-outline-warning btn-lg" style="width: 20%"
          id="center" onclick="goSnackInsert()"> 간식 추가</button>
          
-         <% } else {%>
-            <p id ="center"> 간식은 최대 9개까지만 등록이 가능합니다.</p>
-            <% } %>
+
+         <% } else if( loginUser.getAdminChecked().equals("Y") ) { %> 
+         	<p id ="center" style="color:red"> <u>간식은 최대 9개까지만 등록이 가능합니다.</u></p>
+         	<p></p>
+         	<p id="center"><mark>간식을 추가하려면 삭제 후 등록해주시기 바랍니다.</mark> </p>
+         	<% } %>
+
+
          
          <% if ( userNo != 0 && loginUser.getAdminChecked().equals("N") ) { %> <!-- 관리자 번호는 구매 버튼이 보이지않도록 설정 -->
          <button class="btn btn-outline-warning btn-lg" style="width: 20%"
@@ -193,6 +198,7 @@
                <div class="container-md">
                   <div class="row">
                      <div class="col-sm row gx-0">
+
 
                         <img
                            src="<%=contextPath%>/resources/FileUpload_test(SNACK)/<%=s.getTitleImg()%>"
@@ -270,7 +276,7 @@
       
    <!-- 회원 및 관리자 구분하여주기 -->
    
-   <%if (loginUser != null && loginUser.getUserId().contains("admin")) {%> <!-- 관리자는 관리자의 마이페이지가 보이도록 설정 -->
+   <%if (loginUser != null && loginUser.getAdminChecked().equals("Y")) {%> <!-- 관리자는 관리자의 마이페이지가 보이도록 설정 -->
    <button class="btn btn-outline-warning btn-lg" style="width: 20%"
       id="center" onclick="goAdminmypage()">(관리자) 마이페이지 바로가기</button>
       <% } %>
@@ -315,13 +321,14 @@
          
          //관리자만 들어갈 수 있는 경로
          function goSnackInsert(){ //새로운 간식 추가하기위한 서블릿
-            location.href="<%=request.getContextPath()%>/snackInsertForm.do"
+        	 location.href="<%=request.getContextPath()%>/snackInsertForm.do"
          }
          
 
          
       
    </script>
+
 
    <%@ include file="../common/footer.jsp"%>
 </body>
