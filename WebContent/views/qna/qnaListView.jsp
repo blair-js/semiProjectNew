@@ -97,7 +97,7 @@
 			<!-- 넘어오는 글이 비밀글인 경우-> 비밀글이 Y인 경우 앞에 자물쇠 이미지와 비밀번호를 작성하라는 alret창 -->
 			<% if(list.isEmpty()) {%> <!-- 비어있는 경우 -->
 				<tr>
-					<td colspan="6"> 조회된 리스트가 없습니다.</td>
+					<td colspan="6" onclick="event.cancelBubble=true"> 조회된 리스트가 없습니다.</td>
 				</tr>
 			<%} else{ %>
 				<% for(Qna q : list) {%>

@@ -186,7 +186,7 @@ div .canBtn{
 			
 			<!-- 숨겨져있는 파일영역 -->
 			<div id="fileArea">
-		    	<input type="file" accept="image/*" name="file" id="file" onchange="loadImg(this);" required>
+		    	<input type="file" accept="image/*" name="file" id="file" onchange="loadImg(this);">
 		    </div>
 	</form>
 	<!-- 신청서 form 끝 -->
@@ -282,10 +282,13 @@ div .canBtn{
 		
 		//form에 모든 데이터가 작성되었는지 확인해주는 용도
 		function dogEnrollValidate() {
-			if($('#file').val() == null){
-				alert('파일을 첨부해주세요.');
+			var fileCheck = document.getElementById("file").value;
+			if(!fileCheck){
+				alert('강아지 사진을 선택해주세요.');
+				$('#file').focus();
 				return false;
 			}
+			
 			if($('#dogName').val() == null){
 				alert('이름을 입력해주세요.');
 				$('#dogName').focus();

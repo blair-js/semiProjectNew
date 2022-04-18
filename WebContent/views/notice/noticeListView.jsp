@@ -100,7 +100,7 @@
 			<tbody>
 				<%if(list.isEmpty()){ %>
 				<tr>
-					<td colspan="5">조회된 리스트가 없습니다.</td>
+					<td colspan="5" onclick="event.cancelBubble=true">조회된 리스트가 없습니다.</td>
 				<tr>
 				<%} else { %>
 					<% for(Notice n : list) { %>
