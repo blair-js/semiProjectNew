@@ -134,7 +134,9 @@
          <button class="btn btn-outline-warning btn-lg" style="width: 20%"
          id="center" onclick="goSnackInsert()"> 간식 추가</button>
          
-         <% } else if( loginUser.getAdminChecked().equals("Y") ) { %> 
+
+         <% } else if(  loginUser != null && loginUser.getAdminChecked().equals("Y") ) { %> 
+
             <p id ="center" style="color:red"> <u>간식은 최대 9개까지만 등록이 가능합니다.</u></p>
             <p></p>
             <p id="center"><mark>간식을 추가하려면 삭제 후 등록해주시기 바랍니다.</mark> </p>

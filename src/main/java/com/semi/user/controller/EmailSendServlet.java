@@ -50,7 +50,8 @@ public class EmailSendServlet extends HttpServlet {
 		//메일 내용
 		//인증하기 링크를 클릭하면 내가 설정해놓은 서블릿으로 오게됨.
 		String content = "링크를 누르시면 이메일 인증이 완료됩니다." 
-							+ "<a href='" + host + "emailCheck.do?code=" + new SHA256().getSHA256(to) + "&userId=" + userId
+							+ "<a href='" + host + "emailCheck.do?code=" 
+							+ new SHA256().getSHA256(to) + "&userId=" + userId
 							+ "'>이메일 인증하기</a>";
 
 		//서버의 정보를 설정하는 부분

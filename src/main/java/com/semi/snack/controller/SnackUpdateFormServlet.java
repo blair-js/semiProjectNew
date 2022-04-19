@@ -41,19 +41,11 @@ public class SnackUpdateFormServlet extends HttpServlet {
 		Snack snack = new SnackService().selectSnack(sno);
 		Attachment at = new SnackService().selectAttachment(sno);
 		
-		String page = "";
 		
 		if(snack != null) {
 			request.setAttribute("snack", snack);
 			request.setAttribute("at", at);
-		/*	
-			try {
-				
-			}catch(Exception e) {
-				page = "error.jsp";
-			}finally {
-				page = "snackUpdateForm.jsp";
-			}*/
+	
 			request.getRequestDispatcher("views/snack/snackUpdateForm.jsp").forward(request, response);
 		}else {
 			request.setAttribute("msg", "수정할 간식을 불러오는데 실패하였습니다");

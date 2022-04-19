@@ -41,13 +41,6 @@ public class ReplyInsertServlet extends HttpServlet {
 		// 작성자 회원 번호
 		int writer = ((User)request.getSession().getAttribute("loginUser")).getUserNo();
 		System.out.println(content + nno + "작성자 회원번호 : " + writer);
-		// 댓글 객체 생성
-//		REPLY_NO	NUMBER 시퀀스
-//		REF_NO	NUMBER 참조게시글 번호 받았음
-//		REF_WRITER	NUMBER 회원번호 받았음
-//		CREATE_DATE	DATE 시스데이트
-//		REPLY_CONTENT	VARCHAR2(1000 BYTE) 내용 받았음
-//		STATUS	VARCHAR2(1 BYTE) 기본 값 y
 		
 		Reply r = new Reply();
 		r.setRefBoardId(nno);

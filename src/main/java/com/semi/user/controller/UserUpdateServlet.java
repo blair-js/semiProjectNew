@@ -68,7 +68,7 @@ public class UserUpdateServlet extends HttpServlet {
 			request.setAttribute("dogList", dogList);
 			
 			//다시 마이 페이지로 이동하는데 세션 값을 수정해준다
-			//기존 세션명 loginUser에 업데이트된 회원의 정보 객체 updateMem로 값 덮어씀
+			//기존 세션명 loginUser에 업데이트된 회원의 정보로 값 덮어씀
 			request.setAttribute("loginUser", loginUser); 
 			request.getRequestDispatcher("views/user/userDetailMyPage.jsp").forward(request, response);
 			
