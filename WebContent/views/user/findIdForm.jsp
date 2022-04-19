@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>둥글개 아이디찾기</title>
+<title>둥글개 둥글개</title>
 <style>
 @font-face {
 	font-family: 'LeferiPoint-BlackA';

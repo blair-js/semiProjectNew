@@ -13,11 +13,11 @@
 
 <meta name="google-signin-scope" content="profile email">
 
-<meta name="google-signin-client_id" content="821072282485-pafufg8p84rr1e1aqd9im0ut4gcueep8.apps.googleusercontent.com">
+<meta name="google-signin-client_id" content="163385164449-3o3n4l4t45dn7ja24kk2ll19nd70som7.apps.googleusercontent.com">
 
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 
-<title>둥글개 로그인</title>
+<title>둥글개 둥글개</title>
 
 <!-- 제이쿼리 사용하기 위해 CDN 연결 -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

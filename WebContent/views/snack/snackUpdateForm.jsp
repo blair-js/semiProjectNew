@@ -29,7 +29,7 @@
 <body>
    
    <%@ include file="../common/menubar.jsp"%>
-
+	<div class="container">
       <!-- 컨테이너 시작 div -->
 
 
@@ -54,163 +54,177 @@
 
             <p>&nbsp&nbsp&nbsp저희 둥글개둥글개 에서 제공하는 간식은</p>
 
-
-					<div name="snack_img1" id="center">
-						<% if(at != null) { %>
-						   <input type='hidden' name='originFile' value='<%=at.getChangeName()%>'>	 
-						   <input type='hidden' name='originFileNo' value='<%=at.getFileNo()%>'>
-						   
-						   <% } %>
-					</div>
-
+            <p>&nbsp&nbsp&nbsp뼈다귀 충전 후 보유한 포인트에서 차감하여 구매할 수 있습니다.</p>
 
             <p>&nbsp&nbsp&nbsp구매 한 간식은 식사시간에 견주님의 강아지에게 소분하여 지급되며,</p>
 
+            <p>&nbsp&nbsp&nbsp필요 시 방문 및 통학버스를 이용하여 보호자님께서도</p>
 
-			</div>
-			</div>
-			<br>
-			<div name="snack_no" id="center">
-						<p id="center">간식 번호 : <%=snack.getSanckNo() %></p>
-						<br>
-					</div>
-			<br>
-			<pre id="center"><p>수정 전                                                           수정 후</p></pre>
-			<div id="center">
-					
+            <p>&nbsp&nbsp&nbsp직접 수령이 가능하십니다.</p>
 
-			<td><img src="<%= contextPath %>/resources/FileUpload_test(SNACK)/<%= at.getChangeName() %>" width="297px">&nbsp&nbsp
-			<img id="snackImg" width="297px" /></td>
+         </div>
+      </div>
+            
+         <form id="updateForm" action="<%= contextPath %>/snackUpdate.do" method="post" enctype="multipart/form-data"> <!-- 첨부파일이있어서 멀티파트로 넘기고 서블릿에 넘김 -->   
+         <input type="hidden" name="sno" value="<%= snack.getSanckNo() %>">
+         <div class="container">
+         <div class="container-md">
+            <div class="row">
 
-			</div>
-			<div id="fileArea">	
-			
-			<br> <input type="file" id="file" name="file"
-			onchange="loadImg(this, 1);" > <!-- 서블릿으로 보내는 파일 이름 -->
-				
-			</div>
-			<p></p>
+               <div name="snack_img1" id="center">
+                  <% if(at != null) { %>
 
-			<!-- multipart/form-data 을 사용하여 데이터 전송 -->
+                     <input type='hidden' name='originFile' value='<%=at.getChangeName()%>'>    
+                     <input type='hidden' name='originFileNo' value='<%=at.getFileNo()%>'>
+                     
+                     <% } %>
+                                    
+               </div>
 
-			<!-- 구매에 대한 체크박스 필요 뼈다귀 수량이 있어야할 컨테이너 -->
-			<div class="container-md">
-				<div class="row">
+            </div>
 
-					<div class="col-sm row gx-3">
-						<!-- snack 1 div 시작 -->
+         </div>
+         </div>
+         <br>
+         <div name="snack_no" id="center">
+                  <p id="center">간식 번호 : <%=snack.getSanckNo() %></p>
+                  <br>
+               </div>
+         <br>
+         <pre id="center"><p>수정 전                                                           수정 후</p></pre>
+         <div id="center">
+               
+         <td><img src="<%= contextPath %>/resources/FileUpload_test(SNACK)/<%= at.getChangeName() %>" style="width:297px">&nbsp&nbsp
+         <img id="snackImg" height="293px" width="297px" /></td>
+         </div>
+         <div id="fileArea">   
+         
+         <br> <input type="file" id="file" name="file"
+         onchange="loadImg(this, 1);" > <!-- 서블릿으로 보내는 파일 이름 -->
+            
+         </div>
+         <p></p>
 
-						<table id="center">
-							<tr>
-								<td> 
-								
-								<p> <h5> 간식명  :  <input type="text" name="snackName" value="<%= snack.getSanckName() %>"   required></h5> </p> 
-								   
-								<p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" value="<%= snack.getPrice() %>"  required></h5> </p> 
-								
-								</td>
-							</tr>
+         <!-- multipart/form-data 을 사용하여 데이터 전송 -->
 
-						</table>
-						
-						</div>
-					</div>
-					</div>
-					<!-- snack 1 div 끝-->
-				</form>		
+         <!-- 구매에 대한 체크박스 필요 뼈다귀 수량이 있어야할 컨테이너 -->
+         <div class="container-md">
+            <div class="row">
 
-	</div>
-	<!-- container 속성이 아래까지 못내려오도록 닫는 div -->
-	</div>
-	<!-- container 속성이 아래까지 못내려오도록 닫는 div -->
+               <div class="col-sm row gx-3">
+                  <!-- snack 1 div 시작 -->
 
+                  <table id="center">
+                     <tr>
+                        <td> 
+                        
+                        <p> <h5> 간식명  :  <input type="text" name="snackName" value="<%= snack.getSanckName() %>"   required></h5> </p> 
+                           
+                        <p> <h5> 뼈다귀  :  <input type="text" name="snackPrice" value="<%= snack.getPrice() %>"  required></h5> </p> 
+                        
+                        </td>
+                     </tr>
 
-	</div>
-	<!-- container 속성이 아래까지 못내려오도록 닫는 div -->
-	</div>
-	<!-- container 속성이 아래까지 못내려오도록 닫는 div -->
+                  </table>
+                  
+                  </div>
+               </div>
+               </div>
+               <!-- snack 1 div 끝-->
+            </form>      
 
-
-	</div>
-	<!-- row div 종료 -->
-
-	</div>
-	<!-- container-md 종료 -->
-
-
-
-	<div class="container-md">
-	
-	
-	
-  	<button  class="btn btn-outline-warning btn-lg" style="width: 15%"
-		id="center" onclick="goSnackUpdateForm()"><b>간식 수정</b></button> 
-		
-		<!--  <input type="submit"> -->
-	
-	<br>
-	
-
-	</div>
+   </div>
+   <!-- container 속성이 아래까지 못내려오도록 닫는 div -->
+   </div>
+   <!-- container 속성이 아래까지 못내려오도록 닫는 div -->
 
 
-	<div class="px-4 py-1 my-5 text-center">
-		<p class="display-5 fw-bold"></p>
-	</div>
+   </div>
+   <!-- container 속성이 아래까지 못내려오도록 닫는 div -->
+   </div>
+   <!-- container 속성이 아래까지 못내려오도록 닫는 div -->
 
 
-	
-	</div>
-	<!-- 컨테이너 끝 div -->
+   </div>
+   <!-- row div 종료 -->
 
-	<script>
-	
+   </div>
+   <!-- container-md 종료 -->
 
-	$(function(){
-		$("#fileArea").hide();
-		
-		
-		$("#snackImg").click(function(){ 
-			$("#file").click();
-	
-		});
-			
-	});
-	
-	
-	function loadImg(inputFile, num){ 
-		if(inputFile.files.length == 1){
-			var reader = new FileReader(); // 파일 읽어 들이는 객체 생성 (미리보기)
-			
-			//파일이 존재하면 URL을 읽어와서 가져오겠다는 함수
-			reader.readAsDataURL(inputFile.files[0]); // 파일을 일단 가져오면 배열의 0번째 인덱스에 들어있다. 파일 읽어 들이는 메소드
-			
-			<!-- 파일리더 API = https://developer.mozilla.org/ko/docs/Web/API/FileReader -->
-			reader.onload = function(e){ // 파일 읽기가 다 완료되면 실행
-				switch(num){
-				// e.target.result(URL 형식) 결과값을 src에 다 담아주고 있다. 각각의 파일을 읽어들여서 미리보기가 가능하게된다.
-				case 1 : $("#snackImg").attr("src", e.target.result); break; //src 속성을 titleImg 속성을 걸어주니가 load가 가능한거이다.
-			
-				}
-			}
-		}
-	}
-	
-	function goSnackUpdateForm(){
-		document.getElementById("updateForm").submit();	
-	}
-	
-	
-	
-	function goSnackDelete(){  //간식 수정을 하기위한 서블릿 여기에 들어가서 snackUpdateServlet를 호출 
-		location.href="<%=request.getContextPath()%>/snackDelete.do" 	
-	}	
 
-	</script>
-	
-	
-	
-	<%@ include file="../common/footer.jsp"%>
 
+   <div class="container-md">
+   
+   
+   
+     <button  class="btn btn-outline-warning btn-lg" style="width: 15%"
+      id="center" onclick="goSnackUpdateForm()"><b>간식 수정</b></button> 
+      
+      <!--  <input type="submit"> -->
+   
+   <br>
+   
+
+   </div>
+
+
+   <div class="px-4 py-1 my-5 text-center">
+      <p class="display-5 fw-bold"></p>
+   </div>
+
+
+   
+   </div>
+   <!-- 컨테이너 끝 div -->
+
+   <script>
+   
+
+   $(function(){
+      $("#fileArea").hide();
+      
+      
+      $("#snackImg").click(function(){ 
+         $("#file").click();
+   
+      });
+         
+   });
+   
+   
+   function loadImg(inputFile, num){ 
+      if(inputFile.files.length == 1){
+         var reader = new FileReader(); // 파일 읽어 들이는 객체 생성 (미리보기)
+         
+         //파일이 존재하면 URL을 읽어와서 가져오겠다는 함수
+         reader.readAsDataURL(inputFile.files[0]); // 파일을 일단 가져오면 배열의 0번째 인덱스에 들어있다. 파일 읽어 들이는 메소드
+         
+         <!-- 파일리더 API = https://developer.mozilla.org/ko/docs/Web/API/FileReader -->
+         reader.onload = function(e){ // 파일 읽기가 다 완료되면 실행
+            switch(num){
+            // e.target.result(URL 형식) 결과값을 src에 다 담아주고 있다. 각각의 파일을 읽어들여서 미리보기가 가능하게된다.
+            case 1 : $("#snackImg").attr("src", e.target.result); break; //src 속성을 titleImg 속성을 걸어주니가 load가 가능한거이다.
+         
+            }
+         }
+      }
+   }
+   
+   function goSnackUpdateForm(){
+      document.getElementById("updateForm").submit();   
+   }
+   
+   
+   
+   function goSnackDelete(){  //간식 수정을 하기위한 서블릿 여기에 들어가서 snackUpdateServlet를 호출 
+      location.href="<%=request.getContextPath()%>/snackDelete.do"    
+   }   
+
+   </script>
+   
+   
+   
+   <%@ include file="../common/footer.jsp"%>
+   
 </body>
 </html>

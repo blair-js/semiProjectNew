@@ -12,7 +12,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>동글개 강아지상세</title>
+<title>둥글개 둥글개</title>
 <style type="text/css">
 div main hr{
 	 color: #FDC800; 

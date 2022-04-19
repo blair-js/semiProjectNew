@@ -15,7 +15,7 @@
 </style>
 <script src="https://kit.fontawesome.com/96b0e9ec8b.js" crossorigin="anonymous"></script>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>둥글개 둥글개</title>
 </head>
 <body>
 	<%@ include file="/views/common/menubar.jsp"%>

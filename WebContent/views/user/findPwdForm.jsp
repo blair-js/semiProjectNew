@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>둥글개 비밀번호찾기</title>
+<title>둥글개 둥글개</title>
 <style>
 @font-face {
 	font-family: 'LeferiPoint-BlackA';
