@@ -54,16 +54,14 @@ public class UserInsertServlet extends HttpServlet {
 		System.out.println(gender);*/
 		
 		//받은 파라미터로 객체 생성(매개변수 생성자 사용)
-		User user = new User(userId, userPwd, userName, phone, smsCheck, gender, userEmail, util.SHA256.getSHA256(userEmail), "N");
+		User user = new User(userId, userPwd, userName, phone, 
+							smsCheck, gender, userEmail, 
+							util.SHA256.getSHA256(userEmail), "N");
 		
 		//해당 객체를 인자로 넣어 회원등록 메소드 호출 후 결과 받기
 		int result = new UserService().insertUser(user);
 		
-		//////////////////////////////////////////////////////////////////////////////////////////
-		
 		if(result > 0) { //회원가입 성공시
-			
-			System.out.println("회원가입성공");
 			
 			//회원가입(등록)이 정상적으로 완료되었다면
 			//이메일을 보내주는 서블릿(EmailSendServlet)으로 이동(단, 회원의 아이디가 필요하다)
