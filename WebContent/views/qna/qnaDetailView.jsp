@@ -26,6 +26,11 @@
 	
 	.table-condensed>tfoot>tr>td { padding: 15px;}
 
+	table>tr>td>pre{
+		font-family: 'GmarketSansMedium';
+		font-size:15px;
+	}
+
 </style>
 </head>
 <body>
@@ -40,10 +45,22 @@
 			<div class="row">
 				<div class="col-md-12 text-md-end p-3">
 					<button class="btn btn-secondary m-1" onclick="location.href='<%=contextPath%>/updateFormQna.do?qno=<%=q.getQnaNo()%>'"><b>수정</b></button>
-					<button class="btn btn-secondary m-1" onclick="location.href='<%=contextPath%>/deleteQna.do?qno=<%=q.getQnaNo()%>'"><b>삭제</b></button>
+					<button class="btn btn-secondary m-1" onclick="deleteQna()"><b>삭제</b></button>
 				</div>
 			</div>
 		<% } %>
+		
+		<script>
+			function deleteQna(){
+				var answer = confirm("게시물을 정말 삭제하시겠습니까?");
+				
+				if(answer){
+					location.href="<%=contextPath%>/deleteQna.do?qno=<%=q.getQnaNo()%>"
+				} else {
+					return false;
+				}
+			}
+		</script>
 		
 		<hr class="bor">
 		
@@ -100,12 +117,17 @@
     
     <!-- 댓글script -->
     <script>
-    //댓글 등록
+    	//댓글 등록
 	    $(function(){
-	    	selectReplyList(); //onload될 때 댓글이 있다면 댓글을 가져와서 뿌려준다.
+	    	selectReplyList(); //onload될 때 댓글이 있다면 댓글을 가져와서 뿌려준다.    	
 	    	$('#addreply').click(function() { //등록버튼을 누르면 실행
 	    		var content = $('#replyCnt').val();
 	    		var qno = <%=q.getQnaNo()%>
+	    		
+	    		if($('#replyCnt').val().length == 0){
+	    			alert('댓글 내용을 입력해주세요.');
+	    			return false;
+	    		}
 	    		
 	    		$.ajax({
 	    			url:"insertReplyQna.do",
@@ -126,6 +148,7 @@
 	    		})
 	    	})
 	    })
+    
 	    //댓글 리스트
 	    function selectReplyList(){
 	    	$('#replyList').empty(); //새로 로드하기 위해 안의 내용 비운다.
@@ -143,15 +166,15 @@
 	        				value += '<tr style="border-top: 10px solid #fff;">' +
 
 	        						 '<td style="text-align:left; border:none;">' + obj.replyWriter + ' | ' + obj.createDate + '</td>' +
-	        						 '<td style="text-align:left; border:none;"><input class="btn btn-secondary btn-sm" style="background-color:#002147" type="button" onclick="updateBtn('+ obj.qnaReplyNo +');" value="수정">' + 
-	        						 '<input class="btn btn-secondary btn-sm mx-2" style="background-color:#002147" type="button" onclick="deleteReply(' + obj.qnaReplyNo + ');" value="삭제"></td>' + 
+	        						 '<td style="text-align:left; border:none;"><input class="updateBtn btn btn-secondary btn-sm" style="background-color:#002147" type="button" onclick="updateBtn('+ obj.qnaReplyNo +');" value="수정">' + 
+	        						 '<input class="deleteBtn btn btn-secondary btn-sm mx-2" style="background-color:#002147" type="button" onclick="deleteReply(' + obj.qnaReplyNo + ');" value="삭제"></td>' + 
 
 	        						 '</tr>' + 
 	        						 '<tr id="reply'+obj.qnaReplyNo +'">' +
-	        						 '<td style="text-align:left;" colspan="2">' + obj.qnaReplyContent + '</td>' +
+	        						 '<td style="text-align:left;" colspan="2"><pre>' + obj.qnaReplyContent + '</pre></td>' +
 	        						 '</tr>' +
 	        						 '<tr id="update'+obj.qnaReplyNo +'" style="display: none">' +
- 						 '<td><textarea rows="3" id="textarea'+obj.qnaReplyNo+'" style="resize: none; width:92%">'+ obj.qnaReplyContent +'</textarea></td>' +
+ 						 			 '<td><textarea rows="3" id="textarea'+obj.qnaReplyNo+'" style="resize: none; width:92%">'+ obj.qnaReplyContent +'</textarea></td>' +
 	        						 '<td>&nbsp<input type="button" onclick="updateReply('+obj.qnaReplyNo +');" class="btn btn-secondary" style="background-color:#002147" value="수정하기">' +
 	        						 '<input type="button" class="btn btn-secondary mx-2" style="background-color:#002147" onclick="closeR('+obj.qnaReplyNo +');" value="취소"></td>'+
 
@@ -179,8 +202,13 @@
     		var replyId = "reply" + rQno;
     		var updateId = "update" + rQno;
     		
+    		//수정 버튼 클릭 시 기존 댓글 내용을 숨기고, 다른 수정, 삭제 버튼들도 숨긴다.
     		$('#' + replyId).hide();
-    		$('#' + updateId).show();
+    		$('.updateBtn').attr('disabled', true);
+    		$('.deleteBtn').attr('disabled', true);
+    		if($('#' + updateId).css("display") == "none"){
+    			$('#' + updateId).show();
+    		}   			
     	}
     	
     	//취소 버튼을 누르면 다시 list로 돌아간다.
@@ -188,7 +216,10 @@
     		var replyId = "reply" + rQno;
     		var updateId = "update" + rQno;
     		
+    		//취소 버튼 클릭 시 숨겨놓은 것 보여주기
     		$('#' + replyId).show();
+    		$('.updateBtn').attr('disabled', false);
+    		$('.deleteBtn').attr('disabled', false);
     		$('#' + updateId).hide();
     	}
     	

@@ -38,14 +38,16 @@ public class Qna {
 		this.rowNo = rowNo;
 	}
 	
-	public Qna(int qnaNo, String qnaTitle, String qnaWriter, Date createDate, int count, String qnaContent) {
+	public Qna(int qnaNo, String qnaTitle, String qnaWriter, Date createDate, int count, String qnaContent, String qnaPwd, String qnaSecret) {
 		super();
 		this.qnaNo = qnaNo;
 		this.qnaTitle = qnaTitle;
 		this.qnaWriter = qnaWriter;
 		this.createDate = createDate;
 		this.count = count;
-		this.qnaContent = qnaContent;		
+		this.qnaContent = qnaContent;
+		this.qnaPwd = qnaPwd;
+		this.qnaSecret = qnaSecret;
 	}
 
 	public Qna(int qnaNo, String qnaWriter, int category, String qnaTitle, String qnaContent, int count,

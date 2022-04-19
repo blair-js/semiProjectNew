@@ -32,7 +32,6 @@
 			resize_enaleb : false,
 			enterMode : CKEDITOR.ENTER_BR,
 			shiftEnterMode : CKEDITOR.ENTER_P
-			//filebrowerUploadUrl : "/uploadQna.do"
 	};
 </script>
 </head>
@@ -61,8 +60,14 @@
 				
 				<div class="my-4">
 					<span>비밀글 설정</span>
-					<input type="radio" class="form-check-input mx-3" id="secret" name="secret" value="N" checked="checked"><span class="ml-3">공개글</span>&nbsp;&nbsp;&nbsp;&nbsp;
-					<input type="radio" class="form-check-input mx-3" id="secret" name="secret" value="Y"><span class="ml-2">비밀글</span>
+					<!-- 비밀글인 경우 -->
+					<%if(q.getQnaSecret().equals("Y")) {%>
+						<input type="radio" class="form-check-input mx-3" id="secret" name="secret" value="N"><span class="ml-3">공개글</span>&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="radio" class="form-check-input mx-3" id="secret" name="secret" value="Y" checked="checked"><span class="ml-2">비밀글</span>
+					<%} else{ %>
+						<input type="radio" class="form-check-input mx-3" id="secret" name="secret" value="N" checked="checked"><span class="ml-3">공개글</span>&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="radio" class="form-check-input mx-3" id="secret" name="secret" value="Y"><span class="ml-2">비밀글</span>
+					<%} %>
 				</div>
 				
 				<hr>
@@ -72,7 +77,7 @@
 					<%if(q.getQnaPwd() == null) {%>
 					<input type="text" id="secretPwd" name="secretPwd" class="mx-4" placeholder="비밀번호를 설정하세요" value="">
 					<%} else {%>
-					<input type="text" id="secretPwd" name="secretPwd" class="mx-4" placeholder="비밀번호를 설정하세요" value="<%=q.getQnaPwd()%>">
+					<input type="text" id="secretPwd" name="secretPwd" class="mx-4" value="<%=q.getQnaPwd()%>">
 					<%} %>
 				</div>	
 				
@@ -94,76 +99,28 @@
 		<script>
 			$(function(){
 				$('input:submit').on('click', function(){
+					//비밀번호 숫자인지 확인하기 위한 정규식 
+					var pwdVal = $('#secretPwd').val();
+					var regex = /^[0-9]{4}$/;
+					
 					if($('input[name=secret]:checked').val() == 'Y'){
-						$("#secretPwd").attr("required", true);
+						if(!regex.test(pwdVal)){
+							alert("비밀번호는 숫자 4자리를 입력해주세요.");
+							$('#secretPwd').val(pwdVal.replace(regex, ''));
+							return false;
+						}
 					}
-				})
+					
+					//글 내용이 비어있을 경우 -> ckeditor는 CKEDITOR.instances.textarea id 작성.getData()로 글 내용을 확인
+					if(CKEDITOR.instances.summernote.getData()  == '' || CKEDITOR.instances.summernote.getData().length == 0){
+						alert("글 내용을 입력해주세요.");
+						return false;
+					}
+					
+				});
 			
 			});
 		</script>
-		
-		<!-- 글 수정하기 -->
-		<!-- 수정할 값을 request에서 꺼내서 뿌려줘야한다. -->
-		<!-- <form id="enrollForm" action="<= contextPath %>/updateQna.do" method="post" enctype="multipart/form-data">
-			<div class="form-group">
-				<table class="table table-condensed table-borded pd-1">	
-					<tbody>
-						<tr>
-							<th class="col-md-1"><h3>제목 : </h3></th>
-							<td><input type="text" class="form-control form-control-lg rounded-0 mt-3" name="title" placeholder="제목을 입력해주세요"></td>
-						</tr>
-						<tr>
-							<td colspan="2">
-								<label for="comment"><h3>내용 : </h3></label>
-								<textarea class="form-control form-control-lg rounded-0" name="content" rows="20" style="resize:none"></textarea>
-							</td>
-						</tr>
-						<%-- 첨부파일이 있는지 없는지 확인해야 한다. --%>
-						<%--
-							<tr>
-								<th>첨부파일</th>
-								<td>
-									<% if(at != null){ %> <!-- 기존의 첨부파일이 있었을 경우 -> list로 확인해야한다. -->
-										<%= at.getOriginName() %> <br>
-										<input type='hidden' name='originFile' value='<%=at.getChangeName()%>'>
-										<input type='hidden' name='originFileNo' value='<%=at.getFileNo()%>'>
-									<% }%>
-									<input type="file" name="upFile">
-								</td>			
-							</tr>
-						 --%>
-						<tr>
-							<td>첨부파일1</td>
-							<td><input type="file" name="upfile1"></td>
-						</tr>
-						<tr>
-							<td>첨부파일2</td>
-							<td><input type="file" name="upfile2"></td>
-						</tr>
-						<tr>
-							<td>첨부파일3</td>
-							<td><input type="file" name="upfile3"></td>
-						</tr>
-						<tr>
-							<td>비밀번호</td>
-							<td><input type="text" id="pwd" name="pwd" placeholder="비밀번호를 설정하세요."></td>
-						</tr>
-						<tr>
-							<td>비밀글설정</td>
-							<td colspan="2">
-								<div class="form-check-inline">
-									<input type="radio" class="form-check-input" id="secret" name="secret" value="N"><span class="ml-3">공개글</span>&nbsp;&nbsp;&nbsp;&nbsp;
-									<input type="radio" class="form-check-input" id="secret" name="secret" value="Y"><span class="ml-2">비밀글</span>
-								</div>
-							</td>
-						</tr>
-					</tbody>	
-				</table>
-			</div> 
-			
-			
-		</form>			
-	</div>-->
 	
 	<%@ include file="../common/footer.jsp" %>
 </body>

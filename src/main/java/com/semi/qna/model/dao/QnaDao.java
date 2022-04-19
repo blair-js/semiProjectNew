@@ -239,7 +239,7 @@ public class QnaDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		//selectQna=SELECT QNA_NO, QNA_TITLE, USER_ID, CREATE_DATE, COUNT, QNA_CONTENT FROM QA A JOIN R_USER B ON QNA_WRITER=USER_NO WHERE A.STATUS='Y' AND QNA_NO=?
+		//selectQna=SELECT QNA_NO, QNA_TITLE, USER_ID, CREATE_DATE, COUNT, QNA_CONTENT, QNA_PWD, QNA_SECRET FROM QA A JOIN R_USER B ON QNA_WRITER=USER_NO WHERE A.STATUS='Y' AND QNA_NO=?
 		String sql = prop.getProperty("selectQna");
 		
 		try {
@@ -254,7 +254,9 @@ public class QnaDao {
 							rset.getString("USER_ID"),
 							rset.getDate("CREATE_DATE"),
 							rset.getInt("COUNT"),
-							rset.getString("QNA_CONTENT")
+							rset.getString("QNA_CONTENT"),
+							rset.getString("QNA_PWD"),
+							rset.getString("QNA_SECRET")
 						);
 			}
 		} catch (SQLException e) {

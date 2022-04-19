@@ -2,8 +2,9 @@
     pageEncoding="UTF-8" import="java.util.ArrayList, com.semi.notice.model.dto.*, com.semi.common.dto.*"%>
  <%
  	Notice n = (Notice)request.getAttribute("n");
- 	//ArrayList<Attachment> atList = (ArrayList<Attachment>)request.getAttribute("atList");
  	Attachment at = (Attachment)request.getAttribute("at");
+ 	
+ 	String nContent = n.getNoticeContent().replace("<br>", "\n");
 %>
 <!DOCTYPE html>
 <html>
@@ -51,36 +52,23 @@
 						<tr>
 							<td colspan="2">
 								<label for="comment"><h3>내용 : </h3></label>
-								<textarea class="form-control form-control-lg rounded-0" name="content" rows="20" style="resize:none"><%= n.getNoticeContent() %></textarea>
+								<textarea class="form-control form-control-lg rounded-0" name="content" rows="20" style="resize:none"><%= nContent %></textarea>
 							</td>
 						</tr>
-						<!--< if(at != null) {%>
-							 <for(int i = 0; i < atList.size(); i++) { %>  -->
-							<tr>
-								<% if(at != null) {%>
-									<th>첨부파일</th>
-									<td colspan="3">
-										<%= at.getOriginName()%>
-										<input type='hidden' name='originFile' value='<%=at.getChangeName()%>'>
-										<input type='hidden' name='originFileNo' value='<%=at.getFileNo()%>'>
-										<!-- <input  type="checkbox" name='delFile' value='<=at.getFileNo()%>'>삭제 -->
-									</td>
-								<%} %>
-							</tr>
-							<!--< } %>-->
-						<!-- <} %> -->
+						<tr>
+							<% if(at != null) {%>
+								<th>첨부파일</th>
+								<td colspan="3">
+									<%= at.getOriginName()%>
+									<input type='hidden' name='originFile' value='<%=at.getChangeName()%>'>
+									<input type='hidden' name='originFileNo' value='<%=at.getFileNo()%>'>
+								</td>
+							<%} %>
+						</tr>
 						<tr>
 							<td>첨부파일</td>
 							<td><input type="file" name="upfile"></td>
-						</tr>
-						<!-- <tr>
-							<td>첨부파일2</td>
-							<td><input type="file" name="upfile2"></td>
-						</tr>
-						<tr>
-							<td>첨부파일3</td>
-							<td><input type="file" name="upfile3"></td>
-						</tr> -->				
+						</tr>				
 					</tbody>	
 				</table>
 			</div>

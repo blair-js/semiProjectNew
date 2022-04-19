@@ -74,8 +74,9 @@
 						</div>
 							
 						<!-- 검색어 입력 -->
-						<!-- 검색어 까지 입력하고 버튼을 누르면 list?keyword=title/content/wirter&searchKey=검색내용 -->		
-						<input type="text" class="form-control" id="searchKey" name="searchKey" placeholder="검색어를 입력하세요." value="${param.searchKey}"> <!-- 검색어가 있을 경우 계속 유지되도록 한다. -->	
+						<!-- 검색어 까지 입력하고 버튼을 누르면 list?keyword=title/content/wirter&searchKey=검색내용 -->	
+						<!-- 검색어가 있을 경우 계속 유지되도록 한다. -->		
+						<input type="text" class="form-control" id="searchKey" name="searchKey" placeholder="검색어를 입력하세요." value="${param.searchKey}"> 
 						<!-- 검색 버튼 --> 
 						<input type="submit" class="btn btn-secondary" id="searchBtn" value="검색">					
 					</div>	

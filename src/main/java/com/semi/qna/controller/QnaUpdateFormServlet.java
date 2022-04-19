@@ -33,7 +33,7 @@ public class QnaUpdateFormServlet extends HttpServlet {
 		//update는 폼이 뜰 때 게시글의 정보를 가지고 온다.
 		int qno = Integer.parseInt(request.getParameter("qno"));
 		
-	Qna q = new QnaService().selectUpdateQna(qno);
+		Qna q = new QnaService().selectUpdateQna(qno);
 		
 		if(q != null) {
 			request.setAttribute("q", q);
