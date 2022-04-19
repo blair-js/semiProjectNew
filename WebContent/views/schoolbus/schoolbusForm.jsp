@@ -3,6 +3,7 @@
 <%
 	// 현재 세션에 있는 회원의 정보로 로그인 안되어 있으면 0을 담고, 로그인이 되어있으면 회원 번호를 담아준다.
 	int userNo = (User)request.getSession().getAttribute("loginUser") != null ? ((User)request.getSession().getAttribute("loginUser")).getUserNo() : 0;
+	String adminCheck = (User)request.getSession().getAttribute("loginUser") != null ? ((User)request.getSession().getAttribute("loginUser")).getAdminChecked() : null;
 	ArrayList<Schoolbus> list = (ArrayList<Schoolbus>)request.getAttribute("list");
 	ArrayList<UserReservation> rList = (ArrayList<UserReservation>)request.getAttribute("rList");
 %>
@@ -90,9 +91,11 @@
 	  				<select id="schedule" name="scheduleNo" class="form-select border-1 rounded-1">
 	  					<% for(Schoolbus sb : list){ %>
 	  						<% if(sb.getSeatCount() == 0) { %>
-	  							<option disabled value="<%=sb.getBusDallyNo() %>"><%= sb.getBusContent() %> (잔여좌석 수: <%=sb.getSeatCount() %>)</option>
+	  							<option disabled value="<%=sb.getBusDallyNo() %>"><%= sb.getBusContent() %>
+	  							 (잔여좌석 수: <%=sb.getSeatCount() %>)</option>
 	  						<% }else{ %>
-		  						<option value="<%=sb.getBusDallyNo() %>"><%= sb.getBusContent() %> (잔여좌석 수: <%=sb.getSeatCount() %>)</option>
+		  						<option value="<%=sb.getBusDallyNo() %>"><%= sb.getBusContent() %>
+		  						 (잔여좌석 수: <%=sb.getSeatCount() %>)</option>
 	  						<% } %>
 	  					<% } %>
 	  				</select>
@@ -105,10 +108,17 @@
   		<script>
   			// 로그인한 회원만 입학신청이 가능, 로그인 안 했을 경우에는 버튼 비활성화 처리, 로그인 후 이용하라는것도 숨기기
   			var userNo = '<%= userNo %>';
+  			var adminCheck = '<%= adminCheck %>';
+  			console.log(adminCheck + "관리자");
   			if(userNo == 0){
   				$("#apply-btn").prop("disabled", true);
   				$("#ment").hide();
   				$("#checkNo").hide();
+  			}else if(adminCheck == "Y"){ // 관리자일 경우 신청 불가
+  				$("#apply-btn").prop("disabled", true);
+  				$("#ment").hide();
+  				$("#checkNo").hide();
+  				$("#userService").hide();
   			}else{
   				$("#apply-btn").prop("disabled", false);
   				$("#userService").hide();
@@ -117,11 +127,6 @@
 
   			}
   			
-  			if(<%= loginUser.getAdminChecked().equals("Y") %>){
-  				$("#apply-btn").prop("disabled", true);
-  			}else{
-  				$("#apply-btn").prop("disabled", false);
-  			}
   			
   			// 예약을 한 회원의 경우 중복 예약 불가 예약 테이블에서 회원 아이디 조회
   			// 중복 예약 불가능하다고 멘트 보여주고 버튼 비활성화
