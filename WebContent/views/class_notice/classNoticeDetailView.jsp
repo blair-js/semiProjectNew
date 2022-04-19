@@ -29,7 +29,7 @@ tr {
 }
 table>tr>td>pre{
 	font-family: 'GmarketSansMedium';
-	font-size:13px;
+	font-size:15px;
 }
 </style>
 </head>

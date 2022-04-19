@@ -11,7 +11,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="icon" href="assets/img/favicons/fdog.ico">
 <meta charset="UTF-8">
 <title>둥글개 둥글개</title>
 <script

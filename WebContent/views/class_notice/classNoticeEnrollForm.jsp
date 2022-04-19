@@ -36,12 +36,11 @@
 	</div>
 	<script>
 		// 스마트 에디터 로딩 스크립트 부분
-		// 사진파일 첨부기능 및 DB 연결 아직 안됨
 		var oEditors = [];
 		$(function() {
 			nhn.husky.EZCreator.createInIFrame({
 				oAppRef : oEditors,
-				elPlaceHolder : "content", //textarea에서 지정한 id와 일치해야 합니다. 
+				elPlaceHolder : "content", //textarea에서 지정한 id와 일치하는 값 입력. 
 				//SmartEditor2Skin.html 파일이 존재하는 경로
 				sSkinURI : "./resources/smartEditor/SmartEditor2Skin.html",
 				htParams : {
