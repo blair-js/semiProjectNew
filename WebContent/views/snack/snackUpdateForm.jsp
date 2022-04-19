@@ -29,9 +29,10 @@
 <body>
    
    <%@ include file="../common/menubar.jsp"%>
-
+      
+      <div class="container">
       <!-- 컨테이너 시작 div -->
-		<div class="container">
+
 
       <!-- 해당 페이지는 로그인된 유저만 들어올 수 있으며 비회원이 클릭 시 alert 창으로 "로그인을 해주세요" 띄워주기 -->
 
@@ -94,7 +95,7 @@
          <pre id="center"><p>수정 전                                                           수정 후</p></pre>
          <div id="center">
                
-		<td><img src="<%= contextPath %>/resources/FileUpload_test(SNACK)/<%= at.getChangeName() %>" height="293px" width="297px">&nbsp&nbsp
+         <td><img src="<%= contextPath %>/resources/FileUpload_test(SNACK)/<%= at.getChangeName() %>" style="width:297px; height:293px">&nbsp&nbsp
          <img id="snackImg" height="293px" width="297px" /></td>
          </div>
          <div id="fileArea">   
@@ -175,6 +176,7 @@
 
    
    </div>
+   
    <!-- 컨테이너 끝 div -->
 
    <script>
