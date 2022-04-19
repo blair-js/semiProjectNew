@@ -29,7 +29,8 @@
 <body>
    
    <%@ include file="../common/menubar.jsp"%>
-	<div class="container">
+      
+      <div class="container">
       <!-- 컨테이너 시작 div -->
 
 
@@ -94,7 +95,7 @@
          <pre id="center"><p>수정 전                                                           수정 후</p></pre>
          <div id="center">
                
-         <td><img src="<%= contextPath %>/resources/FileUpload_test(SNACK)/<%= at.getChangeName() %>" style="width:297px">&nbsp&nbsp
+         <td><img src="<%= contextPath %>/resources/FileUpload_test(SNACK)/<%= at.getChangeName() %>" style="width:297px; height:293px">&nbsp&nbsp
          <img id="snackImg" height="293px" width="297px" /></td>
          </div>
          <div id="fileArea">   
@@ -175,6 +176,7 @@
 
    
    </div>
+   
    <!-- 컨테이너 끝 div -->
 
    <script>
