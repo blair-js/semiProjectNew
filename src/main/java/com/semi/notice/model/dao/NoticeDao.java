@@ -140,7 +140,6 @@ public class NoticeDao {
 		int startRow = (pi.getCurrentPage() - 1) * pi.getBoardLimit() + 1; //1
 		int endRow = startRow + pi.getBoardLimit() - 1; //10
 		
-		//searchList=SELECT * FROM (SELECT ROWNUM RNUM, A.* FROM (SELECT NOTICE_NO, NOTICE_TITLE, USER_ID, COUNT, CREATE_DATE FROM NOTICE A JOIN R_USER B ON NOTICE_WRITER=USER_NO WHERE A.STATUS = 'Y' AND ? LIKE ? ORDER BY A.NOTICE_NO DESC) A) WHERE RNUM BETWEEN ? AND ?
 		//?로 인자를 먼저 올려놓으면 값으로 인식하여 "title" -> 이렇게 들어가기 때문에 앞뒤로 "++"를 넣어주고 그 안에 keyword를 넣어준다.
 		//String sql = prop.getProperty("searchList"); -> properties 파일에 jsp에서 받아온 keyword가 들어가지 않아서 sql을 따로 빼서 작성
 		String sql = "SELECT * FROM (SELECT ROWNUM RNUM, A.* FROM ("
@@ -162,7 +161,8 @@ public class NoticeDao {
 						rset.getString("NOTICE_TITLE"),
 						rset.getString("USER_ID"),
 						rset.getInt("COUNT"),	
-						rset.getDate("CREATE_DATE")
+						rset.getDate("CREATE_DATE"),
+						rset.getInt("RNUM")
 						));
 			}
 			
@@ -267,39 +267,6 @@ public class NoticeDao {
 		return at;
 	}
 
-//	public ArrayList<Attachment> selectAttachment(Connection conn, int nno) {
-//		ArrayList<Attachment> atList = new ArrayList<Attachment>();
-//		PreparedStatement pstmt = null;
-//		ResultSet rset = null;
-//		
-//		//selectAttachment=SELECT FILE_NO, ORIGIN_NAME, CHANGE_NAME FROM ATTACHMENT WHERE REF_NO=? AND CATEGORY=3 AND STATUS='Y'
-//		String sql = prop.getProperty("selectAttachment");
-//		
-//		try {
-//			pstmt = conn.prepareStatement(sql);
-//			pstmt.setInt(1, nno);
-//			
-//			rset = pstmt.executeQuery();
-//			
-//			while(rset.next()) {
-//				Attachment at = new Attachment();
-//				at.setFileNo(rset.getInt("FILE_NO"));
-//				at.setOriginName(rset.getString("ORIGIN_NAME"));
-//				at.setChangeName(rset.getString("CHANGE_NAME"));
-//				
-//				atList.add(at);
-//				System.out.println(atList);
-//			}
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} finally {
-//			close(rset);
-//			close(pstmt);
-//		}
-//		return atList;
-//	}
-
 	public int insertNotice(Connection conn, Notice n) {
 		int result = 0;
 		PreparedStatement pstmt = null;
@@ -357,37 +324,6 @@ public class NoticeDao {
 		return result;
 	}
 
-
-//	public int insertAttachment(Connection conn, int noticeWriter, ArrayList<Attachment> fileList) {
-//		Attachment at = new Attachment();
-//		int result = 0;
-//		PreparedStatement pstmt = null;
-//		
-//		//insertAttachment=INSERT INTO ATTACHMENT VALUES(SEQ_FNO.NEXTVAL, ?, SEQ_NNO.CURRVAL, 3, ?, ?, ?, SYSDATE, DEFAULT)
-//		String sql = prop.getProperty("insertAttachment");
-//		
-//		try {
-//			for(int i = 0; i < fileList.size(); i++) {
-//				at = fileList.get(i);
-//				
-//				pstmt = conn.prepareStatement(sql);
-//				pstmt.setInt(1, noticeWriter);
-//				pstmt.setString(2, at.getOriginName());
-//				pstmt.setString(3, at.getChangeName());
-//				pstmt.setString(4, at.getFilePath());
-//				
-//				result += pstmt.executeUpdate();
-//			}
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} finally {
-//			close(pstmt);
-//		}
-//		
-//		return result;
-//	}
-
 	public int updateNotice(Connection conn, Notice n) {
 		int result = 0;
 		PreparedStatement pstmt = null;
@@ -438,36 +374,6 @@ public class NoticeDao {
 		
 		return result;
 	}
-
-	/*public int updateAttachment(Connection conn, ArrayList<Attachment> atList) {
-		Attachment at = new Attachment();
-		int result = 0;
-		//int result2 = 0;
-		PreparedStatement pstmt = null;
-		
-		//updateAttachment=UPDATE ATTACHMENT SET CHANGE_NAME=?, ORIGIN_NAME=?, FILE_PATH=? WHERE FILE_NO=?
-		String sql = prop.getProperty("updateAttachment");
-		
-		try {			
-			for(int i = 0; i < atList.size(); i++) {
-				at = atList.get(i);
-				
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, at.getOriginName());
-				pstmt.setString(2, at.getOriginName());
-				pstmt.setString(3, at.getFilePath());
-				pstmt.setInt(4, at.getFileNo());
-				
-				result += pstmt.executeUpdate();
-			}
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return result;
-	}*/
 	
 	//일단 사용 안함
 	public int updateDeleteAttachment(Connection conn, String delFile) {

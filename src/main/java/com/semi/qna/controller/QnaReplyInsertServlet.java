@@ -32,7 +32,9 @@ public class QnaReplyInsertServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String content = request.getParameter("content");
+		String content = request.getParameter("content").replace("\r\n", "<br>");
+		//content = content.replace("\r\n", "<br>"); //댓글 개행
+		
 		int qno = Integer.parseInt(request.getParameter("qno"));
 		int writer = ((User)request.getSession().getAttribute("loginUser")).getUserNo();
 		

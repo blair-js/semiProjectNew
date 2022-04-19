@@ -35,12 +35,10 @@ public class NoticeUpdateFormServlet extends HttpServlet {
 		int nno = Integer.parseInt(request.getParameter("nno"));
 		
 		Notice notice = new NoticeService().selectUpdateNotice(nno);
-		//ArrayList<Attachment> atList = new NoticeService().selectAttachment(nno);
 		Attachment at = new NoticeService().selectAttachment(nno);
 		
 		if(notice != null) {
 			request.setAttribute("n", notice);
-			//request.setAttribute("atList", atList);
 			request.setAttribute("at", at);
 			
 			request.getRequestDispatcher("views/notice/noticeUpdateForm.jsp").forward(request, response);

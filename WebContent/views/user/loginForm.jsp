@@ -13,7 +13,7 @@
 
 <meta name="google-signin-scope" content="profile email">
 
-<meta name="google-signin-client_id" content="821072282485-pafufg8p84rr1e1aqd9im0ut4gcueep8.apps.googleusercontent.com">
+<meta name="google-signin-client_id" content="321300587626-js01p9ev0nro3673speqqp4gim7adlp7.apps.googleusercontent.com">
 
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 

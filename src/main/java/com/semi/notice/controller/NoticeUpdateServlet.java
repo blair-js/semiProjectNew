@@ -85,8 +85,7 @@ public class NoticeUpdateServlet extends HttpServlet {
 					 //atList.add(at);
 					 
 					 if(multiRequest.getParameter("originFile") != null) { //기존 첨부파일이 있는 경우
-						 File deleteFile = new File(savePath + multiRequest.getParameter("originFile"));
-						 
+						 File deleteFile = new File(savePath + multiRequest.getParameter("originFile"));					 
 						 deleteFile.delete();
 						 
 						 at.setFileNo(Integer.parseInt(multiRequest.getParameter("originFileNo")));
@@ -96,7 +95,7 @@ public class NoticeUpdateServlet extends HttpServlet {
 				}
 			//}
 			
-			int result = new NoticeService().updateNotice(n, at/*, delFile*/);
+			int result = new NoticeService().updateNotice(n, at);
 			
 			if(result > 0) {
 				response.sendRedirect("detailNotice.do?nno="+nno);

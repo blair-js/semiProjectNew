@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>둥글개 둥글개</title>
 <style>
 	.bor{
 		border: 2px solid gray;
@@ -42,11 +42,23 @@
 			<div class="row">
 				<div class="col-md-12 text-md-end p-3">
 					<button class="btn btn-secondary m-1" onclick="location.href='<%=contextPath%>/updateFormNotice.do?nno=<%=n.getNoticeNo()%>'">수정</button>
-					<button class="btn btn-secondary m-1" onclick="location.href='<%=contextPath%>/deleteNotice.do?nno=<%=n.getNoticeNo()%>'">삭제</button>
+					<button class="btn btn-secondary m-1" onclick="deleteNotice()">삭제</button>
 				</div>
 			</div>
 		<% } %>
-
+		
+		<script>
+			function deleteNotice(){
+				var answer = confirm("게시물을 정말 삭제하시겠습니까?");
+				
+				if(answer){
+					location.href="<%=contextPath%>/deleteNotice.do?nno=<%=n.getNoticeNo()%>";
+				} else {
+					return false;
+				}
+			}
+		</script>
+		
 		<hr class="bor">
 		
 		<!-- 글 상세보기 -->

@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>둥글개 둥글개</title>
 <style>
 	.bor{
 		border: 2px solid gray;
@@ -27,7 +27,7 @@
 	var ckeditor_config = {
 			height: 600,
 			resize_enaleb : false,
-			enterMode : CKEDITOR.ENTER_BR,
+			enterMode: CKEDITOR.ENTER_BR,
 			shiftEnterMode : CKEDITOR.ENTER_P
 	};
 </script>
@@ -88,7 +88,6 @@
 					var regex = /^[0-9]{4}$/;
 					
 					if($('input[name=secret]:checked').val() == 'Y'){
-						//$("#secretPwd").attr("required", true);
 						
 						if(!regex.test(pwdVal)){
 							alert("비밀번호는 숫자 4자리를 입력해주세요.");

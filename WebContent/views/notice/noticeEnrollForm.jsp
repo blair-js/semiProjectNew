@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>둥글개 둥글개</title>
 <style>
 	.bor{
 		border: 2px solid gray;
@@ -51,14 +51,6 @@
 							<td>첨부파일</td>
 							<td><input type="file" name="upfile"></td>
 						</tr>
-						<!-- <tr>
-							<td>첨부파일2</td>
-							<td><input type="file" name="upfile2"></td>
-						</tr>
-						<tr>
-							<td>첨부파일3</td>
-							<td><input type="file" name="upfile3"></td>
-						</tr> -->
 					</tbody>	
 				</table>
 			</div>
@@ -67,6 +59,7 @@
 			
 			<div class="row">
 				<div class="col-md-12 text-md-end p-3">
+					<!-- 취소 버튼을 누를 경우 list 화면으로 이동 -->
 					<input class="btn btn-secondary m-1" type="button" value="취소" onclick="location.href='<%=contextPath%>/listNotice.do'">
 					<input class="btn btn-secondary m-1" type="submit" value="등록">
 				</div>
