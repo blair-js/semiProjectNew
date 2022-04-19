@@ -59,17 +59,6 @@ public class SnackUpdateSerlvet extends HttpServlet {
       snack.setSanckNo(sno);
       
       
-      /*
-      int sno = Integer.parseInt(multiRequest.getParameter("sno"));
-      String snackName = multiRequest.getParameter("snackName");
-      int snackPrice = Integer.parseInt(multiRequest.getParameter("snackPrice"));
-      
-      
-      Snack snack = new Snack();
-      snack.setSanckName(snackName);
-      snack.setPrice(snackPrice);
-      snack.setSanckNo(sno);
-      */
       Attachment at = null;
       if(multiRequest.getOriginalFileName("file") != null) {
          String originName = multiRequest.getOriginalFileName("file");

@@ -175,20 +175,7 @@
    
    <script>
    
-   /*
 
-   $(function(){
-      $("#fileArea").hide();
-      
-      
-      $("#snackImg").click(function(){ 
-         $("#file").click();
-   
-      });
-         
-   });
-   
-   */
    function goSnackUpdateForm(){
       $("#postForm").attr("action", "<%=contextPath%>/snackUpdateForm.do"); 
       <!--hidden으로 sno 값을 가지고 서블릿으로 간다 액션 속성값을 정의 : -->
