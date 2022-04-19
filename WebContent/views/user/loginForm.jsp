@@ -13,11 +13,11 @@
 
 <meta name="google-signin-scope" content="profile email">
 
-<meta name="google-signin-client_id" content="821072282485-pafufg8p84rr1e1aqd9im0ut4gcueep8.apps.googleusercontent.com">
+<meta name="google-signin-client_id" content="952213952257-qfucuv5qsicj7vihnm1kndfbqdseqpaa.apps.googleusercontent.com">
 
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 
-<title>둥글개 로그인</title>
+<title>둥글개 둥글개</title>
 
 <!-- 제이쿼리 사용하기 위해 CDN 연결 -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -104,7 +104,8 @@
 			<button type="submit" class="w-100 btn btn-lg btn-primary mb-2"><b>로그인</b></button>
 			<!-- 구글 로그인 버튼 -->
 			<!-- onSuccess : 데이터 발행 및 수신 성공을 확인하는 속성 -->
-				<div class="g-signin2 btn px-0" data-width="300" data-height="45" data-onsuccess="onSignIn" data-longtitle="true" data-theme="dark"></div>
+				<div class="g-signin2 btn px-0" data-width="300" data-height="45" 
+				data-onsuccess="onSignIn" data-longtitle="true" data-theme="dark"></div>
 				<!-- 구글 로그인 취소 버튼 -->
 				<!-- 0411 삭제_원하는 데이터만 저장 후 커넥션은 바로 끊어줄 예정 -->
 				<!-- <button class="btn btn-primary" type="button" onclick="signOut();">Google Sign Out</button> -->
@@ -132,7 +133,8 @@
 		    //그 쿠키값을 name이 userId인 요소의 값으로 넣어준다.
 		    $("input[name='userId']").val(userInputId); 
 			 
-		 	//처음 페이지 로딩시 입력칸에 저장된 id가 표시된 상태라면(위의 요소에 아이디가 자동으로 입력되어있으면) => 즉 입력칸이 비어있지 않다면
+		 	//처음 페이지 로딩시 입력칸에 저장된 id가 표시된 상태라면(위의 요소에 아이디가 자동으로 입력되어있으면)
+		 	//즉 입력칸이 비어있지 않다면
 			if($("input[name='userId']").val() != ""){ 
 			    $("#input_check_Yes").attr("checked", true); //아이디 저장하기를 체크 상태로 두기.
 			}
@@ -198,16 +200,17 @@
 		
 		//구글에서 가져온 데이터를 갖고 로직을 처리하는 함수
 		function onSignIn(googleUser) {
+			//사용자의 정보를 가져오는 코드
 	        //구글 api를 통해 얻어온 값들 확인하여, 사용하고자 하는 데이터(이름, 이메일)는 아래에서 추출하여 변수에 담을 예정.
 	        var profile = googleUser.getBasicProfile();
-	        console.log("ID: " + profile.getId()); // Don't send this directly to your server!(우리의 서버에 이것을 직접 보내지말것!)
+	        console.log("ID: " + profile.getId()); 
 	        console.log('Full Name: ' + profile.getName());
 	        console.log('Given Name: ' + profile.getGivenName());
 	        console.log('Family Name: ' + profile.getFamilyName());
 	        console.log("Image URL: " + profile.getImageUrl());
 	        console.log("Email: " + profile.getEmail());
 	
-	        // The ID token you need to pass to your backend:
+	        //해당 유저의 인증 토큰을 발급받아야 함.
 	        var id_token = googleUser.getAuthResponse().id_token;
 	        console.log("ID Token: " + id_token);
 	        
@@ -220,10 +223,9 @@
 	        
 	        //2.구글전용 로그인 서블릿으로 파라미터를 넘긴다.
 	        location.href="<%=contextPath%>/googleLogin.do?userName="+userName+"&userEmail="+userEmail;
-	         
 	      }
 		
-		//구글 api와 연결된 커넥션을 끊어주는 함수
+		//구글 api와 연결된 커넥션을 끊어주는 함수(로그아웃)
 		function signOut() {
 			gapi.auth2.getAuthInstance().disconnect();
 		}

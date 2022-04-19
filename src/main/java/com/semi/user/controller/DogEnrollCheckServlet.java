@@ -35,11 +35,6 @@ public class DogEnrollCheckServlet extends HttpServlet {
 		//전달받은 Dog 몸무게로 반이름을 조회해올 것
 		String className = new UserService().selectClassName(dogWeight);
 		
-		///////////////////////////////////////////////////////////////////
-		
-		System.out.println("className 확인 : " + className);
-		
-		
 		if(className == null) { //입학이 불가능한 경우 대기로 응답
 			response.getWriter().print("대기");
 		}

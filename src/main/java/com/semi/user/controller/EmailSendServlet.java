@@ -40,8 +40,7 @@ public class EmailSendServlet extends HttpServlet {
 		
 		//DB에 데이터가 들어갔으면 이메일을 보내야 한다. 
 		//여기서 구글 SMTP가 사용된다. 
-
-		String host = "http://localhost:8088/"; //보내는 서버 
+		String host = "http://localhost:8086/"; //보내는 서버 
 		
 		String from = "kjisu4717@gmail.com"; //보내는 사람 메일 계정(고정)
 		String to = new UserService().getUserEmail(userId); //받는 사람 메일(userId를 기준으로 메소드 실행하여 가져오기)
@@ -50,7 +49,8 @@ public class EmailSendServlet extends HttpServlet {
 		//메일 내용
 		//인증하기 링크를 클릭하면 내가 설정해놓은 서블릿으로 오게됨.
 		String content = "링크를 누르시면 이메일 인증이 완료됩니다." 
-							+ "<a href='" + host + "emailCheck.do?code=" + new SHA256().getSHA256(to) + "&userId=" + userId
+							+ "<a href='" + host + "emailCheck.do?code=" 
+							+ new SHA256().getSHA256(to) + "&userId=" + userId
 							+ "'>이메일 인증하기</a>";
 
 		//서버의 정보를 설정하는 부분

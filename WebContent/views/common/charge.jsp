@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>둥글개 둥글개</title>
 <!-- 가상결제 api를 사용하기 위한 아임포트 CDN 추가 -->
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 <style>
@@ -122,6 +122,7 @@
       var point = target.options[target.selectedIndex].value;
       console.log("point확인 : " + point);
       
+       //라이브러리가 로드되면, IMP 전역 객체를 window 객체의 프로퍼티로 접근하여 IMP의 함수 호출 가능
        //IMP 객체를 초기화 하는 함수 init에 아임포트에서 받은 가맹점식별코드를 인자로 넣기
        IMP.init('imp61171514');
        
