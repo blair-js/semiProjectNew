@@ -28,6 +28,7 @@
     - jQuery 3.6.0
     - Gson, Json
     - mail.jar
+    - Google Auth
     - Google SMTP
     - i'mport api
     - Smart Editor api
@@ -122,4 +123,48 @@
 ## 🖥️ **서비스 화면**
 
 ### [회원가입]
-
+![회원가입](https://user-images.githubusercontent.com/81502408/178647254-379556de-2492-4af4-a86a-b05c86c8bbd3.JPG)
+### [로그인]
+![로그인](https://user-images.githubusercontent.com/81502408/178647266-432995e8-6f59-4eb0-9580-7a4053e72637.JPG)
+### [아이디/비밀번호 찾기]
+![아이디비밀번호찾기](https://user-images.githubusercontent.com/81502408/178647270-cf3f5f74-1ac7-4fcf-bca9-0239a26784b8.JPG)
+### [회원 마이페이지]
+![마이페이지](https://user-images.githubusercontent.com/81502408/178647285-62192c93-6c52-4d32-8ad4-7ed456705994.JPG)
+### [강아지 입학신청]
+![입학신청](https://user-images.githubusercontent.com/81502408/178647291-1ca0df6f-211f-4070-ba8d-620cfbb04b43.JPG)
+### [결제(뼈다귀 충전)]
+![결제](https://user-images.githubusercontent.com/81502408/178647300-b57b289d-34c2-4563-8acb-5da3c4defaad.JPG)
+### [공지사항 - 목록조회]
+![공지사항목록](https://user-images.githubusercontent.com/81502408/178647324-32fdd32d-45be-4c7e-b6d4-486c0df1ebf7.JPG)
+### [공지사항 - 작성]
+![공지사항작성](https://user-images.githubusercontent.com/81502408/178647351-1c992809-3a2c-4217-b9f2-36dc0824669e.JPG)
+### [공지사항 - 상세조회]
+![공지사항상세](https://user-images.githubusercontent.com/81502408/178647354-3accbe85-374a-4a2d-b882-d74cbb9b8335.JPG)
+### [QNA - 목록조회]
+![qna](https://user-images.githubusercontent.com/81502408/178647367-b5b6f2c4-f2e4-4f05-82c7-1e098ea1152c.JPG)
+### [QNA - 작성]
+![qna작성](https://user-images.githubusercontent.com/81502408/178647370-c68d2520-6ff2-43bb-a14d-9f5b0d7bf38d.JPG)
+### [QNA - 상세조회]
+![qna상세](https://user-images.githubusercontent.com/81502408/178647373-d401bc6f-f9ad-4493-b89e-77e295d9d059.JPG)
+### [알림장 - 목록조회]
+![알림장](https://user-images.githubusercontent.com/81502408/178647459-e675fe17-11ac-4687-8dae-42d3a46ced1a.JPG)
+### [알림장 - 등록]
+![알림장등록](https://user-images.githubusercontent.com/81502408/178647465-411e1f68-c054-4529-984b-e4cff5649c2b.JPG)
+### [알림장 - 상세조회]
+![알림장상세](https://user-images.githubusercontent.com/81502408/178647469-bbf3717f-ba65-451f-a64c-5fcbee5a7d39.JPG)
+### [통학버스 - 신청]
+![통학버스신청](https://user-images.githubusercontent.com/81502408/178647477-d98d81c8-1e70-4532-ac9c-62c0808c89ef.JPG)
+### [통학버스 - 나의 예약내역 조회]
+![통학버스예약내역](https://user-images.githubusercontent.com/81502408/178647480-294f28f6-28e3-4435-9676-e505d714835a.JPG)
+### [간식관리 - 목록조회]
+![간식목록](https://user-images.githubusercontent.com/81502408/178647489-a8778366-e35a-4fe8-b086-2cb7a360a12c.JPG)
+### [간식관리 - 등록]
+![간식등록](https://user-images.githubusercontent.com/81502408/178647495-02cf01b1-b1ca-4473-a3d7-9205ce9f6831.JPG)
+### [간식관리 - 상세조회]
+![간식상세](https://user-images.githubusercontent.com/81502408/178647498-4161633a-c8a8-4726-b430-e9d60cdccbbf.JPG)
+### [관리자 - 마이페이지]
+![관리자페이지](https://user-images.githubusercontent.com/81502408/178647501-3192ddb7-02e7-43ef-aaba-2850cda203af.JPG)
+### [관리자 - 회원 간식 구매내역조회]
+![회원간식구매내역](https://user-images.githubusercontent.com/81502408/178647528-ff1cd45b-dff7-4b99-9fb2-58da6b5ffc55.JPG)
+### [관리자 - 회원 정보조회]
+![회원정보](https://user-images.githubusercontent.com/81502408/178647530-0f8f27d7-1ecc-4999-80ff-173db41a0f48.JPG)
