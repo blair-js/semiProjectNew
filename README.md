@@ -28,7 +28,6 @@
     - jQuery 3.6.0
     - Gson, Json
     - mail.jar
-    - Google Auth
     - Google SMTP
     - i'mport api
     - Smart Editor api
