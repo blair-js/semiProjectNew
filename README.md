@@ -122,6 +122,8 @@
 
 ## 🖥️ **서비스 화면**
 
+### [메인페이지]
+![홈](https://user-images.githubusercontent.com/81502408/178648495-72357770-4692-4e0c-a4fb-2cdb1c5a3851.JPG)
 ### [회원가입]
 ![회원가입](https://user-images.githubusercontent.com/81502408/178647254-379556de-2492-4af4-a86a-b05c86c8bbd3.JPG)
 ### [로그인]
