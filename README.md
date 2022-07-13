@@ -117,7 +117,7 @@
 - 👦🏻 임현빈 : 관리자 페이지 및 간식 관리
 
 ## 🏗️ **ERD**
-![2asy work (2)](https://user-images.githubusercontent.com/81502408/178409279-fe8c4bd0-1a6f-4b3c-b303-8faf187f1a39.png)
+![SemiProject (1)](https://user-images.githubusercontent.com/81502408/178646055-201be986-6a29-4841-88bf-a370e12b2925.png)
 
 ## 🖥️ **서비스 화면**
 
